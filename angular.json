@@ -25,7 +25,12 @@
             "aot": true,
             "assets": [
               "src/favicon.ico",
-              "src/assets"
+              "src/assets",
+              {
+                "glob": "**/*",
+                "input": "./node_modules/@ant-design/icons-angular/src/inline-svg/",
+                "output": "/assets/"
+              }
             ],
             "styles": [
               "src/styles.less"
@@ -123,6 +128,10 @@
           }
         }
       }
-    }},
-  "defaultProject": "rococo-angular-starter"
+    }
+  },
+  "defaultProject": "rococo-angular-starter",
+  "cli": {
+    "analytics": "5c298e8a-c97d-436b-a2b0-b2410f788d56"
+  }
 }
