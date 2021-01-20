@@ -9,6 +9,7 @@ import { ZORRO_MODULES } from './zorro.module';
   declarations: [],
   imports: [
     CommonModule,
+
     ... ZORRO_MODULES,
     ... DELON_MODULES
   ],

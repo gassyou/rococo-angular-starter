@@ -1,19 +1,12 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
-import { MainComponent } from './layout/main/main.component';
-import { PassportComponent } from './layout/passport/passport.component';
 
 const routes: Routes = [
-  {
-    path: '',
-    component: MainComponent,
-  },
-  {
-    path: 'passport',
-    component: PassportComponent,
-  }
+  { path: '',         loadChildren: () => import('./routes/routes.module').then((m)=>m.RoutesModule), },
+  { path: 'passport', loadChildren: () => import('./passport/passport.module').then((m)=>m.PassportModule) },
+  { path: 'exception', loadChildren: () => import('./exception/exception.module').then((m)=>m.ExceptionModule) },
+  { path: '**', redirectTo: 'exception/404' }
 ];
-
 @NgModule({
   imports: [RouterModule.forRoot(routes, { relativeLinkResolution: 'legacy' })],
   exports: [RouterModule]

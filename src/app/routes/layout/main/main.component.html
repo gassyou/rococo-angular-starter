@@ -1,0 +1,15 @@
+<layout-default [options]="options" [content]="contentTpl">
+  <layout-default-header-item direction="left" hidden="mobile">
+    <h2 class="sys-name">乐科科管理系统</h2>
+  </layout-default-header-item>
+
+  <layout-default-header-item direction="right" hidden="mobile">
+    <header-user></header-user>
+  </layout-default-header-item>
+
+  <ng-template #contentTpl>
+    <router-outlet></router-outlet>
+  </ng-template>
+
+</layout-default>
+
