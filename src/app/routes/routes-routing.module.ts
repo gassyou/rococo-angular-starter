@@ -7,6 +7,7 @@ const routes: Routes = [
     path: '',
     component: MainComponent,
     children: [
+      {path: 'sys', loadChildren: () => import('./system-management/sys-mgt.module').then((m)=>m.SysmMgtModule) }
     ]
   }
 ];
