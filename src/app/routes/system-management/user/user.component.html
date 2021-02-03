@@ -1,5 +1,19 @@
+<div class="alain-default__content-title">
+  <nz-breadcrumb [nzAutoGenerate]="true"></nz-breadcrumb>
+  <div>
+    <app-advance-search class="mr-sm"></app-advance-search>
+    <button nz-button nzType="primary" (click)="addUser()">添加新用户</button>
+  </div>
+</div>
+
 <st #userTable
   [columns]="columns"
   [data]="getUserListURL"
+  [page]="{total:true}"
   [req]="{params:searchParams}">
+
+  <ng-template st-row="enable" let-item>
+    <nz-switch nzSize="small" [ngModel]="item.enable===0"></nz-switch>
+  </ng-template>
+
 </st>

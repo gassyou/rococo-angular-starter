@@ -3,10 +3,11 @@ import { CommonModule } from '@angular/common';
 
 import { DELON_MODULES } from './delon.module';
 import { ZORRO_MODULES } from './zorro.module';
+import { AdvanceSearchComponent } from './components/advance-search/advance-search.component';
 
 
 @NgModule({
-  declarations: [],
+  declarations: [AdvanceSearchComponent],
   imports: [
     CommonModule,
 
@@ -14,6 +15,7 @@ import { ZORRO_MODULES } from './zorro.module';
     ... DELON_MODULES
   ],
   exports: [
+    AdvanceSearchComponent,
     ... ZORRO_MODULES,
     ... DELON_MODULES
   ]

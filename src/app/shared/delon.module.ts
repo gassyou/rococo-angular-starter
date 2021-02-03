@@ -8,6 +8,8 @@ import { SEModule } from '@delon/abc/se';
 import { SidebarNavModule } from '@delon/abc/sidebar-nav';
 import { STModule } from '@delon/abc/st';
 import { SVModule } from '@delon/abc/sv';
+import { FullContentModule } from '@delon/abc/full-content';
+import { AlainConfig } from '@delon/util';
 
 export const DELON_MODULES = [
   PageHeaderModule,
@@ -20,4 +22,17 @@ export const DELON_MODULES = [
   SEModule,
   SVModule,
   ReuseTabModule,
+  FullContentModule,
 ];
+
+export const alainConfig: AlainConfig = {
+  st: {
+    page: {
+      front: false,
+      showSize:true,
+      total:true,
+      showQuickJumper:true,
+      pageSizes: [5,10,15,20]
+    }
+  },
+};

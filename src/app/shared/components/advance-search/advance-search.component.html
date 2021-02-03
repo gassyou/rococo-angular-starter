@@ -1,0 +1,22 @@
+<nz-input-group
+  nz-tooltip
+  nzSearch
+
+  [nzSuffix]="searchButton"
+  [nzPrefix]="moreButton"
+  [nzTooltipTitle]="tooltilTemplate">
+    <input type="text" nz-input [placeholder]="placeholder" />
+</nz-input-group>
+
+<ng-template #searchButton>
+  <button class="search-btn" nz-button nzSize="small" nzSearch><i nz-icon nzType="search"></i></button>
+</ng-template>
+
+<ng-template #moreButton>
+  <button class="search-btn" nz-button nzSize="small" ><i nz-icon nzType="caret-down" nzTheme="outline"></i></button>
+</ng-template>
+
+<ng-template #tooltilTemplate>
+  <div>1. 按“回车键”或者点击"<i nz-icon nzType="search"></i>"图标,进行查找</div>
+  <div>2. 点击"<i nz-icon nzType="caret-down" nzTheme="outline"></i>"图标，显示高级查询</div>
+</ng-template>

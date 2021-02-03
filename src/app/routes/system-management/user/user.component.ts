@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { STColumn } from '@delon/abc/st';
+import { STColumn, STPage, STRes } from '@delon/abc/st';
+
 
 @Component({
   selector: 'app-user',
@@ -14,17 +15,26 @@ export class UserComponent implements OnInit {
     {title: '角色', index:'roleName'},
     {title: '最后登录时间', index:'lastLoginTime'},
     {title: '最后登录IP', index:'lastLoginIP'},
-    {title: '启用', index:'enable'},
-    {title: '操作', index:'id'},
+    {title: '启用', index:'enable', render:'enable'},
+    {title: '操作', buttons:[
+      {text: '编辑',icon:'edit', type:'modal',modal:{}},
+      {text: '密码修改', icon:'lock', type:'modal',modal:{}},
+      {text: '删除', icon:'delete', type:'del',pop:{title:'确定删除此用户？',okType:'danger',okText:'删除'},click:(record)=>{console.log(record.id)}}
+    ]},
   ];
 
   getUserListURL = '/users'
 
-  searchParams = {}
+  searchParams: {name:string,roleName:string} = {name:'',roleName:''};
 
   constructor() { }
 
   ngOnInit(): void {
+  }
+
+  addUser() {
+    this.searchParams.name = 're';
+    this.searchParams.roleName = '';
   }
 
 }

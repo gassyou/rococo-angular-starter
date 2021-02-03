@@ -4,6 +4,8 @@ import { CommonModule } from '@angular/common';
 import { LayoutModule } from './layout/layout.module';
 import { MenuService } from '@delon/theme';
 import { SharedModule } from '../shared/shared.module';
+import { NzModalService } from 'ng-zorro-antd/modal';
+import { FormsModule } from '@angular/forms';
 
 @NgModule({
   declarations: [],
@@ -11,8 +13,9 @@ import { SharedModule } from '../shared/shared.module';
     CommonModule,
     RoutesRoutingModule,
     LayoutModule,
-    SharedModule
+    SharedModule,
+    FormsModule,
   ],
-  providers: [MenuService]
+  providers: [MenuService,NzModalService],
 })
 export class RoutesModule { }
