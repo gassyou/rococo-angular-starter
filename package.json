@@ -31,6 +31,7 @@
     "@delon/util": "^11.2.0",
     "@ngx-translate/core": "^13.0.0",
     "@ngx-translate/http-loader": "^6.0.0",
+    "@types/ajv": "^1.0.0",
     "ajv": "^6.12.6",
     "file-saver": "^2.0.5",
     "ng-alain": "^11.3.0",

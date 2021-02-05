@@ -1,22 +1,37 @@
 <nz-input-group
-  nz-tooltip
   nzSearch
-
+  cdkOverlayOrigin
+  #trigger
   [nzSuffix]="searchButton"
-  [nzPrefix]="moreButton"
-  [nzTooltipTitle]="tooltilTemplate">
-    <input type="text" nz-input [placeholder]="placeholder" />
+  [nzPrefix]="form ? moreButton:null">
+    <input type="text" style="width:250px" nz-input [placeholder]="placeholder" />
 </nz-input-group>
 
 <ng-template #searchButton>
-  <button class="search-btn" nz-button nzSize="small" nzSearch><i nz-icon nzType="search"></i></button>
+  <button class="search-btn" nz-button nzSize="small" nzSearch (click)="simpleSearch()">
+    <i nz-icon nzType="search"></i>
+  </button>
 </ng-template>
 
 <ng-template #moreButton>
-  <button class="search-btn" nz-button nzSize="small" ><i nz-icon nzType="caret-down" nzTheme="outline"></i></button>
+  <button
+   class="search-btn"
+   nz-button
+   (click)="isOpen=!isOpen"
+   nzSize="small" >
+    <i nz-icon nzType="caret-down" nzTheme="outline"></i>
+  </button>
 </ng-template>
 
-<ng-template #tooltilTemplate>
-  <div>1. 按“回车键”或者点击"<i nz-icon nzType="search"></i>"图标,进行查找</div>
-  <div>2. 点击"<i nz-icon nzType="caret-down" nzTheme="outline"></i>"图标，显示高级查询</div>
+<ng-template cdkConnectedOverlay
+  cdkConnectedOverlayMinWidth="318px"
+  [cdkConnectedOverlayOrigin]="trigger"
+  [cdkConnectedOverlayOpen]="isOpen">
+  <nz-card class="sk">
+    <sf #sf [schema]="form" button="none"></sf>
+    <div class="modal-footer">
+      <button nz-button nzSize="small" (click)="reset()">重置</button>
+      <button nz-button nzType="primary" nzSize="small" (click)="search()">查询</button>
+    </div>
+  </nz-card>
 </ng-template>

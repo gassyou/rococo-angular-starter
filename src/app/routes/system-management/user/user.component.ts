@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { STColumn, STPage, STRes } from '@delon/abc/st';
+import { SFSchema } from '@delon/form';
 
 
 @Component({
@@ -26,6 +27,12 @@ export class UserComponent implements OnInit {
   getUserListURL = '/users'
 
   searchParams: {name:string,roleName:string} = {name:'',roleName:''};
+  searchForm : SFSchema = {
+    properties: {
+      name:{type: 'string',title:"姓名",},
+      mobile: {type: 'string',title: "电话"},
+    },
+  };
 
   constructor() { }
 
