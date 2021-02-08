@@ -28,6 +28,7 @@ export const DELON_MODULES = [
 export const alainConfig: AlainConfig = {
   st: {
     page: {
+      show: true,
       front: false,
       showSize:true,
       total:true,

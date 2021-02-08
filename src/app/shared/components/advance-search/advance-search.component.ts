@@ -1,12 +1,10 @@
 import { Component, Input, OnInit, Optional, SkipSelf, ViewChild } from '@angular/core';
 import { SFComponent, SFSchema } from '@delon/form';
-import { CRUD } from '../../common/curd';
-import { SearchParams } from '../../common/search-params.interface';
-
+import { CRUDService } from '../../../core/service/crud.service';
 @Component({
   selector: 'app-advance-search',
   templateUrl: './advance-search.component.html',
-  styleUrls: ['./advance-search.component.less']
+  styleUrls: ['./advance-search.component.less'],
 })
 export class AdvanceSearchComponent implements OnInit {
 
@@ -15,39 +13,39 @@ export class AdvanceSearchComponent implements OnInit {
   @Input('searchForm')
   form: SFSchema | Component = null;
 
-  @ViewChild('sf',{static: true})
-  sf: SFComponent;
-
   @Input('simpleSearch')
   simpleSearchParam: any;
 
   isOpen: boolean = false;
+  simpleSearchValue = '';
+  advanceSearchValue: any = null;
 
   constructor(
-    @Optional() @SkipSelf() private searchService: CRUD
+    @Optional() @SkipSelf() private searchService: CRUDService
   ) { }
 
   ngOnInit(): void {
-    this.search()
+  }
+
+  formValueChange(value: any): void {
+    this.advanceSearchValue = {... value.value}
   }
 
   search(): void {
-
-    let param: SearchParams = this.searchService.params;
-    param = Object.assign(param, this.sf.value);
-    this.searchService.search(param);
+    this.searchService.search(this.advanceSearchValue);
     this.isOpen = false;
   }
 
-  reset(): void {
-    this.sf.reset();
-    this.search();
-  }
-
   simpleSearch() {
-    let param: SearchParams = this.searchService.params;
-    param = Object.assign(param, this.simpleSearchParam);
-    this.searchService.search(param);
+
+    if(!this.simpleSearchParam) {
+      return ;
+    }
+
+    for(const key in this.simpleSearchParam) {
+      this.simpleSearchParam[key] = this.simpleSearchValue;
+    }
+    this.searchService.search(this.simpleSearchParam);
   }
 
 }

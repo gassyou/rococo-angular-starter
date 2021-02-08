@@ -31,15 +31,25 @@ app
   })
   .get("/users",(c)=>{
 
-    const {name,pi,ps}  = c.queryParams;
+    const {name,currentPage,pageSize}  = c.queryParams;
+    console.log(c.queryParams);
+    const startIndex = (Number(currentPage)-1) * Number(pageSize);
+    const endIndex = startIndex + Number(pageSize);
 
-    const startIndex = (Number(pi)-1) * Number(ps);
-    const endIndex = startIndex + Number(ps);
+    const recoreds = users.filter( x=> name ? x.name.toLowerCase().indexOf(name.toLowerCase())>=0 : true);
+    const pageRecoreds = recoreds.slice(startIndex, endIndex);
 
     return {
-      total: users.length,
-      list:users.filter( x=> name ? x.name.toLowerCase().indexOf(name.toLowerCase())>=0 : true)
-        .slice(startIndex, endIndex)
+      meta:{
+        success:true,
+        message: 'ok',
+        statusCode: 200,
+        popup: false
+      },
+      data: {
+        total: recoreds.length,
+        records: pageRecoreds
+      }
     };
   },cors())
   .start({port:3000});

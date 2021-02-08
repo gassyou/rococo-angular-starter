@@ -6,6 +6,7 @@ import { AdvanceSearchComponent } from './components/advance-search/advance-sear
 import { OverlayModule } from '@angular/cdk/overlay';
 import { DelonFormModule } from '@delon/form';
 import { PageTitleComponent } from './components/page-title/page-title.component';
+import { FormsModule } from '@angular/forms';
 
 
 @NgModule({
@@ -16,6 +17,7 @@ import { PageTitleComponent } from './components/page-title/page-title.component
     ... ZORRO_MODULES,
     ... DELON_MODULES,
     OverlayModule,
+    FormsModule,
     DelonFormModule.forRoot()
   ],
   exports: [

@@ -4,7 +4,7 @@
   #trigger
   [nzSuffix]="searchButton"
   [nzPrefix]="form ? moreButton:null">
-    <input type="text" style="width:250px" nz-input [placeholder]="placeholder" />
+    <input type="text" style="width:250px" nz-input [placeholder]="placeholder" [(ngModel)]="simpleSearchValue" (keyup.enter)="simpleSearch()"/>
 </nz-input-group>
 
 <ng-template #searchButton>
@@ -28,9 +28,9 @@
   [cdkConnectedOverlayOrigin]="trigger"
   [cdkConnectedOverlayOpen]="isOpen">
   <nz-card class="sk">
-    <sf #sf [schema]="form" button="none"></sf>
+    <sf #sf [schema]="form" button="none" compact="true" (formValueChange)="formValueChange($event)"></sf>
     <div class="modal-footer">
-      <button nz-button nzSize="small" (click)="reset()">重置</button>
+      <button nz-button nzSize="small" (click)="sf.reset();search()">重置</button>
       <button nz-button nzType="primary" nzSize="small" (click)="search()">查询</button>
     </div>
   </nz-card>
