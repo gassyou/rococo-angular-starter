@@ -31,12 +31,7 @@ export abstract class CRUDService {
                           })
                         );
 
-  private params: SearchParams = {
-    currentPage: 1,
-    pageSize: 10,
-    sortName: null,
-    sortValue: null,
-  };
+  public params: SearchParams = {};
 
   constructor(
     private http: _HttpClient,
@@ -44,25 +39,22 @@ export abstract class CRUDService {
   ) {}
 
   /**
-   * 查询方法。
+   * 查询操作
    * 后端返回内容，原模原样返回
    * get 提交。
    * url:取自：searchUrl
    * 组件只需监听 `datasource$`属性，即可获取查询结果
    * @param param 查询参数。没有分页参数时，会自动添加分页参数。当不传参数时，则按照上次条件进行查询
    */
-  public search(query?:any | SearchParams) {
-
+  public search(query?: SearchParams) {
     if(query) {
-      this.params = returnDefaultSearchParams(this.params);
-      this.params = deepMerge(this.params, query)
-      console.log(this.params);
+      this.params = deepMerge({}, query)
     }
     this._search$.next(this.params);
   }
 
   /**
-   * 添加记录
+   * 添加操作
    * 该接口自动显示添加成功或失败消息。
    * 后端返回内容，原模原样返回
    * post 提交。
@@ -86,7 +78,7 @@ export abstract class CRUDService {
   }
 
   /**
-   * 更新记录
+   * 更新操作
    * 该接口自动显示更细成功或失败消息。
    * 后端返回内容，原模原样返回
    * post 提交。
@@ -109,7 +101,7 @@ export abstract class CRUDService {
   }
 
   /**
-   * 根据记录ID，删除记录。
+   * 根据记录ID，删除操作
    * 该接口自动显示删除成功或失败消息。
    * 后端返回内容，原模原样返回
    * post 提交。

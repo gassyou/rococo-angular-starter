@@ -1,6 +1,6 @@
 <app-page-title [searchBar]="searchBar">
   <ng-template #searchBar>
-    <app-advance-search class="mr-sm" [searchForm]="searchForm" [simpleSearch]="searchParams"></app-advance-search>
+    <app-advance-search class="mr-sm" [advanceSearchForm]="searchForm" [simpleSearchKeys]="searchParams"></app-advance-search>
     <button nz-button nzType="primary" (click)="addUser()">添加新用户</button>
   </ng-template>
 </app-page-title>

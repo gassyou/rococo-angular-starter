@@ -28,7 +28,7 @@ export class UserComponent implements OnInit {
     ]},
   ];
 
-  searchParams: {name:string,roleName:string} = {name:'',roleName:''};
+  searchParams = ['name','role'];
   searchForm : SFSchema = {
     properties: {
       name:{type: 'string',title:"姓名",},
@@ -55,26 +55,25 @@ export class UserComponent implements OnInit {
     this.userService.search({
       currentPage: this.currentPage,
       pageSize: this.pageSize,
-      sortName: null,
-      sortValue: null
     });
   }
 
   addUser() {
-    this.searchParams.name = 're';
-    this.searchParams.roleName = '';
+
   }
 
   tableChange(value) {
+
+    console.log(value);
 
     if(value.type === "pi") {
 
       const param: SearchParams = {
         currentPage: value.pi,
         pageSize: value.ps,
-        sortName: null,
-        sortValue: null
       };
+
+      console.log(param);
       this.userService.search(param);
     }
 
@@ -84,8 +83,6 @@ export class UserComponent implements OnInit {
       const param: SearchParams = {
         currentPage: this.currentPage,
         pageSize: value.ps,
-        sortName: null,
-        sortValue: null
       };
       this.userService.search(param);
     }

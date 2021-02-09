@@ -1,5 +1,6 @@
-import { Component, Input, OnInit, Optional, SkipSelf, ViewChild } from '@angular/core';
-import { SFComponent, SFSchema } from '@delon/form';
+import { Component, Input, OnInit, Optional, SkipSelf } from '@angular/core';
+import { SFSchema } from '@delon/form';
+import { SearchParams } from 'src/app/core/model/search-params.interface';
 import { CRUDService } from '../../../core/service/crud.service';
 @Component({
   selector: 'app-advance-search',
@@ -10,42 +11,76 @@ export class AdvanceSearchComponent implements OnInit {
 
   @Input() placeholder: string = '查询';
 
-  @Input('searchForm')
+  @Input('advanceSearchForm')
   form: SFSchema | Component = null;
 
-  @Input('simpleSearch')
-  simpleSearchParam: any;
+  @Input('simpleSearchKeys')
+  simpleSearchKeys: string[] = [];
 
   isOpen: boolean = false;
   simpleSearchValue = '';
-  advanceSearchValue: any = null;
+  advanceSearchValue: any = {}
+
+  isAdvanceMode: boolean = false;
 
   constructor(
-    @Optional() @SkipSelf() private searchService: CRUDService
+    @Optional() @SkipSelf() public searchService: CRUDService
   ) { }
 
-  ngOnInit(): void {
+  ngOnInit(): void {}
+
+  showAdvance() {
+    if(!this.isOpen && this.isAdvanceMode) {
+      this.advanceSearchValue = this.searchService.params;
+    }
+    this.isOpen=!this.isOpen
   }
 
-  formValueChange(value: any): void {
-    this.advanceSearchValue = {... value.value}
-  }
+  advanceSearch(value): void {
+    this.isAdvanceMode = true;
 
-  search(): void {
-    this.searchService.search(this.advanceSearchValue);
+    let params: SearchParams = Object.assign({},value);
+
+    params.currentPage = 1;
+    params.pageSize = this.searchService.params.pageSize;
+    params.sortName = this.searchService.params.sortName;
+    params.sortValue = this.searchService.params.sortValue;
+
+    this.searchService.search(params);
     this.isOpen = false;
   }
 
   simpleSearch() {
 
-    if(!this.simpleSearchParam) {
-      return ;
-    }
+    this.isAdvanceMode = false;
 
-    for(const key in this.simpleSearchParam) {
-      this.simpleSearchParam[key] = this.simpleSearchValue;
-    }
-    this.searchService.search(this.simpleSearchParam);
+    let params: SearchParams = {};
+    this.simpleSearchKeys.forEach(key =>{
+      params[key] = this.simpleSearchValue;
+    });
+
+    params.currentPage = 1;
+    params.pageSize = this.searchService.params.pageSize;
+    params.sortName = this.searchService.params.sortName;
+    params.sortValue = this.searchService.params.sortValue;
+
+    this.searchService.search(params);
+  }
+
+  reset(): void {
+    let params: SearchParams = {};
+
+    params.currentPage = 1;
+    params.pageSize = this.searchService.params.pageSize;
+    params.sortName = this.searchService.params.sortName;
+    params.sortValue = this.searchService.params.sortValue;
+
+    this.searchService.search(params);
+
+    this.advanceSearchValue = Object.assign({}, params);
+    this.simpleSearchValue = '';
+
+    this.isOpen = false;
   }
 
 }
