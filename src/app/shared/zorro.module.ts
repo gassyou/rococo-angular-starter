@@ -66,6 +66,7 @@ import { NzTypographyModule } from 'ng-zorro-antd/typography';
 import { NzUploadModule } from 'ng-zorro-antd/upload';
 import { NzResizableModule } from 'ng-zorro-antd/resizable';
 import { NzPipesModule } from 'ng-zorro-antd/pipes';
+import { NzConfig } from 'ng-zorro-antd/core/config';
 
 export const ZORRO_MODULES = [
   NzAffixModule,
@@ -137,3 +138,9 @@ export const ZORRO_MODULES = [
   NzResizableModule,
   NzPipesModule,
 ];
+
+const ngZorroConfig: NzConfig = {
+  // 注意组件名称没有 nz 前缀
+  message: { nzTop: 120 },
+  notification: { nzTop: 240 }
+};
