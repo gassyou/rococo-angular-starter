@@ -41,7 +41,7 @@ export class AdvanceSearchComponent implements OnInit {
 
     let params: SearchParams = Object.assign({},value);
 
-    params.currentPage = 1;
+    params.currentPage = this.searchService.params.currentPage;
     params.pageSize = this.searchService.params.pageSize;
     params.sortName = this.searchService.params.sortName;
     params.sortValue = this.searchService.params.sortValue;
@@ -59,7 +59,7 @@ export class AdvanceSearchComponent implements OnInit {
       params[key] = this.simpleSearchValue;
     });
 
-    params.currentPage = 1;
+    params.currentPage = this.searchService.params.currentPage;
     params.pageSize = this.searchService.params.pageSize;
     params.sortName = this.searchService.params.sortName;
     params.sortValue = this.searchService.params.sortValue;
@@ -70,7 +70,7 @@ export class AdvanceSearchComponent implements OnInit {
   reset(): void {
     let params: SearchParams = {};
 
-    params.currentPage = 1;
+    params.currentPage = this.searchService.params.currentPage;
     params.pageSize = this.searchService.params.pageSize;
     params.sortName = this.searchService.params.sortName;
     params.sortValue = this.searchService.params.sortValue;
