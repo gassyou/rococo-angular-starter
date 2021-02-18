@@ -4,6 +4,7 @@ import { SFSchema } from '@delon/form';
 import { SearchParams } from 'src/app/core/model/search-params.interface';
 import { CRUDService } from 'src/app/core/service/crud.service';
 import { UserService } from 'src/app/core/service/user.service';
+import { environment } from 'src/environments/environment';
 
 
 @Component({
@@ -26,7 +27,8 @@ export class UserComponent implements OnInit {
   userList: any[] = [];
   total: number = 0;
   currentPage = 1;
-  pageSize = 5;
+  pageSize = environment.pageSize;
+  pageSizeOptions = environment.pageSizeOptions;
 
   constructor(private userService: CRUDService) { }
 

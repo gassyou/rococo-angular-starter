@@ -9,7 +9,7 @@
 
 <nz-table #basicTable [nzData]="userList" nzShowPagination="true" nzShowQuickJumper="true" [(nzPageSize)]="pageSize"
   nzShowSizeChanger="true" nzFrontPagination="false" [nzTotal]="total" [(nzPageIndex)]="currentPage"
-  [nzPageSizeOptions]="[5,10,15,20]" (nzPageIndexChange)="tableChange()" (nzPageSizeChange)="tableChange()">
+  [nzPageSizeOptions]="pageSizeOptions" (nzPageIndexChange)="tableChange()" (nzPageSizeChange)="tableChange()">
   <thead>
     <tr>
       <th>序号</th>

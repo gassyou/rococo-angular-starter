@@ -5,6 +5,8 @@
 export const environment = {
   production: false,
   SERVER_URL: "http://localhost:3000",
+  pageSizeOptions:[5,10,15,20],
+  pageSize: 5
 };
 
 /*
