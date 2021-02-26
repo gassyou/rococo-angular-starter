@@ -1,7 +1,7 @@
 import { NzMessageService } from 'ng-zorro-antd/message';
 import { _HttpClient } from "@delon/theme";
 import { BehaviorSubject, Observable } from "rxjs";
-import { returnDefaultSearchParams, SearchParams } from "../model/search-params.interface";
+import { combineSearchParams, isSearchParams, SearchParams } from "../model/search-params.interface";
 import { filter, map, switchMap } from 'rxjs/operators';
 import { Injectable } from '@angular/core';
 import { deepMerge } from '@delon/util';
@@ -31,7 +31,10 @@ export abstract class CRUDService {
                           })
                         );
 
-  public params: SearchParams = {};
+  private _params: SearchParams = {};
+  public get params() {
+    return this._params;
+  }
 
   constructor(
     private http: _HttpClient,
@@ -46,9 +49,9 @@ export abstract class CRUDService {
    * 组件只需监听 `datasource$`属性，即可获取查询结果
    * @param param 查询参数。没有分页参数时，会自动添加分页参数。当不传参数时，则按照上次条件进行查询
    */
-  public search(query?: SearchParams) {
+  public search(query?: SearchParams | any) {
     if(query) {
-      this.params = deepMerge({}, query)
+      this._params = combineSearchParams(this._params,query);
     }
     this._search$.next(this.params);
   }

@@ -1,11 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-import { STColumn } from '@delon/abc/st';
 import { SFSchema } from '@delon/form';
-import { SearchParams } from 'src/app/core/model/search-params.interface';
 import { CRUDService } from 'src/app/core/service/crud.service';
 import { UserService } from 'src/app/core/service/user.service';
-import { environment } from 'src/environments/environment';
-
+import { PageAndSort } from 'src/app/shared/components/page-and-sort';
 
 @Component({
   selector: 'app-user',
@@ -13,24 +10,22 @@ import { environment } from 'src/environments/environment';
   styleUrls: ['./user.component.less'],
   providers: [{provide: CRUDService, useClass: UserService}]
 })
-export class UserComponent implements OnInit {
+export class UserComponent extends PageAndSort implements OnInit  {
 
   searchParams = ['name','role'];
   searchForm : SFSchema = {
     properties: {
-      name:{type: 'string',title:"姓名",},
-      role:{type: 'string',title:"角色",},
+      name: {type: 'string',title:"姓名",},
+      role: {type: 'string',title:"角色",},
       mobile: {type: 'string',title: "电话"},
     },
   };
 
   userList: any[] = [];
-  total: number = 0;
-  currentPage = 1;
-  pageSize = environment.pageSize;
-  pageSizeOptions = environment.pageSizeOptions;
 
-  constructor(private userService: CRUDService) { }
+  constructor(private userService: CRUDService) {
+    super(userService);
+  }
 
   ngOnInit(): void {
     this.userService.datasource$.subscribe(
@@ -48,13 +43,6 @@ export class UserComponent implements OnInit {
 
   addUser() {
 
-  }
-
-  tableChange() {
-    const params: SearchParams = {... this.userService.params};
-    params.pageSize = this.pageSize;
-    params.currentPage = this.currentPage;
-    this.userService.search(params);
   }
 
 }

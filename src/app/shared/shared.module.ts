@@ -8,7 +8,6 @@ import { DelonFormModule } from '@delon/form';
 import { PageTitleComponent } from './components/page-title/page-title.component';
 import { FormsModule } from '@angular/forms';
 
-
 @NgModule({
   declarations: [AdvanceSearchComponent, PageTitleComponent],
   imports: [

@@ -30,54 +30,40 @@ export class AdvanceSearchComponent implements OnInit {
   ngOnInit(): void {}
 
   showAdvance() {
+
     if(!this.isOpen && this.isAdvanceMode) {
       this.advanceSearchValue = this.searchService.params;
     }
-    this.isOpen=!this.isOpen
+    this.isOpen = !this.isOpen
+
   }
 
   advanceSearch(value): void {
+
     this.isAdvanceMode = true;
-
     let params: SearchParams = Object.assign({},value);
-
-    params.currentPage = this.searchService.params.currentPage;
-    params.pageSize = this.searchService.params.pageSize;
-    params.sortName = this.searchService.params.sortName;
-    params.sortValue = this.searchService.params.sortValue;
-
+    params.currentPage = 1;
     this.searchService.search(params);
     this.isOpen = false;
+
   }
 
   simpleSearch() {
 
     this.isAdvanceMode = false;
-
     let params: SearchParams = {};
     this.simpleSearchKeys.forEach(key =>{
       params[key] = this.simpleSearchValue;
     });
-
-    params.currentPage = this.searchService.params.currentPage;
-    params.pageSize = this.searchService.params.pageSize;
-    params.sortName = this.searchService.params.sortName;
-    params.sortValue = this.searchService.params.sortValue;
-
+    params.currentPage = 1;
     this.searchService.search(params);
+
   }
 
   reset(): void {
-    let params: SearchParams = {};
 
-    params.currentPage = this.searchService.params.currentPage;
-    params.pageSize = this.searchService.params.pageSize;
-    params.sortName = this.searchService.params.sortName;
-    params.sortValue = this.searchService.params.sortValue;
-
-    this.searchService.search(params);
-
-    this.advanceSearchValue = Object.assign({}, params);
+    this.searchService.search({currentPage: 1});
+    this.advanceSearchValue = Object.assign({}, this.searchService.params);
     this.simpleSearchValue = '';
 
     this.isOpen = false;
