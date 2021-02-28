@@ -1,11 +1,9 @@
 import { NzMessageService } from 'ng-zorro-antd/message';
 import { _HttpClient } from "@delon/theme";
 import { BehaviorSubject, Observable } from "rxjs";
-import { combineSearchParams, isSearchParams, SearchParams } from "../model/search-params.interface";
+import { combineSearchParams, SearchParams } from "../model/search-params.interface";
 import { filter, map, switchMap } from 'rxjs/operators';
-import { Injectable } from '@angular/core';
-import { deepMerge } from '@delon/util';
-
+import { Injectable, Optional } from '@angular/core';
 @Injectable()
 export abstract class CRUDService {
 
@@ -38,7 +36,7 @@ export abstract class CRUDService {
 
   constructor(
     private http: _HttpClient,
-    private message: NzMessageService
+    @Optional() private message: NzMessageService
   ) {}
 
   /**

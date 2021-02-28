@@ -16,6 +16,6 @@ import { FormsModule } from '@angular/forms';
     SharedModule,
     FormsModule,
   ],
-  providers: [MenuService,NzModalService],
+  providers: [MenuService, NzModalService],
 })
 export class RoutesModule { }

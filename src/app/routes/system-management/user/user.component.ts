@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { SFSchema } from '@delon/form';
+import { NzMessageService } from 'ng-zorro-antd/message';
 import { CRUDService } from 'src/app/core/service/crud.service';
 import { UserService } from 'src/app/core/service/user.service';
 import { PageAndSort } from 'src/app/shared/components/page-and-sort';
@@ -8,7 +9,7 @@ import { PageAndSort } from 'src/app/shared/components/page-and-sort';
   selector: 'app-user',
   templateUrl: './user.component.html',
   styleUrls: ['./user.component.less'],
-  providers: [{provide: CRUDService, useClass: UserService}]
+  providers: [{provide: CRUDService, useClass: UserService},NzMessageService]
 })
 export class UserComponent extends PageAndSort implements OnInit  {
 

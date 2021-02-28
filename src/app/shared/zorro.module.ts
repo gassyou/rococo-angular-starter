@@ -139,7 +139,7 @@ export const ZORRO_MODULES = [
   NzPipesModule,
 ];
 
-const ngZorroConfig: NzConfig = {
+export const ngZorroConfig: NzConfig = {
   // 注意组件名称没有 nz 前缀
   message: { nzTop: 120 },
   notification: { nzTop: 240 }

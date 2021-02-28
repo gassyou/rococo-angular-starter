@@ -16,6 +16,9 @@ import { Overlay, OverlayModule } from '@angular/cdk/overlay';
 import { NzDrawerService } from 'ng-zorro-antd/drawer';
 import { ALAIN_CONFIG } from '@delon/util';
 import { alainConfig } from './shared/delon.module';
+import { NzMessageService } from 'ng-zorro-antd/message';
+import { NZ_CONFIG } from 'ng-zorro-antd/core/config';
+import { ngZorroConfig } from './shared/zorro.module';
 
 registerLocaleData(zh);
 
@@ -35,7 +38,8 @@ registerLocaleData(zh);
   providers: [
     { provide: NZ_I18N, useValue: zh_CN },
     { provide: ALAIN_CONFIG, useValue: alainConfig },
-     NzModalService, Overlay, NzDrawerService],
+    { provide: NZ_CONFIG, useValue: ngZorroConfig } ,
+     NzModalService, Overlay, NzDrawerService, NzMessageService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

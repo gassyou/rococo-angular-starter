@@ -24,6 +24,6 @@ import { FormsModule } from '@angular/forms';
     PageTitleComponent,
     ... ZORRO_MODULES,
     ... DELON_MODULES
-  ]
+  ],
 })
 export class SharedModule { }

@@ -6,6 +6,7 @@ import { SharedModule } from 'src/app/shared/shared.module';
 import { NzModalService } from 'ng-zorro-antd/modal';
 import { FormsModule } from '@angular/forms';
 import { ZORRO_MODULES } from 'src/app/shared/zorro.module';
+import { NzMessageService } from 'ng-zorro-antd/message';
 
 
 @NgModule({
@@ -17,6 +18,6 @@ import { ZORRO_MODULES } from 'src/app/shared/zorro.module';
     FormsModule,
     ZORRO_MODULES,
   ],
-  providers: [NzModalService]
+  providers: [NzModalService, NzMessageService]
 })
 export class SysmMgtModule { }
