@@ -36,7 +36,9 @@
               "src/styles.less"
             ],
             "scripts": [
-              "node_modules/ajv/dist/ajv.bundle.js"
+            ],
+            "allowedCommonJsDependencies": [
+              "ajv"
             ]
           },
           "configurations": {
