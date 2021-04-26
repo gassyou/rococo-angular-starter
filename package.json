@@ -34,7 +34,7 @@
     "@types/ajv": "^1.0.0",
     "file-saver": "^2.0.5",
     "ng-alain": "^11.7.0",
-    "ng-zorro-antd": "^11.2.0",
+    "ng-zorro-antd": "^11.4.1",
     "ngx-countdown": "^11.0.1",
     "ngx-tinymce": "^11.0.0",
     "ngx-ueditor": "^11.0.0",
