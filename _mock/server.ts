@@ -1,5 +1,5 @@
-import { Application } from "https://deno.land/x/abc@v1.2.4/mod.ts";
-import { cors } from "https://deno.land/x/abc@v1.2.4/middleware/cors.ts";
+import { Application } from "https://deno.land/x/abc@v1.3.1/mod.ts";
+import { cors } from "https://deno.land/x/abc@v1.3.1/middleware/cors.ts";
 
 const app = new Application();
 let users = [

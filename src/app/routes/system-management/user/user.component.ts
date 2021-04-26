@@ -9,7 +9,7 @@ import { PageAndSort } from 'src/app/shared/components/page-and-sort';
   selector: 'app-user',
   templateUrl: './user.component.html',
   styleUrls: ['./user.component.less'],
-  providers: [{provide: CRUDService, useClass: UserService},NzMessageService]
+  providers: [{provide: CRUDService, useClass: UserService}]
 })
 export class UserComponent extends PageAndSort implements OnInit  {
 
@@ -27,6 +27,7 @@ export class UserComponent extends PageAndSort implements OnInit  {
   constructor(private userService: CRUDService) {
     super(userService);
   }
+
 
   ngOnInit(): void {
     this.userService.datasource$.subscribe(
