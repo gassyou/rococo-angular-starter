@@ -36,8 +36,6 @@
     "ng-alain": "^11.10.0",
     "ng-zorro-antd": "^11.4.1",
     "ngx-countdown": "^11.0.1",
-    "ngx-tinymce": "^11.0.0",
-    "ngx-ueditor": "^11.0.0",
     "rxjs": "~6.6.7",
     "tslib": "^2.0.0",
     "zone.js": "~0.10.2"

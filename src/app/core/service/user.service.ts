@@ -1,7 +1,7 @@
 import { Injectable, Optional } from '@angular/core';
 import { _HttpClient } from '@delon/theme';
 import { NzMessageService } from 'ng-zorro-antd/message';
-import { CRUDService } from './crud.service';
+import { CRUDService } from '../../freamwork/core/crud.service';
 
 @Injectable()
 export class UserService extends CRUDService {

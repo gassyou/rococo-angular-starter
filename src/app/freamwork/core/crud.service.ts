@@ -1,13 +1,12 @@
 import { NzMessageService } from 'ng-zorro-antd/message';
 import { _HttpClient } from "@delon/theme";
 import { BehaviorSubject, Observable } from "rxjs";
-import { combineSearchParams, SearchParams } from "../model/search-params.interface";
+import { combineSearchParams, SearchParams } from "./search-params.interface";
 import { filter, map, switchMap } from 'rxjs/operators';
 import { Injectable, Optional } from '@angular/core';
+
 @Injectable()
 export abstract class CRUDService {
-
-
   public searchUrl: string = '';
   public addUrl: string = '';
   public deleteUrl: string = '';
@@ -149,5 +148,4 @@ export abstract class CRUDService {
       })
     );
   }
-
 }

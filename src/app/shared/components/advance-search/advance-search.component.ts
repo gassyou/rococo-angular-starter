@@ -1,13 +1,13 @@
 import { Component, Input, OnInit, Optional, SkipSelf } from '@angular/core';
 import { SFSchema } from '@delon/form';
-import { SearchParams } from 'src/app/core/model/search-params.interface';
-import { CRUDService } from '../../../core/service/crud.service';
+import { SearchComponent } from 'src/app/freamwork/core/search-component';
+import { CRUDService } from '../../../freamwork/core/crud.service';
 @Component({
   selector: 'app-advance-search',
   templateUrl: './advance-search.component.html',
   styleUrls: ['./advance-search.component.less'],
 })
-export class AdvanceSearchComponent implements OnInit {
+export class AdvanceSearchComponent extends SearchComponent implements OnInit {
 
   @Input() placeholder: string = '查询';
 
@@ -19,13 +19,15 @@ export class AdvanceSearchComponent implements OnInit {
 
   isOpen: boolean = false;
   simpleSearchValue = '';
-  advanceSearchValue: any = {}
+  advanceSearchValue: any = {};
 
   isAdvanceMode: boolean = false;
 
   constructor(
     @Optional() @SkipSelf() public searchService: CRUDService
-  ) { }
+  ) {
+    super(searchService);
+  }
 
   ngOnInit(): void {}
 
@@ -39,33 +41,19 @@ export class AdvanceSearchComponent implements OnInit {
   }
 
   advanceSearch(value): void {
-
-    this.isAdvanceMode = true;
-    let params: SearchParams = Object.assign({},value);
-    params.currentPage = 1;
-    this.searchService.search(params);
+    super.advanceSearch(value);
     this.isOpen = false;
 
   }
 
   simpleSearch() {
-
-    this.isAdvanceMode = false;
-    let params: SearchParams = {};
-    this.simpleSearchKeys.forEach(key =>{
-      params[key] = this.simpleSearchValue;
-    });
-    params.currentPage = 1;
-    this.searchService.search(params);
-
+    super.simpleSearch(this.simpleSearchKeys,this.simpleSearchValue);
   }
 
   reset(): void {
-
-    this.searchService.search({currentPage: 1});
+    super.reset();
     this.advanceSearchValue = Object.assign({}, this.searchService.params);
     this.simpleSearchValue = '';
-
     this.isOpen = false;
   }
 
