@@ -1,5 +1,6 @@
 import { Application } from "https://deno.land/x/abc@v1.3.1/mod.ts";
 import { cors } from "https://deno.land/x/abc@v1.3.1/middleware/cors.ts";
+import { delay } from "https://deno.land/std@0.95.0/async/delay.ts";
 
 const app = new Application();
 let users = [
@@ -25,8 +26,13 @@ let users = [
   {id:20, name:"Jansen3", mobile:'15167266618', roleName:"Admin30", lastLoginTime:"2020/01/01 08:01:00", lastLoginIP:"192.168.1.5", enable:0, deleteFlag:0},
 ]
 
+
 app
-  .get("/hello",()=>{
+  .get("/hello",async ()=>{
+
+    // console.log('Do some thing, ' + new Date());
+    // await delay(360000);
+    // console.log('Do other things, ' + new Date());
       return {a:'test'};
   })
   .get("/users",(c)=>{
