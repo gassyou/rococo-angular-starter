@@ -28,7 +28,7 @@ let users = [
 
 
 app
-  .get("/hello",async ()=>{
+  .get("/hello", ()=>{
 
     // console.log('Do some thing, ' + new Date());
     // await delay(360000);

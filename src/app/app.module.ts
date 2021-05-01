@@ -1,7 +1,6 @@
 import { CoreModule } from './core/core.module';
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
-
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { FormsModule } from '@angular/forms';
@@ -19,6 +18,7 @@ import { alainConfig } from './shared/delon.module';
 import { NzMessageService } from 'ng-zorro-antd/message';
 import { NZ_CONFIG } from 'ng-zorro-antd/core/config';
 import { ngZorroConfig } from './shared/zorro.module';
+import { ALAIN_SETTING_KEYS, SettingsService } from '@delon/theme';
 
 registerLocaleData(zh);
 
@@ -39,7 +39,15 @@ registerLocaleData(zh);
     { provide: NZ_I18N, useValue: zh_CN },
     { provide: ALAIN_CONFIG, useValue: alainConfig },
     { provide: NZ_CONFIG, useValue: ngZorroConfig } ,
-     NzModalService, Overlay, NzDrawerService, NzMessageService],
+    {
+         provide: ALAIN_SETTING_KEYS,
+         useValue: {
+           layout: 'new-layout',
+           user: 'new-user',
+           app: 'new-app',
+         },
+       },
+     NzModalService, Overlay, NzDrawerService, NzMessageService, SettingsService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

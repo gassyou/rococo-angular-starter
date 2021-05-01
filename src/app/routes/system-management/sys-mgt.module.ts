@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { UserComponent } from './user/user.component';
+import { UserComponent } from './user/list/user.component';
 import { SysMgtRoutingModule } from './sys-mgt-routing.module';
 import { SharedModule } from 'src/app/shared/shared.module';
 import { NzModalService } from 'ng-zorro-antd/modal';

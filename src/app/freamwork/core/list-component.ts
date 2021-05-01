@@ -2,9 +2,10 @@ import { SearchParams } from 'src/app/freamwork/core/search-params.interface';
 import { CRUDService } from 'src/app/freamwork/core/crud.service';
 import { environment } from 'src/environments/environment';
 import { NzModalService } from 'ng-zorro-antd/modal';
-import { Component, TemplateRef } from '@angular/core';
+import { EditComponent } from './edit-component';
+import { Observable } from 'rxjs';
 
-export abstract class BasicComponent{
+export abstract class ListComponent {
 
   total: number = 0;
   currentPage: number = 1;
@@ -53,13 +54,10 @@ export abstract class BasicComponent{
 
   public openModal(
     title: string,
-    defaultValue: any,
     cancelText: string,
     okText: string,
-    content: any,
-    contentParams: {},
-    cancelFn?: () => void,
-    okFn?: () => void) {
+    content: EditComponent | any,
+    contentParams: {}) {
 
       const modal = this.nzModal.create({
         nzTitle: title,
@@ -69,19 +67,29 @@ export abstract class BasicComponent{
         nzFooter: [{
           label: cancelText,
           type: "default",
-          onClick(): void{
-            if(cancelFn) {
-              cancelFn();
-              modal.destroy();
-            }
+          onClick(): void {
+            const instance : EditComponent | any = modal.getContentComponent();
+            instance.cancel();
+            modal.destroy;
           }
         },{
           label: okText,
           type: "primary",
           loading: false,
-          onClick(): void{
+          onClick(): void {
             this.loading = true;
-
+            const instance : EditComponent | any = modal.getContentComponent();
+            const submit: Observable<any> = instance.submit();
+            if(submit) {
+              submit.subscribe(result => {
+                this.loading = false;
+                if(result) {
+                  modal.destroy();
+                }
+              });
+            } else {
+              this.loading = false;
+            }
           }
         }]
       });
