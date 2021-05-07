@@ -12,7 +12,8 @@ export class MainComponent implements OnInit {
   options: LayoutDefaultOptions = {
     logoExpanded: '../../../assets/logo-full.png',
     logoCollapsed: '../../../assets/logo.png',
-  }
+  };
+
 
   constructor(
     private menuService: MenuService,
@@ -26,6 +27,7 @@ export class MainComponent implements OnInit {
       {text:'测试三'}
     ];
     this.menuService.add(menus);
+
   }
 
 }

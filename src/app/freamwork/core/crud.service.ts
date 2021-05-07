@@ -12,6 +12,7 @@ export abstract class CRUDService {
   public deleteUrl: string = '';
   public updateUrl: string = '';
   public exportUrl: string = '';
+  public allDataUrl: string = '';
 
   private _search$ = new BehaviorSubject<SearchParams>(null);
   public datasource$ = this._search$.asObservable()
@@ -39,6 +40,27 @@ export abstract class CRUDService {
   ) {}
 
   /**
+   * 获取全部数据，不分页。
+   * @returns
+   */
+  public all(): Observable<any> {
+
+    if(!this.allDataUrl) {
+      return null;
+    }
+
+    return this.http.get(this.allDataUrl).pipe(
+      map(response => {
+        if(!response.meta.success) {
+          this.message.error(response['meta']['message']);
+        }
+        return response.data;
+      })
+    );
+
+  }
+
+  /**
    * 查询操作
    * 后端返回内容，原模原样返回
    * get 提交。
@@ -47,6 +69,11 @@ export abstract class CRUDService {
    * @param param 查询参数。没有分页参数时，会自动添加分页参数。当不传参数时，则按照上次条件进行查询
    */
   public search(query?: SearchParams | any) {
+
+    if(!this.searchUrl) {
+      return null;
+    }
+
     if(query) {
       this._params = combineSearchParams(this._params,query);
     }
@@ -62,13 +89,18 @@ export abstract class CRUDService {
    * @param param 更新后的
    */
   public add(param: any): Observable<any> {
+
+    if(!this.addUrl) {
+      return null;
+    }
+
     return this.http.post(this.addUrl, param).pipe(
       map((response)=>{
 
         if(response['meta']['success']) {
           this.message.info('添加成功');
           this.search();
-          return response;
+          return response.data;
         } else {
           this.message.error(response['meta']['message']);
           return false;
@@ -86,12 +118,17 @@ export abstract class CRUDService {
    * @param param 更新后的
    */
   public update(param: any): Observable<any> {
+
+    if(!this.updateUrl) {
+      return null;
+    }
+
     return this.http.post(this.updateUrl, param).pipe(
       map((response)=>{
         if(response['meta']['success']) {
           this.message.info('修改成功');
           this.search();
-          return response;
+          return response.data;
         } else {
           this.message.error(response['meta']['message']);
           return false;
@@ -110,12 +147,17 @@ export abstract class CRUDService {
    * @param id 记录ID，
    */
   public delete(id: number): Observable<any> {
+
+    if(!this.deleteUrl) {
+      return null;
+    }
+
     return this.http.post(`${this.deleteUrl}/${id}`).pipe(
       map((response)=>{
         if(response['meta']['success']) {
           this.message.info('删除成功');
           this.search();
-          return response;
+          return response.data;
         } else {
           this.message.error(response['meta']['message']);
           return false;
@@ -128,6 +170,10 @@ export abstract class CRUDService {
    * 导出满足当前查询条件的所有数据。不分页。
    */
   public export(): Observable<any> {
+
+    if(!this.exportUrl) {
+      return null;
+    }
     return this.http.post(this.exportUrl, this.params, null, {responseType: 'arraybuffer'});
   }
 

@@ -24,7 +24,9 @@ let users = [
   {id:18, name:"Jimmy3",  mobile:'15167288816', roleName:"Admin28", lastLoginTime:"2020/01/01 10:01:00", lastLoginIP:"192.168.1.3", enable:0, deleteFlag:0},
   {id:19, name:"Remo3",   mobile:'15167277717', roleName:"Admin29", lastLoginTime:"2020/01/01 09:01:00", lastLoginIP:"192.168.1.4", enable:1, deleteFlag:0},
   {id:20, name:"Jansen3", mobile:'15167266618', roleName:"Admin30", lastLoginTime:"2020/01/01 08:01:00", lastLoginIP:"192.168.1.5", enable:0, deleteFlag:0},
-]
+];
+
+let roles = [{id:1,name:"admin0"},{id:2,name:"admin1",},{id:3,name:"admin2"}];
 
 
 app
@@ -35,10 +37,23 @@ app
     // console.log('Do other things, ' + new Date());
       return {a:'test'};
   })
+  .get("/all-roles",()=>{
+    return {
+      meta: {
+        success:true,
+        message:'ok',
+        statusCode: 200,
+        popup: false
+      },
+       data: {
+         total: roles.length,
+         records: roles
+       }
+    }
+  },cors())
   .get("/users",(c)=>{
 
     const {name,currentPage,pageSize}  = c.queryParams;
-    console.log(c.queryParams);
     const startIndex = (Number(currentPage)-1) * Number(pageSize);
     const endIndex = startIndex + Number(pageSize);
 

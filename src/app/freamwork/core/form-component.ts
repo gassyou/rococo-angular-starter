@@ -1,6 +1,5 @@
 import { Observable } from "rxjs";
-
-export interface EditComponent {
+export interface FormComponent {
   submit() : Observable<any>;
   cancel();
 }

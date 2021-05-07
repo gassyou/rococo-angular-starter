@@ -5,25 +5,23 @@ import { ZORRO_MODULES } from './zorro.module';
 import { AdvanceSearchComponent } from './components/advance-search/advance-search.component';
 import { OverlayModule } from '@angular/cdk/overlay';
 import { DelonFormModule } from '@delon/form';
-import { PageTitleComponent } from './components/page-title/page-title.component';
 import { FormsModule } from '@angular/forms';
+import { PageContainerComponent } from './components/page-container.component';
 
 @NgModule({
-  declarations: [AdvanceSearchComponent, PageTitleComponent],
+  declarations: [AdvanceSearchComponent, PageContainerComponent],
   imports: [
     CommonModule,
-
-    ... ZORRO_MODULES,
-    ... DELON_MODULES,
+    ...ZORRO_MODULES,
+    ...DELON_MODULES,
     OverlayModule,
     FormsModule,
     DelonFormModule.forRoot()
   ],
   exports: [
-    AdvanceSearchComponent,
-    PageTitleComponent,
-    ... ZORRO_MODULES,
-    ... DELON_MODULES
+    AdvanceSearchComponent, PageContainerComponent,
+    ...ZORRO_MODULES,
+    ...DELON_MODULES
   ],
 })
 export class SharedModule { }

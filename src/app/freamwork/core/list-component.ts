@@ -2,7 +2,7 @@ import { SearchParams } from 'src/app/freamwork/core/search-params.interface';
 import { CRUDService } from 'src/app/freamwork/core/crud.service';
 import { environment } from 'src/environments/environment';
 import { NzModalService } from 'ng-zorro-antd/modal';
-import { EditComponent } from './edit-component';
+import { FormComponent } from './form-component';
 import { Observable } from 'rxjs';
 
 export abstract class ListComponent {
@@ -31,6 +31,8 @@ export abstract class ListComponent {
     });
   }
 
+
+
   onPageIndexChange() {
     const params: SearchParams = {... this.crudService.params};
     params.currentPage = this.currentPage;
@@ -56,8 +58,8 @@ export abstract class ListComponent {
     title: string,
     cancelText: string,
     okText: string,
-    content: EditComponent | any,
-    contentParams: {}) {
+    content: FormComponent | any,
+    contentParams?: {}) {
 
       const modal = this.nzModal.create({
         nzTitle: title,
@@ -68,9 +70,9 @@ export abstract class ListComponent {
           label: cancelText,
           type: "default",
           onClick(): void {
-            const instance : EditComponent | any = modal.getContentComponent();
+            const instance : FormComponent | any = modal.getContentComponent();
             instance.cancel();
-            modal.destroy;
+            modal.destroy();
           }
         },{
           label: okText,
@@ -78,7 +80,7 @@ export abstract class ListComponent {
           loading: false,
           onClick(): void {
             this.loading = true;
-            const instance : EditComponent | any = modal.getContentComponent();
+            const instance : FormComponent | any = modal.getContentComponent();
             const submit: Observable<any> = instance.submit();
             if(submit) {
               submit.subscribe(result => {
