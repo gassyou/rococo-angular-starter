@@ -1,8 +1,6 @@
-import { Application } from "https://deno.land/x/abc@v1.3.1/mod.ts";
-import { cors } from "https://deno.land/x/abc@v1.3.1/middleware/cors.ts";
-import { delay } from "https://deno.land/std@0.95.0/async/delay.ts";
+import { Application,  Router } from "https://deno.land/x/oak/mod.ts";
+import { oakCors } from "https://deno.land/x/cors/mod.ts";
 
-const app = new Application();
 let users = [
   {id:1, name:"David",    mobile:'15167267210', roleName:"Admin0", lastLoginTime:"2020/01/01 12:01:00", lastLoginIP:"192.168.1.1", enable:0, deleteFlag:0},
   {id:2, name:"Mark",     mobile:'15167209311', roleName:"Admin9", lastLoginTime:"2020/01/01 11:01:00", lastLoginIP:"192.168.1.2", enable:1, deleteFlag:0},
@@ -28,51 +26,84 @@ let users = [
 
 let roles = [{id:1,name:"admin0"},{id:2,name:"admin1",},{id:3,name:"admin2"}];
 
-
-app
-  .get("/hello", ()=>{
-
-    // console.log('Do some thing, ' + new Date());
-    // await delay(360000);
-    // console.log('Do other things, ' + new Date());
-      return {a:'test'};
+const router = new Router();
+router
+  .post("/users", async (context) => {
+    const result = context.request.body();
+    const value = await result.value;
+    context.response.body = search(value,users);
   })
-  .get("/all-roles",()=>{
-    return {
-      meta: {
-        success:true,
-        message:'ok',
-        statusCode: 200,
-        popup: false
-      },
-       data: {
-         total: roles.length,
-         records: roles
-       }
-    }
-  },cors())
-  .get("/users",(c)=>{
+  .post("/user/add", async (context) => {
+    const result = context.request.body();
+    const value = await result.value;
+    context.response.body = add(value,users);
+  })
+  .post("/user/edit",async (context)=>{
+    const result = context.request.body();
+    const value = await result.value;
+    context.response.body = edit(value,users);
+  })
+  .post("/user/delete", async (context)=>{
+    const result = context.request.body();
+    const value = await result.value;
+    context.response.body = deleteData(value,users);
+  })
+  .post("/all-roles", (context) => {
+    context.response.body =  serverResponse(roles);
+  });
 
-    const {name,currentPage,pageSize}  = c.queryParams;
-    const startIndex = (Number(currentPage)-1) * Number(pageSize);
-    const endIndex = startIndex + Number(pageSize);
+const app = new Application();
+app.use(oakCors());
+app.use(router.routes());
+await app.listen({ port: 3000 });
 
-    const recoreds = users.filter( x=> name ? x.name.toLowerCase().indexOf(name.toLowerCase())>=0 : true);
-    const pageRecoreds = recoreds.slice(startIndex, endIndex);
 
-    return {
-      meta:{
-        success:true,
-        message: 'ok',
-        statusCode: 200,
-        popup: false
-      },
-      data: {
-        total: recoreds.length,
-        records: pageRecoreds
+function deleteData(id: number,datasource: any[]) {
+  let records =datasource.filter(x => x.id !== id);
+  return serverResponse(records);
+}
+
+function edit(params: any,datasource:any[]) {
+  datasource.forEach(data => {
+    if(data.id === params.id) {
+      for(let p in data) {
+        data[p] = params[p];
       }
-    };
-  },cors())
-  .start({port:3000});
+    }
+  });
+  return serverResponse(datasource);
+}
 
+function add(params:any,datasource:any[]) {
+  params.id = datasource.length + 1;
+  datasource.push(params);
+  return serverResponse(datasource);
+}
 
+function search(params: any, datasource:any[]){
+  let recoreds = datasource;
+  for(let p in params) {
+    if(p!=="currentPage" && p!=="pageSize" && p!=="sortName" && p!="sortValue") {
+      recoreds = recoreds.filter( x=> params[p] ? x[p].toLowerCase().indexOf(params[p].toLowerCase())>=0 : true);
+    }
+  }
+  const startIndex = (Number(params.currentPage)-1) * Number(params.pageSize);
+  const endIndex = startIndex + Number(params.pageSize);
+  const pageRecoreds = recoreds.slice(startIndex, endIndex);
+  return serverResponse(pageRecoreds);
+}
+
+function serverResponse(data: any) {
+  return {
+    meta:{
+      success:true,
+      message: 'ok',
+      statusCode: 200,
+      popup: false
+    },
+    data: {
+      total: data.length,
+      records: data
+    }
+  };
+}

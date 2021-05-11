@@ -18,7 +18,7 @@ export abstract class CRUDService {
   public datasource$ = this._search$.asObservable()
                         .pipe(filter(params => params !== null))
                         .pipe(switchMap( (params) => {
-                            return  this.http.get(this.searchUrl, params).pipe(
+                            return  this.http.post(this.searchUrl,params).pipe(
                               map(response => {
                                 if(!response.meta.success) {
                                   this.message.error(response['meta']['message']);
@@ -49,7 +49,7 @@ export abstract class CRUDService {
       return null;
     }
 
-    return this.http.get(this.allDataUrl).pipe(
+    return this.http.post(this.allDataUrl).pipe(
       map(response => {
         if(!response.meta.success) {
           this.message.error(response['meta']['message']);

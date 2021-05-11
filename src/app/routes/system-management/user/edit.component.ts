@@ -1,9 +1,10 @@
 import { FormComponent } from 'src/app/freamwork/core/form-component';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { Observable } from 'rxjs';
-import { SFSchema, SFSelectWidgetSchema } from '@delon/form';
+import { SFComponent, SFSchema, SFSelectWidgetSchema } from '@delon/form';
 import { RoleService } from 'src/app/core/service/role.service';
 import { map } from 'rxjs/operators';
+import { UserService } from 'src/app/core/service/user.service';
 
 @Component({
   selector: 'user-edit',
@@ -14,13 +15,17 @@ import { map } from 'rxjs/operators';
       compact="true">
     </sf>
   `,
-  providers: [RoleService]
+  providers: [RoleService,UserService]
 })
 export class EditComponent implements FormComponent, OnInit {
 
   form : SFSchema = {
     properties: {
-      name: {type: 'string',title:"姓名",},
+      name: {type: 'string',title:"姓名",maxLength: 20,ui: {
+        errors: {
+          'required': '必填项'
+        }
+      }},
       role: {
         type: 'integer',
         title:"角色",
@@ -33,12 +38,17 @@ export class EditComponent implements FormComponent, OnInit {
           )
         } as SFSelectWidgetSchema,
       },
-      mobile: {type: 'string',title: "电话"},
+      mobile: {type: 'string',title: "电话", ui: {
+        validator: val => (!val ? [{ keyword: 'required', message: 'Required mobile' }] : []),
+      }},
     },
   };
 
+  @ViewChild('sf', {static:true}) sf :SFComponent;
+
   constructor(
     public roleService: RoleService,
+    public userService: UserService,
   ) { }
 
   ngOnInit(): void {
@@ -46,6 +56,10 @@ export class EditComponent implements FormComponent, OnInit {
   }
 
   submit(): Observable<any> {
+    this.sf.validator();
+    if(this.sf.valid) {
+      return this.userService.add(this.sf.value);
+    }
     return null;
   }
 
