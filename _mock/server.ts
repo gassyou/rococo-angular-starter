@@ -1,5 +1,6 @@
 import { Application,  Router } from "https://deno.land/x/oak/mod.ts";
 import { oakCors } from "https://deno.land/x/cors/mod.ts";
+// import { delay } from "https://deno.land/std@0.96.0/async/delay.ts";
 
 let users = [
   {id:1, name:"David",    mobile:'15167267210', roleName:"Admin0", lastLoginTime:"2020/01/01 12:01:00", lastLoginIP:"192.168.1.1", enable:0, deleteFlag:0},
@@ -28,6 +29,22 @@ let roles = [{id:1,name:"admin0"},{id:2,name:"admin1",},{id:3,name:"admin2"}];
 
 const router = new Router();
 router
+  .post("/api/s020/index", async(context) => {
+
+    // await delay(300000);
+    context.response.body = {
+      status	 :	 2 	,
+      response	 :	 {
+        error_code	 : "8000",
+        error_message	 :	 "Api	 Connection"
+
+        // t_status:"0","t_last_api	":"1",
+        // f_status:"0:0",
+        // card_status:"8",
+        // card_enable_flag:"0"
+      }
+    }
+  })
   .post("/users", async (context) => {
     const result = context.request.body();
     const value = await result.value;
