@@ -1,70 +1,64 @@
 import { FormComponent } from 'src/app/freamwork/core/form-component';
-import { Component, OnInit, ViewChild } from '@angular/core';
-import { Observable } from 'rxjs';
-import { SFComponent, SFSchema, SFSelectWidgetSchema } from '@delon/form';
+import { Component, Input, OnInit } from '@angular/core';
 import { RoleService } from 'src/app/core/service/role.service';
-import { map } from 'rxjs/operators';
 import { UserService } from 'src/app/core/service/user.service';
+import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { of } from 'rxjs';
 
 @Component({
   selector: 'user-edit',
   template: `
-      <sf #sf
-      [schema]="form"
-      button="none"
-      compact="true">
-    </sf>
-  `,
-  providers: [RoleService,UserService]
+  <form nz-form [formGroup]="editForm" se-container="1" labelWidth="60" >
+    <se label="姓名" required [error]="{required: '请输入姓名', maxLength:'名字最大不能超过20'}">
+      <input nz-input formControlName="name" placeholder="请输入姓名" />
+    </se>
+    <se label="角色">
+      <nz-select formControlName="role" nzPlaceHolder="请选择角色" >
+        <nz-option *ngFor="let role of roleList" [nzValue]="role.id" [nzLabel]="role.name"></nz-option>
+      </nz-select>
+    </se>
+    <se label="电话" required [error]="{required: '请输入电话', serverError:'电话号码重复'}">
+      <input nz-input formControlName="mobile" placeholder="请输入姓名" />
+    </se>
+  </form>
+  `
 })
-export class EditComponent implements FormComponent, OnInit {
+export class EditComponent  extends FormComponent  implements OnInit{
 
-  form : SFSchema = {
-    properties: {
-      name: {type: 'string',title:"姓名",maxLength: 20,ui: {
-        errors: {
-          'required': '必填项'
-        }
-      }},
-      role: {
-        type: 'integer',
-        title:"角色",
-        ui: {
-          widget: 'select',
-          asyncData: ()=> this.roleService.all().pipe(
-            map( result => {
-                return result.records.map( data => { return { label: data.name, value: data.id} } );
-            })
-          )
-        } as SFSelectWidgetSchema,
-      },
-      mobile: {type: 'string',title: "电话", ui: {
-        validator: val => (!val ? [{ keyword: 'required', message: 'Required mobile' }] : []),
-      }},
-    },
-  };
+  @Input()
+  value:any;
 
-  @ViewChild('sf', {static:true}) sf :SFComponent;
+  roleList: any[] = [];
 
   constructor(
     public roleService: RoleService,
     public userService: UserService,
-  ) { }
+    public fb:FormBuilder,
+  ) {
+    super(userService);
+  }
 
   ngOnInit(): void {
-
+    this.isEdit = this.value ? true:false;
+    this.roleService.all().subscribe(result => {this.roleList = result.records;});
+    this.editForm = this.fb.group({
+      id: [this.value?this.value.id : null],
+      name:[this.value?this.value.name: null,[Validators.required,Validators.maxLength(20)]],
+      role:[this.value?this.value.role: null],
+      mobile:[this.value?this.value.mobile: null, { validators: [Validators.required],
+        asyncValidators: [this.checkMobileValidator.bind(this)],updateOn:'blur'} ]
+    });
   }
 
-  submit(): Observable<any> {
-    this.sf.validator();
-    if(this.sf.valid) {
-      return this.userService.add(this.sf.value);
+  checkMobileValidator = (control : FormControl) : { [ key:string ] :any } => {
+
+    if(this.editForm && control.value){
+      const param = {
+        id: this.editForm.controls['id'].value,
+        mobile: this.editForm.controls['mobile'].value
+      };
+      return this.userService.asyncValidate('/user/check-mobile', param);
     }
-    return null;
+    return of();
   }
-
-  cancel() {
-
-  }
-
 }

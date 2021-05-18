@@ -4,6 +4,7 @@ import { environment } from 'src/environments/environment';
 import { NzModalService } from 'ng-zorro-antd/modal';
 import { FormComponent } from './form-component';
 import { Observable } from 'rxjs';
+import { download } from '../util/file';
 
 export abstract class ListComponent {
 
@@ -15,7 +16,7 @@ export abstract class ListComponent {
 
   constructor(
     public crudService: CRUDService,
-    public nzModal: NzModalService
+    public nzModal: NzModalService,
     ) { }
 
   init() {
@@ -30,8 +31,6 @@ export abstract class ListComponent {
       pageSize: this.pageSize,
     });
   }
-
-
 
   onPageIndexChange() {
     const params: SearchParams = {... this.crudService.params};
@@ -54,17 +53,25 @@ export abstract class ListComponent {
     this.crudService.search(params);
   }
 
+  export(saveFilename: string) {
+    this.crudService.export().subscribe((data)=> {
+      !download(data, saveFilename)
+    });
+  }
+
   public openModal(
     title: string,
     cancelText: string,
     okText: string,
     content: FormComponent | any,
-    contentParams?: {}) {
+    contentParams?:any) {
 
       const modal = this.nzModal.create({
         nzTitle: title,
         nzContent: content,
-        nzComponentParams: contentParams,
+        nzComponentParams: {
+          value: contentParams
+        },
         nzMaskClosable: false,
         nzFooter: [{
           label: cancelText,

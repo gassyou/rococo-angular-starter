@@ -14,12 +14,15 @@ export abstract class CRUDService {
   public exportUrl: string = '';
   public allDataUrl: string = '';
 
+  public tableDataLoading = false;
+
   private _search$ = new BehaviorSubject<SearchParams>(null);
   public datasource$ = this._search$.asObservable()
                         .pipe(filter(params => params !== null))
                         .pipe(switchMap( (params) => {
                             return  this.http.post(this.searchUrl,params).pipe(
                               map(response => {
+                                this.tableDataLoading = false;
                                 if(!response.meta.success) {
                                   this.message.error(response['meta']['message']);
                                 }
@@ -35,8 +38,8 @@ export abstract class CRUDService {
   }
 
   constructor(
-    private http: _HttpClient,
-    @Optional() private message: NzMessageService
+    public http: _HttpClient,
+    @Optional() public message: NzMessageService
   ) {}
 
   /**
@@ -77,7 +80,8 @@ export abstract class CRUDService {
     if(query) {
       this._params = combineSearchParams(this._params,query);
     }
-    this._search$.next(this.params);
+    this.tableDataLoading = true;
+    this._search$.next(this._params);
   }
 
   /**
@@ -152,7 +156,7 @@ export abstract class CRUDService {
       return null;
     }
 
-    return this.http.post(`${this.deleteUrl}/${id}`).pipe(
+    return this.http.post(this.deleteUrl,{id}).pipe(
       map((response)=>{
         if(response['meta']['success']) {
           this.message.info('删除成功');
@@ -174,22 +178,39 @@ export abstract class CRUDService {
     if(!this.exportUrl) {
       return null;
     }
-    return this.http.post(this.exportUrl, this.params, null, {responseType: 'arraybuffer'});
+    this.tableDataLoading = true;
+    return this.http.post(this.exportUrl, this.params, null, {responseType: 'arraybuffer'}).pipe(
+      map(response => {
+        try {
+          const result = JSON.parse(new TextDecoder().decode(response));
+          if (result.meta && result.meta.success === false) {
+            this.message.error(result.meta.message);
+            return false;
+          }
+        } catch (e) {}
+
+        if (response.byteLength === 0) {
+          this.message.error('文件不存在');
+          return false;
+        }
+        this.tableDataLoading = false;
+        return response;
+      })
+    );
   }
 
-
   /**
-   * 通过后端接口，验证唯一性
+   * 通过后端接口，进行异步验证
    * @param checkUrl  后端接口
    * @param params 参数。比如电话号码。{mobile:13800000000,id:1}
    */
-  public checkUnique(checkUrl: string, params:any): Observable<any> {
+  public asyncValidate(checkUrl: string, params:any): Observable<any> {
     return this.http.post(checkUrl, params).pipe(
       map(result => {
         if(result['meta']['success']) {
           return null;
         } else {
-          return {duplicated: {msg: result['meta']['message']}};
+          return {serverError: {msg: result['meta']['message']}};
         }
       })
     );
