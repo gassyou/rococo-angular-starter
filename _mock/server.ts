@@ -2,6 +2,18 @@ import { Application,  Router } from "https://deno.land/x/oak/mod.ts";
 import { oakCors } from "https://deno.land/x/cors/mod.ts";
 // import { delay } from "https://deno.land/std@0.96.0/async/delay.ts";
 
+let roles = [
+  {id:1, name:"admin1",    detail:'15167267210', enable:0, deleteFlag:0},
+  {id:2, name:"admin2",    detail:'15167267210', enable:0, deleteFlag:0},
+  {id:3, name:"admin3",    detail:'15167267210', enable:0, deleteFlag:0},
+  {id:4, name:"admin4",    detail:'15167267210', enable:0, deleteFlag:0},
+  {id:5, name:"admin5",    detail:'15167267210', enable:0, deleteFlag:0},
+  {id:6, name:"admin6",    detail:'15167267210', enable:0, deleteFlag:0},
+  {id:7, name:"admin7",    detail:'15167267210', enable:0, deleteFlag:0},
+  {id:8, name:"admin8",    detail:'15167267210', enable:0, deleteFlag:0},
+  {id:9, name:"admin9",    detail:'15167267210', enable:0, deleteFlag:0},
+];
+
 let users = [
   {id:1, name:"David",    mobile:'15167267210', password:"111111", role:1, roleName:"Admin0", lastLoginTime:"2020/01/01 12:01:00", lastLoginIP:"192.168.1.1", enable:0, deleteFlag:0},
   {id:2, name:"Mark",     mobile:'15167209311', password:"111111", role:1, roleName:"Admin9", lastLoginTime:"2020/01/01 11:01:00", lastLoginIP:"192.168.1.2", enable:1, deleteFlag:0},
@@ -25,7 +37,6 @@ let users = [
   {id:20, name:"Jansen3", mobile:'15167266618', password:"111111", role:1, roleName:"Admin30", lastLoginTime:"2020/01/01 08:01:00", lastLoginIP:"192.168.1.5", enable:0, deleteFlag:0},
 ];
 
-let roles = [{id:1,name:"admin0"},{id:2,name:"admin1",},{id:3,name:"admin2"}];
 
 const router = new Router();
 router
@@ -85,6 +96,31 @@ router
     const value = await params.value;
     context.response.body = updatePassword(value,users);
   })
+  .post("/roles", async (context) => {
+    const result = context.request.body();
+    const value = await result.value;
+    context.response.body = search(value,roles);
+  })
+  .post("/role/add", async (context) => {
+    const result = context.request.body();
+    const value = await result.value;
+    context.response.body = add(value,roles);
+  })
+  .post("/role/update",async (context)=>{
+    const result = context.request.body();
+    const value = await result.value;
+    context.response.body = edit(value,roles);
+  })
+  .post("/role/delete", async (context)=>{
+    const result = context.request.body();
+    const value = await result.value;
+    context.response.body = deleteData(value,roles);
+  })
+  .post("/role/check-name", async (context)=>{
+    const params = context.request.body();
+    const value = await params.value;
+    context.response.body = checkRoleName(value,roles);
+  })
   .post("/all-roles", (context) => {
     context.response.body =  serverResponse(roles.length,roles);
   });
@@ -93,6 +129,41 @@ const app = new Application();
 app.use(oakCors());
 app.use(router.routes());
 await app.listen({ port: 3000 });
+
+
+function checkRoleName(value: any, datasource: any[]) {
+
+  let index = -1;
+
+  if(value.id) {
+    index = datasource.findIndex((x)=>{ return x.id !== value.id && x.name === value.name;});
+  } else {
+
+    index = datasource.findIndex((x)=>{return x.name === value.name;});
+  }
+
+  if (index >= 0) {
+    return {
+      meta:{
+        success:false,
+        message: '角色名称已存在',
+        statusCode: 200,
+        popup: false
+      },
+      data: {}
+    };
+  } else {
+    return {
+      meta:{
+        success:true,
+        message: 'OK',
+        statusCode: 200,
+        popup: false
+      },
+      data: {}
+    };
+  }
+}
 
 function updatePassword(value: any, datasource: any[]) {
 

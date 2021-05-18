@@ -1,9 +1,9 @@
 import { Component, OnInit } from '@angular/core';
-import { CRUDService } from 'src/app/freamwork/core/crud.service';
 import { ListComponent } from 'src/app/freamwork/core/list-component';
 import { NzModalService } from 'ng-zorro-antd/modal';
 import { EditComponent } from './edit.component';
 import { PasswordEditComponent } from './password-edit.component';
+import { UserService } from 'src/app/core/service/user.service';
 
 @Component({
   selector: 'user-list',
@@ -43,7 +43,7 @@ import { PasswordEditComponent } from './password-edit.component';
           <td>{{ data.lastLoginTime }}</td>
           <td>{{ data.lastLoginIP }}</td>
           <td>
-            <nz-switch nzSize="small" [ngModel]="data.enable===0"></nz-switch>
+            <nz-switch nzSize="small" [ngModel]="data.enable===0" (ngModelChange)="enableData(data)"></nz-switch>
           </td>
           <td><a (click)="edit(data)">编辑</a>
             <nz-divider nzType="vertical"></nz-divider> <a (click)="updatePassword(data)">密码修改</a>
@@ -72,7 +72,7 @@ export class PageComponent extends ListComponent implements OnInit  {
   ];
 
   constructor(
-    public userService: CRUDService,
+    public userService: UserService,
     public nzModal: NzModalService,
     ) {
     super(userService, nzModal);
@@ -80,6 +80,15 @@ export class PageComponent extends ListComponent implements OnInit  {
 
   ngOnInit(): void {
     super.init();
+  }
+
+  enableData(data) {
+    if(data.enable === 0) {
+      data.enable = 1;
+    } else {
+      data.enable = 0;
+    }
+    this.userService.update(data).subscribe();
   }
 
   edit(data?: any) {

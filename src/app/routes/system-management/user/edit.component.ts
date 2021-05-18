@@ -23,7 +23,7 @@ import { of } from 'rxjs';
   </form>
   `
 })
-export class EditComponent  extends FormComponent  implements OnInit{
+export class EditComponent extends FormComponent  implements OnInit{
 
   @Input()
   value:any;
