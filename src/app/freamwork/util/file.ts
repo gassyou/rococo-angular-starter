@@ -1,9 +1,9 @@
-export function download(json: any, fileName: string) {
-  if (json.byteLength === 0) {
+export function download(octetData: any, fileName: string) {
+  if (octetData.byteLength === 0) {
     return false;
   }
   const downFile = function () {
-    const blob = new Blob([json], {type: 'application/octet-stream'});
+    const blob = new Blob([octetData], {type: 'application/octet-stream'});
     const objectUrl = URL.createObjectURL(blob);
     const a = document.createElement('a');
     document.body.appendChild(a);
