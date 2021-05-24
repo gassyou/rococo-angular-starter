@@ -1,6 +1,6 @@
 import { Application,  Router } from "https://deno.land/x/oak/mod.ts";
 import { oakCors } from "https://deno.land/x/cors/mod.ts";
-// import { delay } from "https://deno.land/std@0.96.0/async/delay.ts";
+import { delay } from "https://deno.land/std@0.96.0/async/delay.ts";
 
 let roles = [
   {id:1, name:"admin1",    detail:'15167267210', enable:0, deleteFlag:0},
@@ -42,7 +42,7 @@ const router = new Router();
 router
   .post("/api/s020/index", async(context) => {
 
-    // await delay(300000);
+    await delay(300000);
     context.response.body = {
       status	 :	 2 	,
       response	 :	 {
