@@ -30,6 +30,7 @@ import { PasswordEditComponent } from './password-edit.component';
     NzMessageService,
     UserService,
     RoleService,
+    {provide: CRUDService,useExisting:UserService}
   ]
 })
 export class UserModule { }

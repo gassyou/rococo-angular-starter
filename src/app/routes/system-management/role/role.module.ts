@@ -31,6 +31,7 @@ import { EditComponent } from './edit.component';
     NzModalService,
     NzMessageService,
     RoleService,
+    {provide: CRUDService,useExisting:RoleService}
   ]
 })
 export class RoleModule { }

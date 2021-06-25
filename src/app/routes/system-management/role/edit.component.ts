@@ -56,6 +56,4 @@ export class EditComponent extends FormComponent  implements OnInit {
     }
     return of();
   }
-
-
 }

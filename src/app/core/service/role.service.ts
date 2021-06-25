@@ -17,7 +17,5 @@ export class RoleService extends CRUDService {
     super.deleteUrl = '/role/delete';
     super.updateUrl = '/role/update';
     super.allDataUrl = '/all-roles';
-
   }
-
 }
