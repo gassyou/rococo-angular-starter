@@ -1,6 +1,8 @@
-import { oakCors } from 'https://deno.land/x/cors/mod.ts';
-import { Application, Router } from 'https://deno.land/x/oak@v7.6.3/mod.ts';
-import { delay } from 'https://deno.land/std@0.96.0/async/delay.ts';
+import { oakCors } from 'https://deno.land/x/cors@v1.2.2/mod.ts';
+import { Application, Router } from 'https://deno.land/x/oak@v8.0.0/mod.ts';
+// import { delay } from 'https://deno.land/std@0.96.0/async/delay.ts';
+
+console.log("aa");
 
 let roles = [
   { id: 1, name: 'admin1', detail: '15167267210', enable: 0, deleteFlag: 0 },
@@ -273,6 +275,9 @@ router
     //   }
     // }
   })
+  .get('/test', async context => {
+    context.response.body = '<h1>test</h1>';
+  })
   .post('/users', async context => {
     const result = context.request.body();
     const value = await result.value;
@@ -345,7 +350,7 @@ router
 const app = new Application();
 app.use(oakCors());
 app.use(router.routes());
-await app.listen({ port: 3000 });
+await app.listen({ port: 80 });
 
 function checkRoleName(value: any, datasource: any[]) {
   let index = -1;
