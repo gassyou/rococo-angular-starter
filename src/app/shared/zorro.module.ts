@@ -14,6 +14,7 @@ import { NzCascaderModule } from 'ng-zorro-antd/cascader';
 import { NzCheckboxModule } from 'ng-zorro-antd/checkbox';
 import { NzCollapseModule } from 'ng-zorro-antd/collapse';
 import { NzCommentModule } from 'ng-zorro-antd/comment';
+import { NzConfig } from 'ng-zorro-antd/core/config';
 import { NzNoAnimationModule } from 'ng-zorro-antd/core/no-animation';
 import { NzTransButtonModule } from 'ng-zorro-antd/core/trans-button';
 import { NzWaveModule } from 'ng-zorro-antd/core/wave';
@@ -39,11 +40,13 @@ import { NzModalModule } from 'ng-zorro-antd/modal';
 import { NzNotificationModule } from 'ng-zorro-antd/notification';
 import { NzPageHeaderModule } from 'ng-zorro-antd/page-header';
 import { NzPaginationModule } from 'ng-zorro-antd/pagination';
+import { NzPipesModule } from 'ng-zorro-antd/pipes';
 import { NzPopconfirmModule } from 'ng-zorro-antd/popconfirm';
 import { NzPopoverModule } from 'ng-zorro-antd/popover';
 import { NzProgressModule } from 'ng-zorro-antd/progress';
 import { NzRadioModule } from 'ng-zorro-antd/radio';
 import { NzRateModule } from 'ng-zorro-antd/rate';
+import { NzResizableModule } from 'ng-zorro-antd/resizable';
 import { NzResultModule } from 'ng-zorro-antd/result';
 import { NzSelectModule } from 'ng-zorro-antd/select';
 import { NzSkeletonModule } from 'ng-zorro-antd/skeleton';
@@ -60,13 +63,10 @@ import { NzTimelineModule } from 'ng-zorro-antd/timeline';
 import { NzToolTipModule } from 'ng-zorro-antd/tooltip';
 import { NzTransferModule } from 'ng-zorro-antd/transfer';
 import { NzTreeModule } from 'ng-zorro-antd/tree';
-import { NzTreeViewModule } from 'ng-zorro-antd/tree-view';
 import { NzTreeSelectModule } from 'ng-zorro-antd/tree-select';
+import { NzTreeViewModule } from 'ng-zorro-antd/tree-view';
 import { NzTypographyModule } from 'ng-zorro-antd/typography';
 import { NzUploadModule } from 'ng-zorro-antd/upload';
-import { NzResizableModule } from 'ng-zorro-antd/resizable';
-import { NzPipesModule } from 'ng-zorro-antd/pipes';
-import { NzConfig } from 'ng-zorro-antd/core/config';
 
 export const ZORRO_MODULES = [
   NzAffixModule,
@@ -136,7 +136,7 @@ export const ZORRO_MODULES = [
   NzUploadModule,
   NzWaveModule,
   NzResizableModule,
-  NzPipesModule,
+  NzPipesModule
 ];
 
 export const ngZorroConfig: NzConfig = {

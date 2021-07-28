@@ -5,10 +5,8 @@ import { PageHeaderModule } from '@delon/abc/page-header';
 import { ResultModule } from '@delon/abc/result';
 import { ReuseTabModule } from '@delon/abc/reuse-tab';
 import { SEModule } from '@delon/abc/se';
-import { SidebarNavModule } from '@delon/abc/sidebar-nav';
 import { STModule } from '@delon/abc/st';
 import { SVModule } from '@delon/abc/sv';
-import { FullContentModule } from '@delon/abc/full-content';
 import { AlainConfig } from '@delon/util';
 
 export const DELON_MODULES = [
@@ -16,13 +14,11 @@ export const DELON_MODULES = [
   ResultModule,
   ExceptionModule,
   NoticeIconModule,
-  SidebarNavModule,
   GlobalFooterModule,
   STModule,
   SEModule,
   SVModule,
-  ReuseTabModule,
-  FullContentModule,
+  ReuseTabModule
 ];
 
 export const alainConfig: AlainConfig = {
@@ -30,10 +26,10 @@ export const alainConfig: AlainConfig = {
     page: {
       show: true,
       front: false,
-      showSize:true,
-      total:true,
-      showQuickJumper:true,
-      pageSizes: [5,10,15,20]
+      showSize: true,
+      total: true,
+      showQuickJumper: true,
+      pageSizes: [5, 10, 15, 20]
     }
   },
 };
