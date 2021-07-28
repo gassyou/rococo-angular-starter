@@ -1,9 +1,10 @@
-import { NzMessageService } from 'ng-zorro-antd/message';
-import { _HttpClient } from "@delon/theme";
-import { BehaviorSubject, Observable } from "rxjs";
-import { combineSearchParams, SearchParams } from "./search-params.interface";
-import { filter, map, switchMap } from 'rxjs/operators';
 import { Injectable, Optional } from '@angular/core';
+import { _HttpClient } from '@delon/theme';
+import { NzMessageService } from 'ng-zorro-antd/message';
+import { BehaviorSubject, Observable } from 'rxjs';
+import { filter, map, switchMap } from 'rxjs/operators';
+
+import { combineSearchParams, SearchParams } from './search-params.interface';
 
 @Injectable()
 export abstract class CRUDService {
@@ -17,50 +18,48 @@ export abstract class CRUDService {
   public tableDataLoading = false;
 
   private _search$ = new BehaviorSubject<SearchParams>(null);
-  public datasource$ = this._search$.asObservable()
-                        .pipe(filter(params => params !== null))
-                        .pipe(switchMap( (params) => {
-                            return  this.http.post(this.searchUrl,params).pipe(
-                              map(response => {
-                                this.tableDataLoading = false;
-                                if(!response.meta.success) {
-                                  this.message.error(response['meta']['message']);
-                                }
-                                return response;
-                              })
-                            );
-                          })
-                        );
+  public datasource$ = this._search$
+    .asObservable()
+    .pipe(filter(params => params !== null))
+    .pipe(
+      switchMap(params => {
+        return this.http.post(this.searchUrl, params).pipe(
+          map(response => {
+            this.tableDataLoading = false;
+            if (!response.meta.success) {
+              this.message.error(response['meta']['message']);
+            }
+            return response;
+          })
+        );
+      })
+    );
 
   private _params: SearchParams = {};
   public get params() {
     return this._params;
   }
 
-  constructor(
-    public http: _HttpClient,
-    @Optional() public message: NzMessageService
-  ) {}
+  constructor(public http: _HttpClient, @Optional() public message: NzMessageService) {}
 
   /**
    * 获取全部数据，不分页。
+   *
    * @returns
    */
   public all(): Observable<any> {
-
-    if(!this.allDataUrl) {
+    if (!this.allDataUrl) {
       return null;
     }
 
     return this.http.post(this.allDataUrl).pipe(
       map(response => {
-        if(!response.meta.success) {
+        if (!response.meta.success) {
           this.message.error(response['meta']['message']);
         }
         return response.data;
       })
     );
-
   }
 
   /**
@@ -69,16 +68,16 @@ export abstract class CRUDService {
    * get 提交。
    * url:取自：searchUrl
    * 组件只需监听 `datasource$`属性，即可获取查询结果
+   *
    * @param param 查询参数。没有分页参数时，会自动添加分页参数。当不传参数时，则按照上次条件进行查询
    */
   public search(query?: SearchParams | any) {
-
-    if(!this.searchUrl) {
+    if (!this.searchUrl) {
       return null;
     }
 
-    if(query) {
-      this._params = combineSearchParams(this._params,query);
+    if (query) {
+      this._params = combineSearchParams(this._params, query);
     }
     this.tableDataLoading = true;
     this._search$.next(this._params);
@@ -90,18 +89,17 @@ export abstract class CRUDService {
    * 后端返回内容，原模原样返回
    * post 提交。
    * url:取自：addUrl
+   *
    * @param param 更新后的
    */
   public add(param: any): Observable<any> {
-
-    if(!this.addUrl) {
+    if (!this.addUrl) {
       return null;
     }
 
     return this.http.post(this.addUrl, param).pipe(
-      map((response)=>{
-
-        if(response['meta']['success']) {
+      map(response => {
+        if (response['meta']['success']) {
           this.message.info('添加成功');
           this.search();
           return response.data;
@@ -119,17 +117,17 @@ export abstract class CRUDService {
    * 后端返回内容，原模原样返回
    * post 提交。
    * url:取自：deleteUrl
+   *
    * @param param 更新后的
    */
   public update(param: any): Observable<any> {
-
-    if(!this.updateUrl) {
+    if (!this.updateUrl) {
       return null;
     }
 
     return this.http.post(this.updateUrl, param).pipe(
-      map((response)=>{
-        if(response['meta']['success']) {
+      map(response => {
+        if (response['meta']['success']) {
           this.message.info('修改成功');
           this.search();
           return response.data;
@@ -148,17 +146,17 @@ export abstract class CRUDService {
    * post 提交。
    * url:取自：deleteUrl
    * id 为路径参数
+   *
    * @param id 记录ID，
    */
   public delete(id: number): Observable<any> {
-
-    if(!this.deleteUrl) {
+    if (!this.deleteUrl) {
       return null;
     }
 
-    return this.http.post(this.deleteUrl,{id}).pipe(
-      map((response)=>{
-        if(response['meta']['success']) {
+    return this.http.post(this.deleteUrl, { id }).pipe(
+      map(response => {
+        if (response['meta']['success']) {
           this.message.info('删除成功');
           this.search();
           return response.data;
@@ -174,12 +172,11 @@ export abstract class CRUDService {
    * 导出满足当前查询条件的所有数据。不分页。
    */
   public export(): Observable<any> {
-
-    if(!this.exportUrl) {
+    if (!this.exportUrl) {
       return null;
     }
     this.tableDataLoading = true;
-    return this.http.post(this.exportUrl, this.params, null, {responseType: 'arraybuffer'}).pipe(
+    return this.http.post(this.exportUrl, this.params, null, { responseType: 'arraybuffer' }).pipe(
       map(response => {
         try {
           const result = JSON.parse(new TextDecoder().decode(response));
@@ -201,16 +198,17 @@ export abstract class CRUDService {
 
   /**
    * 通过后端接口，进行异步验证
+   *
    * @param checkUrl  后端接口
    * @param params 参数。比如电话号码。{mobile:13800000000,id:1}
    */
-  public asyncValidate(checkUrl: string, params:any): Observable<any> {
+  public asyncValidate(checkUrl: string, params: any): Observable<any> {
     return this.http.post(checkUrl, params).pipe(
       map(result => {
-        if(result['meta']['success']) {
+        if (result['meta']['success']) {
           return null;
         } else {
-          return {serverError: {msg: result['meta']['message']}};
+          return { serverError: { msg: result['meta']['message'] } };
         }
       })
     );

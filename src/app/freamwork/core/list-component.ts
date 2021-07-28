@@ -1,98 +1,89 @@
-import { SearchParams } from 'src/app/freamwork/core/search-params.interface';
-import { CRUDService } from 'src/app/freamwork/core/crud.service';
-import { environment } from 'src/environments/environment';
 import { NzModalService } from 'ng-zorro-antd/modal';
-import { FormComponent } from './form-component';
 import { Observable } from 'rxjs';
+import { CRUDService } from 'src/app/freamwork/core/crud.service';
+import { SearchParams } from 'src/app/freamwork/core/search-params.interface';
+import { environment } from 'src/environments/environment';
+
 import { download } from '../util/file';
+import { FormComponent } from './form-component';
 
 export abstract class ListComponent {
-
   total: number = 0;
   currentPage: number = 1;
   pageSize = environment.pageSize;
   pageSizeOptions = environment.pageSizeOptions;
   tableDataSource = [];
 
-  constructor(
-    public crudService: CRUDService,
-    public nzModal: NzModalService,
-    ) { }
+  constructor(public crudService: CRUDService, public nzModal: NzModalService) {}
 
   init() {
-    this.crudService.datasource$.subscribe(
-      result => {
-        this.tableDataSource = result.data.records;
-        this.total = result.data.total;
-      }
-    );
+    this.crudService.datasource$.subscribe(result => {
+      this.tableDataSource = result.data.records;
+      this.total = result.data.total;
+    });
     this.crudService.search({
       currentPage: this.currentPage,
-      pageSize: this.pageSize,
+      pageSize: this.pageSize
     });
   }
 
   onPageIndexChange() {
-    const params: SearchParams = {... this.crudService.params};
+    const params: SearchParams = { ...this.crudService.params };
     params.currentPage = this.currentPage;
     this.crudService.search(params);
   }
 
   onPageSizeChange() {
-    const params: SearchParams = {... this.crudService.params};
+    const params: SearchParams = { ...this.crudService.params };
     this.currentPage = 1;
     params.pageSize = this.pageSize;
     params.currentPage = this.currentPage;
     this.crudService.search(params);
   }
 
-  onSortChange($event: { key: string; value: string} ) {
-    const params: SearchParams = {... this.crudService.params};
+  onSortChange($event: { key: string; value: string }) {
+    const params: SearchParams = { ...this.crudService.params };
     params.sortName = $event.key;
     params.sortValue = $event.value;
     this.crudService.search(params);
   }
 
   export(saveFilename: string) {
-    this.crudService.export().subscribe((data)=> {
-      !download(data, saveFilename)
+    this.crudService.export().subscribe(data => {
+      !download(data, saveFilename);
     });
   }
 
-  public openModal(
-    title: string,
-    cancelText: string,
-    okText: string,
-    content: FormComponent | any,
-    contentParams?:any) {
-
-      const modal = this.nzModal.create({
-        nzTitle: title,
-        nzContent: content,
-        nzComponentParams: {
-          value: contentParams
-        },
-        nzMaskClosable: false,
-        nzFooter: [{
+  public openModal(title: string, cancelText: string, okText: string, content: FormComponent | any, contentParams?: any) {
+    const modal = this.nzModal.create({
+      nzTitle: title,
+      nzContent: content,
+      nzComponentParams: {
+        value: contentParams
+      },
+      nzMaskClosable: false,
+      nzFooter: [
+        {
           label: cancelText,
-          type: "default",
+          type: 'default',
           onClick(): void {
-            const instance : FormComponent | any = modal.getContentComponent();
+            const instance: FormComponent | any = modal.getContentComponent();
             instance.cancel();
             modal.destroy();
           }
-        },{
+        },
+        {
           label: okText,
-          type: "primary",
+          type: 'primary',
           loading: false,
           onClick(): void {
             this.loading = true;
-            const instance : FormComponent | any = modal.getContentComponent();
+            const instance: FormComponent | any = modal.getContentComponent();
             const submit: Observable<any> = instance.submit();
-            if(submit) {
+            if (submit) {
               submit.subscribe(result => {
                 this.loading = false;
-                if(result) {
+                if (result) {
                   modal.destroy();
                 }
               });
@@ -100,9 +91,8 @@ export abstract class ListComponent {
               this.loading = false;
             }
           }
-        }]
-      });
-
+        }
+      ]
+    });
   }
-
 }

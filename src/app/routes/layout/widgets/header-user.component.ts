@@ -25,19 +25,16 @@ import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
       </div>
     </nz-dropdown-menu>
   `,
-  styles: [
-  ],
+  styles: [],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class HeaderUserComponent implements OnInit {
-
-  constructor() { }
+  constructor() {}
 
   ngOnInit(): void {
+    // todo
+    console.log();
   }
 
-  logout(): void {
-
-  }
-
+  logout(): void {}
 }

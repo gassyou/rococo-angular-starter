@@ -4,18 +4,23 @@ import { SFSchema } from '@delon/form';
 @Component({
   selector: 'app-page',
   template: `
-    <div class="alain-default__content-title" style="min-height: 54px" >
+    <div class="alain-default__content-title" style="min-height: 54px">
       <nz-breadcrumb [nzAutoGenerate]="true"></nz-breadcrumb>
       <div>
-        <app-advance-search class="mr-sm"
+        <app-advance-search
+          class="mr-sm"
           *ngIf="simpleSearchKeys"
           [advanceSearchForm]="advanceSearchForm"
-          [simpleSearchKeys]="simpleSearchKeys">
+          [simpleSearchKeys]="simpleSearchKeys"
+        >
         </app-advance-search>
         <ng-container *ngFor="let operation of operations">
-          <button nz-button *ngIf="!operation.children else moreAction"
-            [nzType]="operation.type?operation.type:'primary'"
-            (click)="operation.onClick()">
+          <button
+            nz-button
+            *ngIf="!operation.children; else moreAction"
+            [nzType]="operation.type ? operation.type : 'primary'"
+            (click)="operation.onClick()"
+          >
             <i *ngIf="operation.icon" nz-icon [nzType]="operation.icon"></i>
             {{ operation.text }}
           </button>
@@ -23,15 +28,15 @@ import { SFSchema } from '@delon/form';
           <ng-template #moreAction>
             <button nz-button nz-dropdown [nzDropdownMenu]="menu">
               <i *ngIf="operation.icon" nz-icon [nzType]="operation.icon"></i>
-              {{operation.text}}
+              {{ operation.text }}
               <i *ngIf="operation.text" nz-icon nzType="down"></i>
             </button>
             <nz-dropdown-menu #menu="nzDropdownMenu">
-              <ul nz-menu >
+              <ul nz-menu>
                 <li nz-menu-item *ngFor="let item of operation.children">
                   <a (click)="item.onClick()">
                     <i *ngIf="item.icon" nz-icon [nzType]="item.icon"></i>
-                    {{item.text}}
+                    {{ item.text }}
                   </a>
                 </li>
               </ul>
@@ -41,37 +46,32 @@ import { SFSchema } from '@delon/form';
       </div>
     </div>
     <div class="content">
-    <ng-content></ng-content>
+      <ng-content></ng-content>
     </div>
   `,
   styles: [
-    `.content {
-      margin-left: -24px;
-      margin-right: -24px;
-      margin-top: -24px;
-      margin-bottom: -24px;
-      padding:24px;
-      height:calc(100vh - 103px);
-      overflow-y:scroll
-    }
+    `
+      .content {
+        margin-left: -24px;
+        margin-right: -24px;
+        margin-top: -24px;
+        margin-bottom: -24px;
+        padding: 24px;
+        height: calc(100vh - 103px);
+        overflow-y: scroll;
+      }
     `
   ]
 })
-export class PageContainerComponent implements OnInit {
-
-  constructor() { }
+export class PageContainerComponent {
+  constructor() {}
 
   @Input() pageTitle: string;
   @Input() advanceSearchForm: SFSchema;
   @Input() simpleSearchKeys: string[];
 
   @Input() operations: Operation[] = [];
-
-  ngOnInit(): void {
-  }
-
 }
-
 export interface Operation {
   text: string;
   onClick?: Function;

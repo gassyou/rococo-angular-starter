@@ -5,11 +5,7 @@ import { CRUDService } from 'src/app/freamwork/core/crud.service';
 
 @Injectable()
 export class RoleService extends CRUDService {
-
-  constructor(
-    http: _HttpClient,
-    @Optional() message: NzMessageService
-  ) {
+  constructor(http: _HttpClient, @Optional() message: NzMessageService) {
     super(http, message);
 
     super.searchUrl = '/roles';
