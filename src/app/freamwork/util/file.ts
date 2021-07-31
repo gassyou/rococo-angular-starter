@@ -3,7 +3,7 @@ export function download(octetData: any, fileName: string) {
     return false;
   }
   const downFile = function () {
-    const blob = new Blob([octetData], {type: 'application/octet-stream'});
+    const blob = new Blob([octetData], { type: 'application/octet-stream' });
     const objectUrl = URL.createObjectURL(blob);
     const a = document.createElement('a');
     document.body.appendChild(a);
