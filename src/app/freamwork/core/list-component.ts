@@ -4,7 +4,7 @@ import { CRUDService } from 'src/app/freamwork/core/crud.service';
 import { SearchParams } from 'src/app/freamwork/core/search-params.interface';
 import { environment } from 'src/environments/environment';
 
-import { download } from '../util/file';
+import { download } from '../util/file-util';
 import { FormComponent } from './form-component';
 
 export abstract class ListComponent {
