@@ -1,59 +1,38 @@
-<nz-input-group
-  nzSearch
-  cdkOverlayOrigin
-  #trigger
-  [nzSuffix]="searchButton"
-  [nzPrefix]="form ? moreButton:null">
-    <input type="text"
-      style="width:500px"
-      nz-input
-      [placeholder]="placeholder"
-      [(ngModel)]="simpleSearchValue"
-      (keyup.enter)="simpleSearch()"/>
+<nz-input-group nzSearch cdkOverlayOrigin #trigger [nzSuffix]="searchButton" [nzPrefix]="form ? moreButton : null">
+  <input
+    type="text"
+    style="width: 500px"
+    nz-input
+    [placeholder]="placeholder"
+    [(ngModel)]="simpleSearchValue"
+    (keyup.enter)="simpleSearch()"
+  />
 </nz-input-group>
 
 <ng-template #searchButton>
-  <button nz-button nzSearch
-    class="search-btn"
-    nzSize="small"
-    (click)="simpleSearch()">
+  <button nz-button nzSearch class="search-btn" nzSize="small" (click)="simpleSearch()">
     <i nz-icon nzType="search"></i>
   </button>
 </ng-template>
 
 <ng-template #moreButton>
-  <button
-   class="search-btn"
-   nz-button
-   (click)="showAdvance()"
-   nzSize="small" >
+  <button class="search-btn" nz-button (click)="showAdvance()" nzSize="small">
     <i nz-icon nzType="caret-down" nzTheme="outline"></i>
   </button>
 </ng-template>
 
-<ng-template cdkConnectedOverlay
+<ng-template
+  cdkConnectedOverlay
   cdkConnectedOverlayMinWidth="567px"
   [cdkConnectedOverlayOrigin]="trigger"
-  [cdkConnectedOverlayOpen]="isOpen">
+  [cdkConnectedOverlayOpen]="isOpen"
+>
   <nz-card class="sk">
-    <sf #sf
-      [formData]="advanceSearchValue"
-      [schema]="form"
-      button="none"
-      compact="true">
-    </sf>
+    <sf #sf [formData]="advanceSearchValue" [schema]="form" button="none" compact="true"> </sf>
     <div class="modal-footer">
+      <button nz-button nzSize="small" (click)="reset()">重置 </button>
 
-      <button nz-button
-        nzSize="small"
-        (click)="reset();">重置
-      </button>
-
-      <button nz-button
-        nzType="primary"
-        nzSize="small"
-        (click)="advanceSearch(sf.value)">查询
-      </button>
+      <button nz-button nzType="primary" nzSize="small" (click)="advanceSearch(sf.value)">查询 </button>
     </div>
   </nz-card>
 </ng-template>

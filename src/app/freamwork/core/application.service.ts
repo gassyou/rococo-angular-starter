@@ -143,6 +143,10 @@ export abstract class ApplicationService {
    * 获取菜单信息
    */
   public getMenuData(): Observable<any> {
+    if (!this.menuUrl) {
+      return of(null);
+    }
+
     this.acl.setRole(this.token.get().roleList);
     return this.http.get(this.menuUrl).pipe(
       map((response: ResponseData) => {
@@ -159,6 +163,10 @@ export abstract class ApplicationService {
    * 获取各个画面的按钮的ACL信息
    */
   public getACLInfo(): Observable<any[]> {
+    if (!this.actionAclUrl) {
+      return of(null);
+    }
+
     return this.cache.get(this.actionAclUrl).pipe(
       map((response: ResponseData) => {
         if (!response.meta.success) {
@@ -170,7 +178,9 @@ export abstract class ApplicationService {
   }
 
   public getMyInfo() {
-    this._myInfo$.next(this.token.get().uid);
+    if (this.token.get().uid) {
+      this._myInfo$.next(this.token.get().uid);
+    }
   }
 
   public editMyInfo(info: MyInfo): Observable<ResponseData> {

@@ -89,7 +89,7 @@ const APPINIT_PROVIDES = [
     TokenService,
     DecoratorService,
     MenuService,
-    ...APPINIT_PROVIDES,
+    ...APPINIT_PROVIDES
   ],
   bootstrap: [AppComponent]
 })

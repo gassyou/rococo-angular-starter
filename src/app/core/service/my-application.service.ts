@@ -12,8 +12,8 @@ import { ApplicationService } from 'src/app/freamwork/core/application.service';
 })
 export class MyApplicationService extends ApplicationService {
   public appName: string = 'クーポン管理システム';
-  public menuUrl: string = 'init/menu';
-  public actionAclUrl: string = 'init/button-events';
+  public menuUrl: string = '';
+  public actionAclUrl: string = '';
   public loginUrl: string = 'account/login';
   public myInfoUrl: string = 'sysUser/myInfo';
   public myInfoEditUrl: string = 'sysUser/changeUser';

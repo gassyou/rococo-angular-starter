@@ -1,26 +1,33 @@
-import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
+import { Component, OnInit, ChangeDetectionStrategy, OnDestroy, ChangeDetectorRef } from '@angular/core';
+import { NzModalService } from 'ng-zorro-antd/modal';
+import { MyApplicationService } from 'src/app/core/service/my-application.service';
+import { MyInfo } from 'src/app/freamwork/core/application.service';
+import { modalCreator } from 'src/app/freamwork/util/modal-creator';
+
+import { EditMyPasswordComponent } from './edit-my-password.component';
+import { MyInfoComponent } from './my-info.component';
 
 @Component({
   selector: 'header-user',
   template: `
     <div class="alain-default__nav-item d-flex align-items-center px-sm" nz-dropdown nzPlacement="bottomRight" [nzDropdownMenu]="userMenu">
-      <nz-avatar [nzSrc]="'乐'" nzSize="small" class="mr-sm"></nz-avatar>
-      乐科科
+      <nz-avatar [nzText]="myInfo?.name[0]" nzSize="small" class="mr-sm"></nz-avatar>
+      {{ myInfo?.name }}
     </div>
     <nz-dropdown-menu #userMenu="nzDropdownMenu">
       <div nz-menu class="width-sm">
-        <div nz-menu-item routerLink="/pro/account/center">
+        <div nz-menu-item (click)="showMyInfo()">
           <i nz-icon nzType="user" class="mr-sm"></i>
-          账号
+          アカウント情報
         </div>
-        <div nz-menu-item routerLink="/pro/account/settings">
+        <div nz-menu-item (click)="editPassword()">
           <i nz-icon nzType="setting" class="mr-sm"></i>
-          设定
+          パスワード変更
         </div>
         <li nz-menu-divider></li>
         <div nz-menu-item (click)="logout()">
           <i nz-icon nzType="logout" class="mr-sm"></i>
-          退出
+          ログアウト
         </div>
       </div>
     </nz-dropdown-menu>
@@ -28,13 +35,32 @@ import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
   styles: [],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class HeaderUserComponent implements OnInit {
-  constructor() {}
+export class HeaderUserComponent implements OnInit, OnDestroy {
+  myInfoSubscription;
+  myInfo: MyInfo;
+  constructor(private myApp: MyApplicationService, private nzModal: NzModalService, private cdr: ChangeDetectorRef) {}
 
   ngOnInit(): void {
-    // todo
-    console.log();
+    this.myInfoSubscription = this.myApp.myInfo$.subscribe(response => {
+      this.myInfo = response.data;
+      this.cdr.markForCheck();
+    });
+    this.myApp.getMyInfo();
   }
 
-  logout(): void {}
+  ngOnDestroy(): void {
+    this.myInfoSubscription.unsubscribe();
+  }
+
+  editPassword() {
+    modalCreator(this.nzModal, 'パスワードの変更', 'キャンセル', '変更', EditMyPasswordComponent, this.myInfo.name);
+  }
+
+  showMyInfo() {
+    modalCreator(this.nzModal, '個人情報', null, null, MyInfoComponent, this.myInfo, true);
+  }
+
+  logout(): void {
+    this.myApp.logout();
+  }
 }

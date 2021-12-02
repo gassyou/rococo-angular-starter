@@ -18,7 +18,7 @@ export const DELON_MODULES = [
   STModule,
   SEModule,
   SVModule,
-  ReuseTabModule
+  ReuseTabModule,
 ];
 
 export const alainConfig: AlainConfig = {
@@ -29,7 +29,17 @@ export const alainConfig: AlainConfig = {
       showSize: true,
       total: true,
       showQuickJumper: true,
-      pageSizes: [5, 10, 15, 20]
+      pageSizes: [50, 100, 150]
     }
   },
+  auth: {
+    token_send_key: 'Authorization',
+    ignores: [/assets\//, /\/passport\//, /\/login/, /\/init\//, /\/unlock/, /\/ZKIDROnline\//, /check-mail-exist/]
+  },
+  acl: {
+    guard_url: '/exception/403'
+  },
+  cache: {
+    expire: 60 * 60 * 8
+  }
 };
