@@ -3,26 +3,21 @@ import { ActivatedRouteSnapshot, CanActivate, CanActivateChild, Router, RouterSt
 import { TokenService } from '@delon/auth';
 import { Menu, MenuService } from '@delon/theme';
 import { Observable, of } from 'rxjs';
+
 import { MyApplicationService } from '../service/my-application.service';
 
 @Injectable()
 export class AuthGuard implements CanActivate, CanActivateChild {
-  constructor(
-    private router: Router, 
-    private myApp: MyApplicationService,
-    private token : TokenService,
-    private menu: MenuService
-    ) {}
+  constructor(private router: Router, private myApp: MyApplicationService, private token: TokenService, private menu: MenuService) {}
 
   canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<boolean> | boolean {
-
     // console.log(this.token.get());
     // console.log(this.menu.menus);
 
     // console.log(state.url);
     // console.log(this.menu.getPathByUrl(state.url));
 
-    if(!this.myApp.isLogined()) {
+    if (!this.myApp.isLogined()) {
       return this.myApp.autoLogin();
     } else {
       return of(true);
@@ -38,7 +33,7 @@ export class AuthGuard implements CanActivate, CanActivateChild {
   //   const menuItems = this.menu.getPathByUrl(url);
 
   //   for(let menu of menuItems) {
-      
+
   //     if(menu.acl && ) {
   //       return of(false);
   //     }

@@ -16,8 +16,6 @@ export abstract class FormComponent {
     if (this.isEdit) {
       return this.crudService.update(this.editForm.value);
     } else {
-      console.log("this.editForm.value",this.editForm.value);
-      
       return this.crudService.add(this.editForm.value);
     }
   }

@@ -1,15 +1,16 @@
 import { Component, OnInit } from '@angular/core';
-import { ListComponent } from 'src/app/freamwork/core/list-component';
 import { NzModalService } from 'ng-zorro-antd/modal';
+import { UserService } from 'src/app/core/service/user.service';
+import { ListComponent } from 'src/app/freamwork/core/list-component';
+
 import { EditComponent } from './edit.component';
 import { PasswordEditComponent } from './password-edit.component';
-import { UserService } from 'src/app/core/service/user.service';
 
 @Component({
   selector: 'user-list',
-  template: `
-  <app-page [advanceSearchForm]="advanceSearchForm" [simpleSearchKeys]="simpleSearchKeys" [operations]="operation">
-    <nz-table #basicTable
+  template: ` <app-page [advanceSearchForm]="advanceSearchForm" [simpleSearchKeys]="simpleSearchKeys" [operations]="operation">
+    <nz-table
+      #basicTable
       [nzData]="tableDataSource"
       nzShowQuickJumper="true"
       nzShowSizeChanger="true"
@@ -21,7 +22,8 @@ import { UserService } from 'src/app/core/service/user.service';
       [(nzPageIndex)]="currentPage"
       [nzPageSizeOptions]="pageSizeOptions"
       (nzPageIndexChange)="onPageIndexChange()"
-      (nzPageSizeChange)="onPageSizeChange()">
+      (nzPageSizeChange)="onPageSizeChange()"
+    >
       <thead>
         <tr>
           <th>序号</th>
@@ -43,12 +45,12 @@ import { UserService } from 'src/app/core/service/user.service';
           <td>{{ data.lastLoginTime }}</td>
           <td>{{ data.lastLoginIP }}</td>
           <td>
-            <nz-switch nzSize="small" [ngModel]="data.enable===0" (ngModelChange)="enableData(data)"></nz-switch>
+            <nz-switch nzSize="small" [ngModel]="data.enable === 0" (ngModelChange)="enableData(data)"></nz-switch>
           </td>
-          <td><a (click)="edit(data)">编辑</a>
-            <nz-divider nzType="vertical"></nz-divider> <a (click)="updatePassword(data)">密码修改</a>
-            <nz-divider nzType="vertical"></nz-divider> <a nz-popconfirm nzPopconfirmTitle="确认删除?" nzOkText="ok" nzCancelText="cancel" (nzOnConfirm)="deleteData(data)"
-      >删除</a>
+          <td
+            ><a (click)="edit(data)">编辑</a> <nz-divider nzType="vertical"></nz-divider> <a (click)="updatePassword(data)">密码修改</a>
+            <nz-divider nzType="vertical"></nz-divider>
+            <a nz-popconfirm nzPopconfirmTitle="确认删除?" nzOkText="ok" nzCancelText="cancel" (nzOnConfirm)="deleteData(data)">删除</a>
           </td>
         </tr>
       </tbody>
@@ -56,25 +58,26 @@ import { UserService } from 'src/app/core/service/user.service';
     <ng-template #totalTemplate let-total> 共 {{ total }} 条记录 </ng-template>
   </app-page>`
 })
-export class PageComponent extends ListComponent implements OnInit  {
-
-  simpleSearchKeys = ['name','role'];
+export class PageComponent extends ListComponent implements OnInit {
+  simpleSearchKeys = ['name', 'role'];
   advanceSearchForm = {
     properties: {
-      name: {type: 'string',title:"姓名",},
-      role: {type: 'string',title:"角色",},
-      mobile: {type: 'string',title: "电话"},
+      name: { type: 'string', title: '姓名' },
+      role: { type: 'string', title: '角色' },
+      mobile: { type: 'string', title: '电话' }
     }
   };
   operation = [
-    {text:'添加用户',onClick: ()=>{this.edit()}},
-    {text:'导出',onClick: ()=>{}},
+    {
+      text: '添加用户',
+      onClick: () => {
+        this.edit();
+      }
+    },
+    { text: '导出', onClick: () => {} }
   ];
 
-  constructor(
-    public userService: UserService,
-    public nzModal: NzModalService,
-    ) {
+  constructor(public userService: UserService, public nzModal: NzModalService) {
     super(userService, nzModal);
   }
 
@@ -83,7 +86,7 @@ export class PageComponent extends ListComponent implements OnInit  {
   }
 
   enableData(data) {
-    if(data.enable === 0) {
+    if (data.enable === 0) {
       data.enable = 1;
     } else {
       data.enable = 0;
@@ -92,13 +95,7 @@ export class PageComponent extends ListComponent implements OnInit  {
   }
 
   edit(data?: any) {
-    this.openModal(
-      data?"编辑":"添加用户",
-      "取消",
-      "确定",
-      EditComponent,
-      data
-    )
+    this.openModal(data ? '编辑' : '添加用户', '取消', '确定', EditComponent, data);
   }
 
   deleteData(data?: any) {
@@ -106,8 +103,6 @@ export class PageComponent extends ListComponent implements OnInit  {
   }
 
   updatePassword(data?: any) {
-    this.openModal("修改密码","取消","确定",PasswordEditComponent,data);
+    this.openModal('修改密码', '取消', '确定', PasswordEditComponent, data);
   }
-
-
 }

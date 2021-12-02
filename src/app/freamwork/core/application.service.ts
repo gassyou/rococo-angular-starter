@@ -1,19 +1,19 @@
-import { Injectable, Optional } from "@angular/core";
-import { Router } from "@angular/router";
-import { ACLService } from "@delon/acl";
-import { TokenService } from "@delon/auth";
-import { CacheService } from "@delon/cache";
-import { _HttpClient } from "@delon/theme";
-import { NzMessageService } from "ng-zorro-antd/message";
-import { BehaviorSubject, Observable, of } from "rxjs";
-import { filter, map, switchMap } from "rxjs/operators";
+import { Injectable, Optional } from '@angular/core';
+import { Router } from '@angular/router';
+import { ACLService } from '@delon/acl';
+import { TokenService } from '@delon/auth';
+import { CacheService } from '@delon/cache';
+import { _HttpClient } from '@delon/theme';
+import { NzMessageService } from 'ng-zorro-antd/message';
+import { BehaviorSubject, Observable, of } from 'rxjs';
+import { filter, map, switchMap } from 'rxjs/operators';
 
-import { getCookie, setCookie } from "../util/cookie-util";
-import { encryptForServer } from "../util/crypto";
-import { ResponseData, ResponseContentData } from "./response-data";
+import { getCookie, setCookie } from '../util/cookie-util';
+import { encryptForServer } from '../util/crypto';
+import { ResponseData, ResponseContentData } from './response-data';
 
 @Injectable({
-  providedIn: "root",
+  providedIn: 'root'
 })
 export abstract class ApplicationService {
   public abstract loginUrl: string;
@@ -31,18 +31,18 @@ export abstract class ApplicationService {
 
   private _myInfo$ = new BehaviorSubject<number>(null);
   public myInfo$ = this._myInfo$.asObservable().pipe(
-    filter((params) => params !== null),
-    switchMap((params) => {
-      return this.http.get(this.myInfoUrl,{uid: params}).pipe(
-        map((response) => {
-          if(!response.meta.success) {
+    filter(params => params !== null),
+    switchMap(params => {
+      return this.http.get(this.myInfoUrl, { uid: params }).pipe(
+        map(response => {
+          if (!response.meta.success) {
             this.message.error(response['meta']['message']);
           }
           return response;
         })
-      )
+      );
     })
-  )
+  );
 
   constructor(
     public http: _HttpClient,
@@ -58,11 +58,7 @@ export abstract class ApplicationService {
    *
    * @returns Observable<any>
    */
-  public login(
-    loginInfo: LoginInfo,
-    autoLogin = false
-  ): Observable<ResponseData> {
-
+  public login(loginInfo: LoginInfo, autoLogin = false): Observable<ResponseData> {
     let passwordEpt = loginInfo.password;
     if (!autoLogin) {
       passwordEpt = encryptForServer(loginInfo.password);
@@ -71,7 +67,7 @@ export abstract class ApplicationService {
     return this.http
       .post(this.loginUrl, {
         account: loginInfo.account,
-        password: passwordEpt,
+        password: passwordEpt
       })
       .pipe(
         map((response: ResponseData) => {
@@ -80,19 +76,22 @@ export abstract class ApplicationService {
             return response;
           }
           if (loginInfo.autoLogin) {
-            setCookie(this.LOGIN_COOKIE_NAME, btoa(JSON.stringify({
-              account: loginInfo.account,
-              password: passwordEpt,
-            })));
+            setCookie(
+              this.LOGIN_COOKIE_NAME,
+              btoa(
+                JSON.stringify({
+                  account: loginInfo.account,
+                  password: passwordEpt
+                })
+              )
+            );
           }
           this.token.set({
             uid: (response.data as ResponseContentData).id,
             token: (response.data as ResponseContentData).token as string,
-            longToken: (response.data as ResponseContentData)
-              .longToken as string,
+            longToken: (response.data as ResponseContentData).longToken as string,
             time: new Date().getTime(),
-            roleList: (response.data as ResponseContentData)
-              .roleList as string[],
+            roleList: (response.data as ResponseContentData).roleList as string[]
           });
 
           this.router.navigate([this.homePageUrl]);
@@ -133,6 +132,7 @@ export abstract class ApplicationService {
 
   /**
    * 判断是否已经登录过。
+   *
    * @returns boolean
    */
   public isLogined(): boolean {
@@ -173,10 +173,10 @@ export abstract class ApplicationService {
     this._myInfo$.next(this.token.get().uid);
   }
 
-  public editMyInfo(info: MyInfo):Observable<ResponseData> {
-    return this.http.post(this.myInfoEditUrl,info).pipe(
+  public editMyInfo(info: MyInfo): Observable<ResponseData> {
+    return this.http.post(this.myInfoEditUrl, info).pipe(
       map((response: ResponseData) => {
-        if(!response.meta.success) {
+        if (!response.meta.success) {
           this.message.error(response.meta.message);
         } else {
           this.message.success('個人情報を成功に更新しました');
@@ -184,7 +184,7 @@ export abstract class ApplicationService {
         }
         return response;
       })
-    )
+    );
   }
 
   // 修改密码
@@ -193,13 +193,13 @@ export abstract class ApplicationService {
       id: newPasswordInfo.id,
       oldPassword: encryptForServer(newPasswordInfo.oldPassword),
       newPassword: encryptForServer(newPasswordInfo.newPassword),
-      newPwConfirm: encryptForServer(newPasswordInfo.newPwConfirm),
+      newPwConfirm: encryptForServer(newPasswordInfo.newPwConfirm)
     };
 
     return this.http.post(this.myPasswordEditUrl, info).pipe(
       map((response: ResponseData) => {
         if (response.meta.success) {
-          this.message.success("パスワードが成功に変更しました。");
+          this.message.success('パスワードが成功に変更しました。');
         } else {
           this.message.error(response.meta.message);
         }

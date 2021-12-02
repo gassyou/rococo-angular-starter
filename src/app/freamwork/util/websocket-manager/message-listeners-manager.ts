@@ -1,9 +1,7 @@
 import { Component, OnDestroy } from '@angular/core';
 import { Subject } from 'rxjs';
+
 import { WebSocketService } from './webSocket.service';
-
-
-
 @Component({
   template: ''
 })

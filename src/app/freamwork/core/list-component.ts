@@ -64,7 +64,14 @@ export abstract class ListComponent implements OnDestroy {
     });
   }
 
-  public openModal(title: string, cancelText: string, okText: string, content: FormComponent | any, contentParams?: any, callbak?:Function) {
+  public openModal(
+    title: string,
+    cancelText: string,
+    okText: string,
+    content: FormComponent | any,
+    contentParams?: any,
+    callbak?: Function
+  ) {
     const modal = this.nzModal.create({
       nzTitle: title,
       nzContent: content,
@@ -93,7 +100,7 @@ export abstract class ListComponent implements OnDestroy {
             if (submit) {
               submit.subscribe(result => {
                 this.loading = false;
-                if(callbak) {
+                if (callbak) {
                   callbak();
                 }
                 if (result) {

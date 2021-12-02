@@ -1,6 +1,6 @@
-import { DecoratorService } from "./../decorator.service";
-import { ResponseData } from "../../core/response-data";
-import { DECORATORS, DecoratorTypes, PutConfig } from "./config.model";
+import { ResponseData } from '../../core/response-data';
+import { DecoratorService } from './../decorator.service';
+import { DECORATORS, DecoratorTypes, PutConfig } from './config.model';
 
 export function Put(config: PutConfig, showError = true) {
   return (target: any, method: string, descriptor: PropertyDescriptor) => {
@@ -8,27 +8,17 @@ export function Put(config: PutConfig, showError = true) {
   };
 }
 
-function PutMethodDecorator(
-  config: PutConfig,
-  target: any,
-  method: string,
-  descriptor: PropertyDescriptor,
-  showError
-) {
+function PutMethodDecorator(config: PutConfig, target: any, method: string, descriptor: PropertyDescriptor, showError) {
   const http = DecoratorService.getHttpService();
   let url = config.url;
   const originalMethod = descriptor.value;
 
   descriptor.value = function (...args: any[]) {
-    let requestUrl = target[DECORATORS].filter(
-      (decorator) =>
-        decorator.type === DecoratorTypes.UrlParam &&
-        decorator.method === method
-    )
-      .map((parameterDecorator) => {
+    let requestUrl = target[DECORATORS].filter(decorator => decorator.type === DecoratorTypes.UrlParam && decorator.method === method)
+      .map(parameterDecorator => {
         return {
           parameter: parameterDecorator.parameter,
-          value: args[parameterDecorator.index] || "",
+          value: args[parameterDecorator.index] || ''
         };
       })
       .reduce((acc: string, curr: any) => {
@@ -37,13 +27,11 @@ function PutMethodDecorator(
       }, url);
 
     let requestParams = target[DECORATORS].filter(
-      (decorator) =>
-        decorator.type === DecoratorTypes.RequestParam &&
-        decorator.method === method
+      decorator => decorator.type === DecoratorTypes.RequestParam && decorator.method === method
     )
-      .map((decorator) => {
+      .map(decorator => {
         const p: { [n: string]: any } = {};
-        p[decorator.parameter] = args[decorator.index] || "";
+        p[decorator.parameter] = args[decorator.index] || '';
         return p;
       })
       .reduce((acc: any, curr: any) => {
@@ -52,30 +40,22 @@ function PutMethodDecorator(
       }, {});
 
     let requestBody = target[DECORATORS].filter(
-      (decorator) =>
-        decorator.type === DecoratorTypes.RequestBody &&
-        decorator.method === method
+      decorator => decorator.type === DecoratorTypes.RequestBody && decorator.method === method
     )[0];
 
     const responseParamIndex = target[DECORATORS].filter(
-      (decorator) =>
-        decorator.type === DecoratorTypes.Response &&
-        decorator.method === method
+      decorator => decorator.type === DecoratorTypes.Response && decorator.method === method
     )[0].index;
 
-    this[method + "IsLoading"] = true;
-    http
-      .put(requestUrl, requestBody, requestParams)
-      .subscribe((response: ResponseData) => {
-
-        this[method + "IsLoading"] = false;
-        if (showError && !response.meta.success) {
-          DecoratorService.getMessageService().error(response.meta.message);
-          return;
-        }
-        args[responseParamIndex] = response;
-        originalMethod.apply(this, args);
-        
-      });
+    this[`${method}IsLoading`] = true;
+    http.put(requestUrl, requestBody, requestParams).subscribe((response: ResponseData) => {
+      this[`${method}IsLoading`] = false;
+      if (showError && !response.meta.success) {
+        DecoratorService.getMessageService().error(response.meta.message);
+        return;
+      }
+      args[responseParamIndex] = response;
+      originalMethod.apply(this, args);
+    });
   };
 }

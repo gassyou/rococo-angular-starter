@@ -1,5 +1,4 @@
-import { MessageReceiveData, MessageSendData } from "./webSocket.service";
-
+import { MessageReceiveData, MessageSendData } from './webSocket.service';
 
 export type ArgumentsType<T> = T extends (...args: infer U) => void ? U : never;
 

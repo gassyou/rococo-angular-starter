@@ -53,7 +53,7 @@ export abstract class CRUDService {
     }
 
     return this.http.post(this.allDataUrl).pipe(
-      map(response => {             
+      map(response => {
         if (!response.meta.success) {
           this.message.error(response['meta']['message']);
         }
@@ -155,7 +155,7 @@ export abstract class CRUDService {
       return null;
     }
 
-    return this.http.post(this.deleteUrl,{ id }).pipe(
+    return this.http.post(this.deleteUrl, { id }).pipe(
       map(response => {
         if (response['meta']['success']) {
           this.message.info('削除成功');

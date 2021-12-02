@@ -4,9 +4,10 @@
 
 export const environment = {
   production: false,
-  SERVER_URL: "http://localhost",
-  pageSizeOptions:[5,10,15,20],
-  pageSize: 5
+  SERVER_URL: 'http://localhost/',
+  pageSizeOptions: [5, 10, 15, 20],
+  pageSize: 5,
+  defaultTimeout: 40000
 };
 
 /*

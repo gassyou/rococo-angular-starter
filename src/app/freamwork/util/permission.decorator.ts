@@ -1,9 +1,10 @@
-import { Observable } from "rxjs";
-import { map } from "rxjs/operators";
-import { DecoratorService } from "./decorator.service";
+import { Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
 
-const ACL_DECORATORS = "__acl_decorators__";
-const ACL_INFO_NAME = "acl_info_data";
+import { DecoratorService } from './decorator.service';
+
+const ACL_DECORATORS = '__acl_decorators__';
+const ACL_INFO_NAME = 'acl_info_data';
 
 export interface ActionCofing {
   module: string;
@@ -18,6 +19,7 @@ export interface ActionPropertyCofing {
 
 /**
  * 这是一个方法装饰器。用来指定被装饰的方法执行时，需要的权限。
+ *
  * @param aclList 某操作需要的权限
  * @param messageInfo 非必须， 如果设置该参数时，当权限不符时，系统会提示此信息
  *
@@ -26,7 +28,7 @@ export function UsingAcl(aclList: string[], messageInfo?: string) {
   return (target: any, name: string, descriptor: PropertyDescriptor) => {
     const method = descriptor.value;
     descriptor.value = function (...args) {
-      const roleList = DecoratorService.getAclService().data["roles"];
+      const roleList = DecoratorService.getAclService().data['roles'];
 
       if (hasPermission(roleList, aclList)) {
         return method.apply(this, args);
@@ -53,29 +55,22 @@ export function ACL(moduleName: string, actionName: string, tabName?: string) {
       config: {
         module: moduleName,
         action: actionName,
-        tab: tabName ? tabName : undefined,
-      } as ActionCofing,
+        tab: tabName ? tabName : undefined
+      } as ActionCofing
     });
   };
 }
 
 export function ACLConfig() {
   return (target: any, name: string, descriptor: PropertyDescriptor) => {
-    if (
-      !target[ACL_DECORATORS] ||
-      (target[ACL_DECORATORS] as ActionCofing[]).length <= 0
-    ) {
+    if (!target[ACL_DECORATORS] || (target[ACL_DECORATORS] as ActionCofing[]).length <= 0) {
       return;
     }
 
     const originalMethod = descriptor.value;
     descriptor.value = function (...args) {
-      (target[ACL_DECORATORS] as ActionPropertyCofing[]).forEach((item) => {
-        getAcl(
-          item.config.module,
-          item.config.action,
-          item.config.tab
-        ).subscribe((data) => (this[item.name] = data));
+      (target[ACL_DECORATORS] as ActionPropertyCofing[]).forEach(item => {
+        getAcl(item.config.module, item.config.action, item.config.tab).subscribe(data => (this[item.name] = data));
       });
 
       originalMethod.apply(this, args);
@@ -83,11 +78,7 @@ export function ACLConfig() {
   };
 }
 
-export function getAcl(
-  moduleName: string,
-  actionName: string,
-  tabName?: string
-): Observable<any[]> {
+export function getAcl(moduleName: string, actionName: string, tabName?: string): Observable<any[]> {
   return DecoratorService.getMyAppService()
     .getACLInfo()
     .pipe(
@@ -136,23 +127,14 @@ export function hasPermission(permission: any[], aclList: any[]): boolean {
   return false;
 }
 
-function getAclByName(
-  aclInfo: any[],
-  moduleName: string,
-  actionName: string,
-  tabName?: string
-): any[] {
-  const aclObject = aclInfo.filter((item) => {
-    return (
-      item.pageName === moduleName &&
-      (tabName ? item.tag === tabName : true) &&
-      item.i18n === actionName
-    );
+function getAclByName(aclInfo: any[], moduleName: string, actionName: string, tabName?: string): any[] {
+  const aclObject = aclInfo.filter(item => {
+    return item.pageName === moduleName && (tabName ? item.tag === tabName : true) && item.i18n === actionName;
   });
 
   if (!aclObject || aclObject.length <= 0 || !aclObject[0].acl) {
     return [];
   } else {
-    return aclObject[0].acl.split(",");
+    return aclObject[0].acl.split(',');
   }
 }
