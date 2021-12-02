@@ -16,7 +16,6 @@ export class UrlHandlerInterceptor implements HttpInterceptor {
     }
 
     const newRequest = request.clone({ url });
-
     return next.handle(newRequest);
   }
 }

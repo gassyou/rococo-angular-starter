@@ -1,48 +1,232 @@
-import { Injectable, Optional } from '@angular/core';
-import { _HttpClient } from '@delon/theme';
-import { NzMessageService } from 'ng-zorro-antd/message';
-import { Observable } from 'rxjs';
-import { map } from 'rxjs/operators';
+import { Injectable, Optional } from "@angular/core";
+import { Router } from "@angular/router";
+import { ACLService } from "@delon/acl";
+import { TokenService } from "@delon/auth";
+import { CacheService } from "@delon/cache";
+import { _HttpClient } from "@delon/theme";
+import { NzMessageService } from "ng-zorro-antd/message";
+import { BehaviorSubject, Observable, of } from "rxjs";
+import { filter, map, switchMap } from "rxjs/operators";
 
-import { setCookie } from '../util/cookie-util';
-import { ResponseData } from './response-data';
+import { getCookie, setCookie } from "../util/cookie-util";
+import { encryptForServer } from "../util/crypto";
+import { ResponseData, ResponseContentData } from "./response-data";
 
-@Injectable()
-export class ApplicationService {
-  public loginUrl: string = '';
-  public myInfoUrl: string = '';
-  public myInfoEditUrl: string = '';
-  public myPasswordEditUrl: string = '';
-  public LOGIN_COOKIE_NAME = '';
+@Injectable({
+  providedIn: "root",
+})
+export abstract class ApplicationService {
+  public abstract loginUrl: string;
+  public abstract myInfoUrl: string;
+  public abstract myInfoEditUrl: string;
+  public abstract myPasswordEditUrl: string;
 
-  public afterLoginSuccess: (response: ResponseData) => void;
-  public afterLoginFailure: (response: ResponseData) => void;
+  public abstract LOGIN_COOKIE_NAME: string;
 
-  constructor(public http: _HttpClient, @Optional() public message: NzMessageService) {}
+  public abstract loginPageUrl: string;
+  public abstract homePageUrl: string;
+  public abstract appName: string;
+  public abstract menuUrl: string;
+  public abstract actionAclUrl: string;
+
+  private _myInfo$ = new BehaviorSubject<number>(null);
+  public myInfo$ = this._myInfo$.asObservable().pipe(
+    filter((params) => params !== null),
+    switchMap((params) => {
+      return this.http.get(this.myInfoUrl,{uid: params}).pipe(
+        map((response) => {
+          if(!response.meta.success) {
+            this.message.error(response['meta']['message']);
+          }
+          return response;
+        })
+      )
+    })
+  )
+
+  constructor(
+    public http: _HttpClient,
+    @Optional() public message: NzMessageService,
+    public router: Router,
+    public token: TokenService,
+    public acl: ACLService,
+    public cache: CacheService
+  ) {}
 
   /**
    * 登录操作
    *
    * @returns Observable<any>
    */
-  public login(loginInfo: LoginInfo) {
-    return this.http.post(this.loginUrl, loginInfo).subscribe((response: ResponseData) => {
-      if (response.meta.success) {
-        setCookie(this.LOGIN_COOKIE_NAME, btoa(JSON.stringify(loginInfo)));
-        if (this.afterLoginSuccess) {
-          this.afterLoginSuccess(response);
+  public login(
+    loginInfo: LoginInfo,
+    autoLogin = false
+  ): Observable<ResponseData> {
+
+    let passwordEpt = loginInfo.password;
+    if (!autoLogin) {
+      passwordEpt = encryptForServer(loginInfo.password);
+    }
+
+    return this.http
+      .post(this.loginUrl, {
+        account: loginInfo.account,
+        password: passwordEpt,
+      })
+      .pipe(
+        map((response: ResponseData) => {
+          if (!response.meta.success) {
+            this.message.error(response.meta.message);
+            return response;
+          }
+          if (loginInfo.autoLogin) {
+            setCookie(this.LOGIN_COOKIE_NAME, btoa(JSON.stringify({
+              account: loginInfo.account,
+              password: passwordEpt,
+            })));
+          }
+          this.token.set({
+            uid: (response.data as ResponseContentData).id,
+            token: (response.data as ResponseContentData).token as string,
+            longToken: (response.data as ResponseContentData)
+              .longToken as string,
+            time: new Date().getTime(),
+            roleList: (response.data as ResponseContentData)
+              .roleList as string[],
+          });
+
+          this.router.navigate([this.homePageUrl]);
+          return response;
+        })
+      );
+  }
+
+  /**
+   * 自动登录。可以在路由守卫中直接登录系统。
+   */
+  public autoLogin(): Observable<boolean> {
+    const loginInfo = this.getLoginInfoFromCookie();
+    if (!loginInfo) {
+      this.router.navigate([this.loginPageUrl]);
+      return of(false);
+    }
+    return this.login(loginInfo, true).pipe(
+      map((response: ResponseData) => {
+        if (!response.meta.success) {
+          this.router.navigate([this.loginPageUrl]);
+          return false;
         }
-      } else {
-        if (this.afterLoginFailure) {
-          this.afterLoginFailure(response);
+        return true;
+      })
+    );
+  }
+
+  /**
+   *  登出
+   */
+  public logout() {
+    this.token.clear();
+    this.cache.clear();
+    this.getACLInfo();
+    this.router.navigate([this.loginPageUrl]);
+  }
+
+  /**
+   * 判断是否已经登录过。
+   * @returns boolean
+   */
+  public isLogined(): boolean {
+    return this.token.get() && this.token.get().token;
+  }
+
+  /**
+   * 获取菜单信息
+   */
+  public getMenuData(): Observable<any> {
+    this.acl.setRole(this.token.get().roleList);
+    return this.http.get(this.menuUrl).pipe(
+      map((response: ResponseData) => {
+        if (!response.meta.success) {
+          this.message.error(response.meta.message);
+          return null;
         }
-      }
-      return response;
-    });
+        return response.data;
+      })
+    );
+  }
+
+  /**
+   * 获取各个画面的按钮的ACL信息
+   */
+  public getACLInfo(): Observable<any[]> {
+    return this.cache.get(this.actionAclUrl).pipe(
+      map((response: ResponseData) => {
+        if (!response.meta.success) {
+          this.message.error(response.meta.message);
+        }
+        return response.data as any[];
+      })
+    );
+  }
+
+  public getMyInfo() {
+    this._myInfo$.next(this.token.get().uid);
+  }
+
+  public editMyInfo(info: MyInfo):Observable<ResponseData> {
+    return this.http.post(this.myInfoEditUrl,info).pipe(
+      map((response: ResponseData) => {
+        if(!response.meta.success) {
+          this.message.error(response.meta.message);
+        } else {
+          this.message.success('個人情報を成功に更新しました');
+          this.getMyInfo();
+        }
+        return response;
+      })
+    )
+  }
+
+  // 修改密码
+  public updateMyPassword(newPasswordInfo): Observable<any> {
+    const info = {
+      id: newPasswordInfo.id,
+      oldPassword: encryptForServer(newPasswordInfo.oldPassword),
+      newPassword: encryptForServer(newPasswordInfo.newPassword),
+      newPwConfirm: encryptForServer(newPasswordInfo.newPwConfirm),
+    };
+
+    return this.http.post(this.myPasswordEditUrl, info).pipe(
+      map((response: ResponseData) => {
+        if (response.meta.success) {
+          this.message.success("パスワードが成功に変更しました。");
+        } else {
+          this.message.error(response.meta.message);
+        }
+        return response;
+      })
+    );
+  }
+
+  private getLoginInfoFromCookie(): LoginInfo | null {
+    const loginCookie = getCookie(this.LOGIN_COOKIE_NAME);
+    if (loginCookie && loginCookie.length > 0) {
+      return JSON.parse(atob(loginCookie));
+    }
+    return null;
   }
 }
 
 export interface LoginInfo {
   account: string;
   password: string;
+  autoLogin: boolean;
+}
+
+export interface MyInfo {
+  id: number;
+  account?: string;
+  name: string;
+  phone: string;
+  roleName?: string;
 }

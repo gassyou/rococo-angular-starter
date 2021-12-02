@@ -11,9 +11,10 @@ export interface ResponseMetaData {
 }
 
 export interface ResponseContentData {
-  total: number;
-  size: number;
-  page: number;
-  current: number;
-  response: unknown[] | null;
+  total?: number;
+  size?: number;
+  page?: number;
+  current?: number;
+  records?: [];
+  [index: string]: unknown | null | undefined;
 }

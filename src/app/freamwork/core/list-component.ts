@@ -1,3 +1,4 @@
+import { Component, OnDestroy } from '@angular/core';
 import { NzModalService } from 'ng-zorro-antd/modal';
 import { Observable } from 'rxjs';
 import { CRUDService } from 'src/app/freamwork/core/crud.service';
@@ -7,17 +8,26 @@ import { environment } from 'src/environments/environment';
 import { download } from '../util/file-util';
 import { FormComponent } from './form-component';
 
-export abstract class ListComponent {
+@Component({ template: `` })
+export abstract class ListComponent implements OnDestroy {
   total: number = 0;
   currentPage: number = 1;
   pageSize = environment.pageSize;
   pageSizeOptions = environment.pageSizeOptions;
   tableDataSource = [];
 
+  dataSourceSubscription;
+
   constructor(public crudService: CRUDService, public nzModal: NzModalService) {}
 
+  ngOnDestroy(): void {
+    if (this.dataSourceSubscription) {
+      this.dataSourceSubscription.unsubscribe();
+    }
+  }
+
   init() {
-    this.crudService.datasource$.subscribe(result => {
+    this.dataSourceSubscription = this.crudService.datasource$.subscribe(result => {
       this.tableDataSource = result.data.records;
       this.total = result.data.total;
     });
@@ -54,7 +64,7 @@ export abstract class ListComponent {
     });
   }
 
-  public openModal(title: string, cancelText: string, okText: string, content: FormComponent | any, contentParams?: any) {
+  public openModal(title: string, cancelText: string, okText: string, content: FormComponent | any, contentParams?: any, callbak?:Function) {
     const modal = this.nzModal.create({
       nzTitle: title,
       nzContent: content,
@@ -83,6 +93,9 @@ export abstract class ListComponent {
             if (submit) {
               submit.subscribe(result => {
                 this.loading = false;
+                if(callbak) {
+                  callbak();
+                }
                 if (result) {
                   modal.destroy();
                 }

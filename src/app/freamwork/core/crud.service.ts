@@ -53,7 +53,7 @@ export abstract class CRUDService {
     }
 
     return this.http.post(this.allDataUrl).pipe(
-      map(response => {
+      map(response => {             
         if (!response.meta.success) {
           this.message.error(response['meta']['message']);
         }
@@ -96,13 +96,13 @@ export abstract class CRUDService {
     if (!this.addUrl) {
       return null;
     }
-
     return this.http.post(this.addUrl, param).pipe(
       map(response => {
         if (response['meta']['success']) {
           this.message.info('添加成功');
           this.search();
-          return response.data;
+          // 无返回则直接返回true，否则弹出框无法关闭
+          return response.data ? response.data : true;
         } else {
           this.message.error(response['meta']['message']);
           return false;
@@ -130,7 +130,8 @@ export abstract class CRUDService {
         if (response['meta']['success']) {
           this.message.info('修改成功');
           this.search();
-          return response.data;
+          // 无返回则直接返回true，否则弹出框无法关闭
+          return response.data ? response.data : true;
         } else {
           this.message.error(response['meta']['message']);
           return false;
@@ -141,7 +142,7 @@ export abstract class CRUDService {
 
   /**
    * 根据记录ID，删除操作
-   * 该接口自动显示删除成功或失败消息。
+   * 该接口自动显示削除成功或失败消息。
    * 后端返回内容，原模原样返回
    * post 提交。
    * url:取自：deleteUrl
@@ -154,10 +155,10 @@ export abstract class CRUDService {
       return null;
     }
 
-    return this.http.post(this.deleteUrl, { id }).pipe(
+    return this.http.post(this.deleteUrl,{ id }).pipe(
       map(response => {
         if (response['meta']['success']) {
-          this.message.info('删除成功');
+          this.message.info('削除成功');
           this.search();
           return response.data;
         } else {
@@ -204,6 +205,19 @@ export abstract class CRUDService {
    */
   public asyncValidate(checkUrl: string, params: any): Observable<any> {
     return this.http.post(checkUrl, params).pipe(
+      map(result => {
+        if (result['meta']['success']) {
+          return null;
+        } else {
+          return { serverError: { msg: result['meta']['message'] } };
+        }
+      })
+    );
+  }
+
+  // get类型校验
+  public asyncValidateGet(checkUrl: string, params: any): Observable<any> {
+    return this.http.get(checkUrl, params).pipe(
       map(result => {
         if (result['meta']['success']) {
           return null;
