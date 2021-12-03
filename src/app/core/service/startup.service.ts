@@ -16,6 +16,7 @@ export class StartupService {
   load(): Observable<void> {
     return zip(this.myApp.getACLInfo(), this.myApp.getMenuData()).pipe(
       map(([aclInfo, menu]: [any[], Menu[]]) => {
+        menu = [{ text: '测试一' }, { text: '测试二' }, { text: '测试三' }];
         if (menu) {
           this.menuService.add(menu);
         }
