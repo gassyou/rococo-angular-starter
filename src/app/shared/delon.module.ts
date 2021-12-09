@@ -18,7 +18,7 @@ export const DELON_MODULES = [
   STModule,
   SEModule,
   SVModule,
-  ReuseTabModule,
+  ReuseTabModule
 ];
 
 export const alainConfig: AlainConfig = {

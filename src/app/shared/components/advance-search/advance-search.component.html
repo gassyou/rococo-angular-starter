@@ -1,7 +1,7 @@
 <nz-input-group nzSearch cdkOverlayOrigin #trigger [nzSuffix]="searchButton" [nzPrefix]="form ? moreButton : null">
   <input
     type="text"
-    style="width: 500px"
+    class="search-input"
     nz-input
     [placeholder]="placeholder"
     [(ngModel)]="simpleSearchValue"
@@ -23,7 +23,9 @@
 
 <ng-template
   cdkConnectedOverlay
-  cdkConnectedOverlayMinWidth="567px"
+  cdkConnectedOverlayMinWidth="417px"
+  cdkConnectedOverlayHasBackdrop="true"
+  (backdropClick)="isOpen = false"
   [cdkConnectedOverlayOrigin]="trigger"
   [cdkConnectedOverlayOpen]="isOpen"
 >
