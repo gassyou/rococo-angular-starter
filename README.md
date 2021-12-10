@@ -12,6 +12,13 @@
   * 异常画面：ExceptionRoutingModule (ExceptionModule)
     * 各种类型的系统级画面（例如：404）
 
+
+* 推荐做法
+  * 每个模块，比如人员管理模块，设置一个module 和routingmodule
+  * shareModule里面是共同的东西，如果多个模块都要使用的，就不要放到sharemodule里面，会影响编译时间。
+  * 各个模块的service，放在“core/service”文件下
+  * 拦截器，一个功能一个文件
+
 ## Rococo WebFreamwork
 
 框架设计的核心理念，经常重复编写的代码，共同化，抽象成父类。
@@ -46,6 +53,46 @@
 
 1. 文件下载处理
 2. 加密处理
+
+#### http 注解
+参考 freamwork/util/http/redme.md
+#### websocket 注解
+参考 freamwork/websocket-manager/redme.md
+
+### 权限注解
+
+* 控制某个按钮
+```ts
+  @ACL("ブランド管理","削除")
+```
+
+```ts
+  @ACLConfig()
+  ngOnInit(): void {
+```
+
+* 控制某个方法
+
+```ts
+@UsingAcl(['1','2','3'],'无权取得XX数据')
+getDataFromServer(){
+
+}
+```
+
+传入参数有2个。
+1：调用该方法需要的权限，
+2：当权限不满足时，显示的错误信息（非必须）
+
+#### 关于打开对话框
+```ts
+ modalCreator(this.nzModal, '個人情報', null, null, MyInfoComponent, this.myInfo, true);
+```
+```ts
+this.openModal(data ? '编辑' : '添加角色', '取消', '确定', EditComponent, data);
+```
+
+---
 
 ## 实现方式
 
