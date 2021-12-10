@@ -96,6 +96,7 @@ export class PageComponent extends ListComponent implements OnInit {
 
   edit(data?: any) {
     this.openModal(data ? '编辑' : '添加用户', '取消', '确定', EditComponent, data);
+
   }
 
   deleteData(data?: any) {
