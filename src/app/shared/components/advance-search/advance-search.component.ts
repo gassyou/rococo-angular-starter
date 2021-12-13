@@ -47,6 +47,6 @@ export class AdvanceSearchComponent extends SearchComponent {
     super.reset();
     this.advanceSearchValue = { ...this.searchService.params };
     this.simpleSearchValue = '';
-    this.isOpen = false;
+    // this.isOpen = false;
   }
 }

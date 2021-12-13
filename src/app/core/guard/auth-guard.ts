@@ -16,7 +16,7 @@ export class AuthGuard implements CanActivate, CanActivateChild {
       return this.myApp.autoLogin().pipe(
         switchMap(data => {
           if (!data) {
-            this.router.navigate(['/exception/403']);
+            this.router.navigate([this.myApp.loginPageUrl]);
             return of(false);
           } else {
             return this.canActivateUrl(state);
