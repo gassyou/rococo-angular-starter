@@ -11,11 +11,15 @@ export function download(octetData: any, fileName: string) {
     a.setAttribute('href', objectUrl);
     a.setAttribute('download', fileName);
     a.click();
-    if (window.navigator.msSaveOrOpenBlob) {
-      navigator.msSaveBlob(blob, fileName);
-    } else {
-      URL.revokeObjectURL(objectUrl);
-    }
+
+    // not support IE
+    // if (window.navigator.msSaveOrOpenBlob) {
+    //   navigator.msSaveBlob(blob, fileName);
+    // } else {
+    //   URL.revokeObjectURL(objectUrl);
+    // }
+
+    URL.revokeObjectURL(objectUrl);
     return true;
   };
   return downFile();
