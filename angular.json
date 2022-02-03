@@ -7,7 +7,42 @@
       "projectType": "application",
       "schematics": {
         "@schematics/angular:component": {
+          "skipTests": false,
+          "flat": false,
+          "inlineStyle": true,
+          "inlineTemplate": false,
           "style": "less"
+        },
+        "@schematics/angular:application": {
+          "strict": true
+        },
+        "ng-alain:module": {
+          "routing": true,
+          "skipTests": false
+        },
+        "ng-alain:list": {
+          "skipTests": false
+        },
+        "ng-alain:edit": {
+          "skipTests": false,
+          "modal": true
+        },
+        "ng-alain:view": {
+          "skipTests": false,
+          "modal": true
+        },
+        "ng-alain:curd": {
+          "skipTests": false
+        },
+        "@schematics/angular:module": {
+          "routing": true,
+          "skipTests": false
+        },
+        "@schematics/angular:directive": {
+          "skipTests": false
+        },
+        "@schematics/angular:service": {
+          "skipTests": false
         }
       },
       "root": "",
@@ -22,6 +57,7 @@
             "main": "src/main.ts",
             "polyfills": "src/polyfills.ts",
             "tsConfig": "tsconfig.app.json",
+            "inlineStyleLanguage": "less",
             "assets": [
               "src/favicon.ico",
               "src/assets",
@@ -36,8 +72,17 @@
             ],
             "scripts": [],
             "allowedCommonJsDependencies": [
-              "ajv"
-            ]
+              "@antv/g2",
+              "ajv",
+              "ajv-formats",
+              "date-fns",
+              "file-saver"
+            ],
+            "stylePreprocessorOptions": {
+              "includePaths": [
+                "node_modules/"
+              ]
+            }
           },
           "configurations": {
             "production": {
