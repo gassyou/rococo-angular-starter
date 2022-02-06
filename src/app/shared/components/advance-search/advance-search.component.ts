@@ -12,7 +12,7 @@ export class AdvanceSearchComponent extends SearchComponent {
   @Input() placeholder: string = '查询';
 
   @Input('advanceSearchForm')
-  form: SFSchema | Component = null;
+  form: SFSchema | Component | null = null;
 
   @Input('simpleSearchKeys')
   simpleSearchKeys: string[] = [];
@@ -34,7 +34,7 @@ export class AdvanceSearchComponent extends SearchComponent {
     this.isOpen = !this.isOpen;
   }
 
-  advanceSearch(value): void {
+  advanceSearch(value: any): void {
     super.advanceSearch(value);
     this.isOpen = false;
   }

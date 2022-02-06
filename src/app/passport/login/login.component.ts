@@ -64,7 +64,7 @@ import { CheckForm } from 'src/app/freamwork/util/form-valid-checker';
   ]
 })
 export class LoginComponent implements OnInit {
-  loginForm: FormGroup;
+  loginForm: FormGroup | undefined;
   passwordVisible = false;
   islogining = false;
 
@@ -81,11 +81,11 @@ export class LoginComponent implements OnInit {
   @CheckForm('loginForm')
   login() {
     this.islogining = true;
-    this.myApp.login(this.loginForm.value).subscribe(
+    this.myApp.login(this.loginForm?.value).subscribe(
       () => {
         this.islogining = false;
       },
-      error => {
+      () => {
         this.islogining = false;
       }
     );

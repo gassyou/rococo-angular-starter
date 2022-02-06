@@ -1,6 +1,9 @@
 import { FormGroup } from '@angular/forms';
 
-export function isValidForm(form: FormGroup) {
+export function isValidForm(form: FormGroup | undefined) {
+  if (!form) {
+    return false;
+  }
   for (const i in form.controls) {
     if (form.contains(i)) {
       form.controls[i].markAsDirty();
@@ -17,24 +20,29 @@ export function isValidForm(form: FormGroup) {
  * @param form 表单变量
  * @returns
  */
-export function CheckForm(form: string) {
+export function CheckForm(form: any) {
   return (target: any, propOrMethod: string, descriptor?: PropertyDescriptor) => {
-    const originalMethod = descriptor.value;
+    console.log(target);
+
+    if (!descriptor) {
+      return;
+    }
+    const originalMethod = descriptor?.value;
     descriptor.value = function () {
       const args = arguments;
 
-      if (!this[form]) {
+      if (!target[form]) {
         throw new Error(`${form} is not exist.`);
       }
 
-      for (const i in this[form].controls) {
-        if (this[form].contains(i)) {
-          this[form].controls[i].markAsDirty();
-          this[form].controls[i].updateValueAndValidity({ onlySelf: true });
+      for (const i in target[form].controls) {
+        if (target[form].contains(i)) {
+          target[form].controls[i].markAsDirty();
+          target[form].controls[i].updateValueAndValidity({ onlySelf: true });
         }
       }
 
-      if (!this[form].valid) {
+      if (!target[form].valid) {
         return;
       }
 

@@ -18,14 +18,14 @@ export class UserService extends CRUDService {
     super.exportUrl = '/user/export';
   }
 
-  public updatePassword(data): Observable<any> {
-    return this.http.post('/user/update-password', data).pipe(
-      map(response => {
+  public updatePassword(data: any): Observable<any> {
+    return super.http.post('/user/update-password', data).pipe(
+      map((response: any) => {
         if (response['meta']['success']) {
-          this.message.info('修改成功');
+          super.message.info('修改成功');
           return response.data;
         } else {
-          this.message.error(response['meta']['message']);
+          super.message.error(response['meta']['message']);
           return false;
         }
       })

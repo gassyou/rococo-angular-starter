@@ -6,8 +6,8 @@ import { FormComponent } from '../core/form-component';
 export function modalCreator(
   nzModal: NzModalService,
   title: string,
-  cancelText: string,
-  okText: string,
+  cancelText: string | null,
+  okText: string | null,
   content: FormComponent | any,
   contentParams?: any,
   nzMaskClosable = false

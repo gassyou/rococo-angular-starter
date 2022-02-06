@@ -75,7 +75,7 @@ import { isValidForm } from 'src/app/freamwork/util/form-valid-checker';
   styles: []
 })
 export class EditMyPasswordComponent implements OnInit {
-  public editForm: FormGroup;
+  public editForm: FormGroup | undefined;
 
   oldPWVisible = false;
   newPWVisible = false;
@@ -113,8 +113,8 @@ export class EditMyPasswordComponent implements OnInit {
     });
   }
 
-  submit(): Observable<any> {
-    if (this.editForm.controls['newPassword'].value !== this.editForm.controls['newPwConfirm'].value) {
+  submit(): Observable<any> | null {
+    if (this.editForm?.controls['newPassword'].value !== this.editForm?.controls['newPwConfirm'].value) {
       return null;
     }
 
@@ -122,8 +122,8 @@ export class EditMyPasswordComponent implements OnInit {
       return null;
     }
 
-    return this.app.updateMyPassword(this.editForm.value).pipe(
-      map(response => {
+    return this.app.updateMyPassword(this.editForm?.value).pipe(
+      map((response: any) => {
         return response;
       })
     );
@@ -131,11 +131,11 @@ export class EditMyPasswordComponent implements OnInit {
 
   cancel() {}
 
-  checkConfirmPw = (control: FormControl): { [key: string]: any } => {
+  checkConfirmPw = (control: FormControl): { [key: string]: any } | undefined => {
     if (!control.value) {
       return { required: true };
     }
-    if (this.editForm.controls['newPassword'].value !== this.editForm.controls['newPwConfirm'].value) {
+    if (this.editForm?.controls['newPassword'].value !== this.editForm?.controls['newPwConfirm'].value) {
       return { confirm: true, error: true };
     }
   };

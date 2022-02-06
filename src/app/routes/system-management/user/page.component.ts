@@ -85,25 +85,24 @@ export class PageComponent extends ListComponent implements OnInit {
     super.init();
   }
 
-  enableData(data) {
+  enableData(data: { enable: number }) {
     if (data.enable === 0) {
       data.enable = 1;
     } else {
       data.enable = 0;
     }
-    this.userService.update(data).subscribe();
+    this.userService.update(data)?.subscribe();
   }
 
   edit(data?: any) {
-    this.openModal(data ? '编辑' : '添加用户', '取消', '确定', EditComponent, data);
-
+    super.openModal(data ? '编辑' : '添加用户', '取消', '确定', EditComponent, data);
   }
 
   deleteData(data?: any) {
-    this.userService.delete(data.id).subscribe();
+    this.userService.delete(data.id)?.subscribe();
   }
 
   updatePassword(data?: any) {
-    this.openModal('修改密码', '取消', '确定', PasswordEditComponent, data);
+    super.openModal('修改密码', '取消', '确定', PasswordEditComponent, data);
   }
 }

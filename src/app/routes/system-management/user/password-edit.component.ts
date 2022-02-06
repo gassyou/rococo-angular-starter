@@ -80,7 +80,7 @@ export class PasswordEditComponent extends FormComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.editForm = this.fb.group({
+    super.editForm = this.fb.group({
       id: [this.value ? this.value.id : null],
       oldPw: [
         null,
@@ -102,30 +102,30 @@ export class PasswordEditComponent extends FormComponent implements OnInit {
     });
   }
 
-  submit(): Observable<any> {
-    if (!this.checkFormValid()) {
+  submit(): Observable<any> | null {
+    if (!super.checkFormValid()) {
       return null;
     }
     return this.userService.updatePassword({
-      id: this.editForm.controls['id'].value,
-      newPw: this.editForm.controls['newPw'].value
+      id: super.editForm?.controls['id'].value,
+      newPw: super.editForm?.controls['newPw'].value
     });
   }
 
-  checkConfirmPw = (control: FormControl): { [key: string]: any } => {
+  checkConfirmPw = (control: FormControl): { [key: string]: any } | undefined => {
     if (!control.value) {
       return { required: true };
     }
-    if (this.editForm.controls['newPwConfirm'].value !== this.editForm.controls['newPw'].value) {
+    if (super.editForm?.controls['newPwConfirm'].value !== super.editForm?.controls['newPw'].value) {
       return { confirm: true, error: true };
     }
   };
 
   checkSameWidthOldPW = (control: FormControl): { [key: string]: any } => {
-    if (this.editForm && control.value) {
+    if (super.editForm && control.value) {
       const param = {
-        id: this.editForm.controls['id'].value,
-        newPw: this.editForm.controls['newPw'].value
+        id: super.editForm.controls['id'].value,
+        newPw: super.editForm.controls['newPw'].value
       };
       return this.userService.asyncValidate('/user/check-new-pw', param);
     }
@@ -133,10 +133,10 @@ export class PasswordEditComponent extends FormComponent implements OnInit {
   };
 
   checkOldPassword = (control: FormControl): { [key: string]: any } => {
-    if (this.editForm && control.value) {
+    if (super.editForm && control.value) {
       const param = {
-        id: this.editForm.controls['id'].value,
-        oldPw: this.editForm.controls['oldPw'].value
+        id: super.editForm.controls['id'].value,
+        oldPw: super.editForm.controls['oldPw'].value
       };
       return this.userService.asyncValidate('/user/check-old-pw', param);
     }

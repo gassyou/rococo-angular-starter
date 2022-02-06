@@ -13,7 +13,7 @@ export abstract class SearchComponent {
     this.crudService.search(conditions);
   }
 
-  simpleSearch(paramKeys: string[], paramValue) {
+  simpleSearch(paramKeys: string[], paramValue: any) {
     this.isAdvanceMode = false;
     let params: SearchParams = {};
     paramKeys.forEach(key => {

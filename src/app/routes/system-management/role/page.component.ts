@@ -75,21 +75,21 @@ export class PageComponent extends ListComponent implements OnInit {
     super(roleService, nzModal);
   }
 
-  enableData(data) {
+  enableData(data: any) {
     if (data.enable === 0) {
       data.enable = 1;
     } else {
       data.enable = 0;
     }
-    this.roleService.update(data).subscribe();
+    this.roleService.update(data)?.subscribe();
   }
 
   edit(data?: any) {
-    this.openModal(data ? '编辑' : '添加角色', '取消', '确定', EditComponent, data);
+    super.openModal(data ? '编辑' : '添加角色', '取消', '确定', EditComponent, data);
   }
 
   deleteData(data?: any) {
-    this.roleService.delete(data.id).subscribe();
+    this.roleService.delete(data.id)?.subscribe();
   }
 
   ngOnInit(): void {

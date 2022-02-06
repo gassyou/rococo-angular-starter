@@ -1,5 +1,6 @@
 import { Component, OnInit, ChangeDetectionStrategy, OnDestroy, ChangeDetectorRef } from '@angular/core';
 import { NzModalService } from 'ng-zorro-antd/modal';
+import { Subscription } from 'rxjs';
 import { MyApplicationService } from 'src/app/core/service/my-application.service';
 import { MyInfo } from 'src/app/freamwork/core/application.service';
 import { modalCreator } from 'src/app/freamwork/util/modal-creator';
@@ -36,12 +37,12 @@ import { MyInfoComponent } from './my-info.component';
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class HeaderUserComponent implements OnInit, OnDestroy {
-  myInfoSubscription;
-  myInfo: MyInfo;
+  myInfoSubscription: Subscription | undefined;
+  myInfo: MyInfo | undefined;
   constructor(private myApp: MyApplicationService, private nzModal: NzModalService, private cdr: ChangeDetectorRef) {}
 
   ngOnInit(): void {
-    this.myInfoSubscription = this.myApp.myInfo$.subscribe(response => {
+    this.myInfoSubscription = this.myApp.myInfo$.subscribe((response: any) => {
       this.myInfo = response.data;
       this.cdr.markForCheck();
     });
@@ -49,11 +50,11 @@ export class HeaderUserComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
-    this.myInfoSubscription.unsubscribe();
+    this.myInfoSubscription?.unsubscribe();
   }
 
   editPassword() {
-    modalCreator(this.nzModal, 'パスワードの変更', 'キャンセル', '変更', EditMyPasswordComponent, this.myInfo.name);
+    modalCreator(this.nzModal, 'パスワードの変更', 'キャンセル', '変更', EditMyPasswordComponent, this.myInfo?.name);
   }
 
   showMyInfo() {

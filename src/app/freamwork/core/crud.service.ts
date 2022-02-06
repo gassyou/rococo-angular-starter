@@ -17,14 +17,14 @@ export abstract class CRUDService {
 
   public tableDataLoading = false;
 
-  private _search$ = new BehaviorSubject<SearchParams>(null);
+  private _search$ = new BehaviorSubject<SearchParams | null>(null);
   public datasource$ = this._search$
     .asObservable()
-    .pipe(filter(params => params !== null))
+    .pipe(filter((params: SearchParams | null) => params !== null))
     .pipe(
-      switchMap(params => {
+      switchMap((params: SearchParams | null) => {
         return this.http.post(this.searchUrl, params).pipe(
-          map(response => {
+          map((response: any) => {
             this.tableDataLoading = false;
             if (!response.meta.success) {
               this.message.error(response['meta']['message']);
@@ -47,13 +47,13 @@ export abstract class CRUDService {
    *
    * @returns
    */
-  public all(): Observable<any> {
+  public all(): Observable<any> | null {
     if (!this.allDataUrl) {
       return null;
     }
 
     return this.http.post(this.allDataUrl).pipe(
-      map(response => {
+      map((response: any) => {
         if (!response.meta.success) {
           this.message.error(response['meta']['message']);
         }
@@ -92,12 +92,12 @@ export abstract class CRUDService {
    *
    * @param param 更新后的
    */
-  public add(param: any): Observable<any> {
+  public add(param: any): Observable<any> | null {
     if (!this.addUrl) {
       return null;
     }
     return this.http.post(this.addUrl, param).pipe(
-      map(response => {
+      map((response: any) => {
         if (response['meta']['success']) {
           this.message.info('添加成功');
           this.search();
@@ -120,13 +120,13 @@ export abstract class CRUDService {
    *
    * @param param 更新后的
    */
-  public update(param: any): Observable<any> {
+  public update(param: any): Observable<any> | null {
     if (!this.updateUrl) {
       return null;
     }
 
     return this.http.post(this.updateUrl, param).pipe(
-      map(response => {
+      map((response: any) => {
         if (response['meta']['success']) {
           this.message.info('修改成功');
           this.search();
@@ -150,13 +150,13 @@ export abstract class CRUDService {
    *
    * @param id 记录ID，
    */
-  public delete(id: number): Observable<any> {
+  public delete(id: number): Observable<any> | null {
     if (!this.deleteUrl) {
       return null;
     }
 
     return this.http.post(this.deleteUrl, { id }).pipe(
-      map(response => {
+      map((response: any) => {
         if (response['meta']['success']) {
           this.message.info('削除成功');
           this.search();
@@ -172,13 +172,13 @@ export abstract class CRUDService {
   /**
    * 导出满足当前查询条件的所有数据。不分页。
    */
-  public export(): Observable<any> {
+  public export(): Observable<any> | null {
     if (!this.exportUrl) {
       return null;
     }
     this.tableDataLoading = true;
     return this.http.post(this.exportUrl, this.params, null, { responseType: 'arraybuffer' }).pipe(
-      map(response => {
+      map((response: any) => {
         try {
           const result = JSON.parse(new TextDecoder().decode(response));
           if (result.meta && result.meta.success === false) {
@@ -205,7 +205,7 @@ export abstract class CRUDService {
    */
   public asyncValidate(checkUrl: string, params: any): Observable<any> {
     return this.http.post(checkUrl, params).pipe(
-      map(result => {
+      map((result: any) => {
         if (result['meta']['success']) {
           return null;
         } else {
@@ -218,7 +218,7 @@ export abstract class CRUDService {
   // get类型校验
   public asyncValidateGet(checkUrl: string, params: any): Observable<any> {
     return this.http.get(checkUrl, params).pipe(
-      map(result => {
+      map((result: any) => {
         if (result['meta']['success']) {
           return null;
         } else {

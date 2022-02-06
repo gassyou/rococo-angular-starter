@@ -1,4 +1,4 @@
-import { HttpRequest, HttpHandler, HttpInterceptor, HttpErrorResponse } from '@angular/common/http';
+import { HttpRequest, HttpHandler, HttpInterceptor, HttpErrorResponse, HttpEvent } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { NzMessageService } from 'ng-zorro-antd/message';
@@ -20,7 +20,7 @@ export class ErrorHandlerInterceptor implements HttpInterceptor {
 
   intercept(request: HttpRequest<unknown>, next: HttpHandler): Observable<any> {
     return next.handle(request).pipe(
-      catchError(error => {
+      catchError((error: any, caught: Observable<HttpEvent<any>>) => {
         if (error['name'] === 'TimeoutError') {
           this.notification.warning('タイムアウト', 'サーバーからレスポンスがタイムアウトになりました！');
           return throwError(error.error);
@@ -52,6 +52,7 @@ export class ErrorHandlerInterceptor implements HttpInterceptor {
               return throwError(error.error);
           }
         }
+        return error;
       })
     );
   }

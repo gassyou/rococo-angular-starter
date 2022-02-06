@@ -29,12 +29,12 @@ export abstract class ApplicationService {
   public abstract menuUrl: string;
   public abstract actionAclUrl: string;
 
-  private _myInfo$ = new BehaviorSubject<number>(null);
+  private _myInfo$ = new BehaviorSubject<number | null>(null);
   public myInfo$ = this._myInfo$.asObservable().pipe(
-    filter(params => params !== null),
-    switchMap(params => {
+    filter((params: number | null) => params !== null),
+    switchMap((params: number | null) => {
       return this.http.get(this.myInfoUrl, { uid: params }).pipe(
-        map(response => {
+        map((response: any) => {
           if (!response.meta.success) {
             this.message.error(response['meta']['message']);
           }
@@ -162,13 +162,13 @@ export abstract class ApplicationService {
   /**
    * 获取各个画面的按钮的ACL信息
    */
-  public getACLInfo(): Observable<any[]> {
+  public getACLInfo(): Observable<any[] | null> {
     if (!this.actionAclUrl) {
       return of(null);
     }
 
     return this.cache.get(this.actionAclUrl).pipe(
-      map((response: ResponseData) => {
+      map((response: any) => {
         if (!response.meta.success) {
           this.message.error(response.meta.message);
         }
@@ -198,7 +198,7 @@ export abstract class ApplicationService {
   }
 
   // 修改密码
-  public updateMyPassword(newPasswordInfo): Observable<any> {
+  public updateMyPassword(newPasswordInfo: { id: any; oldPassword: string; newPassword: string; newPwConfirm: string }): Observable<any> {
     const info = {
       id: newPasswordInfo.id,
       oldPassword: encryptForServer(newPasswordInfo.oldPassword),

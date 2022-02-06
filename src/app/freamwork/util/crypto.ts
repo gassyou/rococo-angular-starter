@@ -12,7 +12,7 @@ export function encrypt(text: String): String {
     });
     const iv = CryptoJS.lib.WordArray.random(128 / 8);
     const options = { iv: iv, mode: CryptoJS.mode.CBC, padding: CryptoJS.pad.Pkcs7 };
-    const password_text = CryptoJS.enc.Utf8.parse(text);
+    const password_text = CryptoJS.enc.Utf8.parse(text.toString());
     const password_encrypted = CryptoJS.AES.encrypt(password_text, key128Bits500Iterations, options);
     let password_binary = CryptoJS.enc.Hex.stringify(salt);
     password_binary += `,${CryptoJS.enc.Hex.stringify(iv)}`;
@@ -29,7 +29,7 @@ export function encryptForServer(text: string): string {
   try {
     const password_text = CryptoJS.enc.Utf8.parse(text);
     const iv_text = getRandomData();
-    const iv = CryptoJS.enc.Utf8.parse(iv_text);
+    const iv = CryptoJS.enc.Utf8.parse(iv_text.toString());
     const password_binary = btoa(
       CryptoJS.AES.encrypt(password_text, secret_passphrase, { iv: iv, mode: CryptoJS.mode.CBC, padding: CryptoJS.pad.Pkcs7 }).toString()
     );
@@ -76,7 +76,7 @@ export function decrypt(text: String): String {
 
       const key128Bits500Iterations = CryptoJS.PBKDF2(secret_passphrase, salt, { keySize: 128 / 8, iterations: 500 });
       const options = { iv: iv, mode: CryptoJS.mode.CBC, padding: CryptoJS.pad.Pkcs7 };
-      const decrypted = CryptoJS.AES.decrypt({ ciphertext: encrypted_data }, key128Bits500Iterations, options);
+      const decrypted = CryptoJS.AES.decrypt({ ciphertext: encrypted_data } as CryptoJS.lib.CipherParams, key128Bits500Iterations, options);
       return decrypted.toString(CryptoJS.enc.Utf8);
     } else {
       return '';

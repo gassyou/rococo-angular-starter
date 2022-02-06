@@ -66,9 +66,9 @@ import { SFSchema } from '@delon/form';
 export class PageContainerComponent {
   constructor() {}
 
-  @Input() pageTitle: string;
-  @Input() advanceSearchForm: SFSchema;
-  @Input() simpleSearchKeys: string[];
+  @Input() pageTitle: string | undefined;
+  @Input() advanceSearchForm: SFSchema | undefined;
+  @Input() simpleSearchKeys: string[] | undefined;
 
   @Input() operations: Operation[] = [];
 }

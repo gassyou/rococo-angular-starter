@@ -106,18 +106,18 @@ import { CheckForm } from 'src/app/freamwork/util/form-valid-checker';
 })
 export class MyInfoComponent implements OnInit {
   @Input()
-  value: MyInfo;
+  value: MyInfo | undefined;
 
-  myForm: FormGroup;
+  myForm: FormGroup | undefined;
 
   isEdit = false;
   constructor(public app: MyApplicationService, public fb: FormBuilder) {}
 
   ngOnInit(): void {
     this.myForm = this.fb.group({
-      name: [this.value.name, [Validators.maxLength(32), Validators.required]],
+      name: [this.value?.name, [Validators.maxLength(32), Validators.required]],
       phone: [
-        this.value.phone,
+        this.value?.phone,
         [
           Validators.maxLength(11),
           Validators.minLength(11),
@@ -129,16 +129,23 @@ export class MyInfoComponent implements OnInit {
 
   @CheckForm('myForm')
   saveMyInfo() {
+    if (!this.value || !this.value?.id) {
+      return;
+    }
+
     const value = {
-      id: this.value.id,
-      name: this.myForm.controls['name'].value,
-      phone: this.myForm.controls['phone'].value
+      id: this.value?.id,
+      name: this.myForm?.controls['name'].value,
+      phone: this.myForm?.controls['phone'].value
     };
-    this.app.editMyInfo(value).subscribe(response => {
+
+    this.app.editMyInfo(value).subscribe((response: any) => {
       if (response.meta.success) {
         this.isEdit = false;
-        this.value.name = value.name;
-        this.value.phone = value.phone;
+        if (this.value) {
+          this.value.name = value.name;
+          this.value.phone = value.phone;
+        }
       }
     });
   }

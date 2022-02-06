@@ -34,11 +34,11 @@ export class EditComponent extends FormComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.isEdit = this.value ? true : false;
-    this.roleService.all().subscribe(result => {
+    super.isEdit = this.value ? true : false;
+    this.roleService.all()?.subscribe((result: any) => {
       this.roleList = result.records;
     });
-    this.editForm = this.fb.group({
+    super.editForm = this.fb.group({
       id: [this.value ? this.value.id : null],
       name: [this.value ? this.value.name : null, [Validators.required, Validators.maxLength(20)]],
       role: [this.value ? this.value.role : null],
@@ -50,10 +50,10 @@ export class EditComponent extends FormComponent implements OnInit {
   }
 
   checkMobileValidator = (control: FormControl): { [key: string]: any } => {
-    if (this.editForm && control.value) {
+    if (super.editForm && control.value) {
       const param = {
-        id: this.editForm.controls['id'].value,
-        mobile: this.editForm.controls['mobile'].value
+        id: super.editForm.controls['id'].value,
+        mobile: super.editForm.controls['mobile'].value
       };
       return this.userService.asyncValidate('/user/check-mobile', param);
     }
