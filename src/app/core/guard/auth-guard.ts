@@ -14,7 +14,7 @@ export class AuthGuard implements CanActivate, CanActivateChild {
   canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<boolean> | boolean {
     if (!this.myApp.isLogined()) {
       return this.myApp.autoLogin().pipe(
-        switchMap(data => {
+        switchMap((data: any) => {
           if (!data) {
             this.router.navigate([this.myApp.loginPageUrl]);
             return of(false);
