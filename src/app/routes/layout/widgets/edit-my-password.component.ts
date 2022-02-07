@@ -131,12 +131,13 @@ export class EditMyPasswordComponent implements OnInit {
 
   cancel() {}
 
-  checkConfirmPw = (control: FormControl): { [key: string]: any } | undefined => {
+  checkConfirmPw = (control: FormControl): { [key: string]: any } | null => {
     if (!control.value) {
       return { required: true };
     }
     if (this.editForm?.controls['newPassword'].value !== this.editForm?.controls['newPwConfirm'].value) {
       return { confirm: true, error: true };
     }
+    return null;
   };
 }

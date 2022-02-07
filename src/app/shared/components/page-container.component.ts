@@ -19,7 +19,7 @@ import { SFSchema } from '@delon/form';
             nz-button
             *ngIf="!operation.children; else moreAction"
             [nzType]="operation.type ? operation.type : 'primary'"
-            (click)="operation.onClick()"
+            (click)="operation?.onClick()"
           >
             <i *ngIf="operation.icon" nz-icon [nzType]="operation.icon"></i>
             {{ operation.text }}
@@ -34,7 +34,7 @@ import { SFSchema } from '@delon/form';
             <nz-dropdown-menu #menu="nzDropdownMenu">
               <ul nz-menu>
                 <li nz-menu-item *ngFor="let item of operation.children">
-                  <a (click)="item.onClick()">
+                  <a (click)="item?.onClick()">
                     <i *ngIf="item.icon" nz-icon [nzType]="item.icon"></i>
                     {{ item.text }}
                   </a>
@@ -68,14 +68,14 @@ export class PageContainerComponent {
 
   @Input() pageTitle: string | undefined;
   @Input() advanceSearchForm: SFSchema | undefined;
-  @Input() simpleSearchKeys: string[] | undefined;
+  @Input() simpleSearchKeys: string[] | null | undefined;
 
   @Input() operations: Operation[] = [];
 }
 export interface Operation {
   text: string;
   onClick?: Function;
-  type?: string;
+  type?: 'primary' | 'default' | 'dashed' | 'link' | 'text';
   icon?: string;
-  children?: Operation;
+  children?: Operation[];
 }

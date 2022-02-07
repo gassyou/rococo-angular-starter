@@ -73,7 +73,7 @@ export abstract class CRUDService {
    */
   public search(query?: SearchParams | any) {
     if (!this.searchUrl) {
-      return null;
+      return;
     }
 
     if (query) {

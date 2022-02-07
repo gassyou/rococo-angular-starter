@@ -112,13 +112,14 @@ export class PasswordEditComponent extends FormComponent implements OnInit {
     });
   }
 
-  checkConfirmPw = (control: FormControl): { [key: string]: any } | undefined => {
+  checkConfirmPw = (control: FormControl): { [key: string]: any } | null => {
     if (!control.value) {
       return { required: true };
     }
     if (super.editForm?.controls['newPwConfirm'].value !== super.editForm?.controls['newPw'].value) {
       return { confirm: true, error: true };
     }
+    return null;
   };
 
   checkSameWidthOldPW = (control: FormControl): { [key: string]: any } => {

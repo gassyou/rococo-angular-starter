@@ -87,11 +87,11 @@ export abstract class ApplicationService {
             );
           }
           this.token.set({
-            uid: (response.data as ResponseContentData).id,
-            token: (response.data as ResponseContentData).token as string,
-            longToken: (response.data as ResponseContentData).longToken as string,
+            uid: (response.data as ResponseContentData)['id'],
+            token: (response.data as ResponseContentData)['token'] as string,
+            longToken: (response.data as ResponseContentData)['longToken'] as string,
             time: new Date().getTime(),
-            roleList: (response.data as ResponseContentData).roleList as string[]
+            roleList: (response.data as ResponseContentData)['roleList'] as string[]
           });
 
           this.router.navigate([this.homePageUrl]);
