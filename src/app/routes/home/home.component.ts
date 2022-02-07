@@ -9,7 +9,7 @@ import { MyApplicationService } from 'src/app/core/service/my-application.servic
   template: `
     <div style="margin-top:80px">
       <nz-avatar [nzSize]="64" nzIcon="user" style="color:#f56a00; background-color:#fde3cf;"></nz-avatar>
-      <span class="ml-md" style="font-size:24px; font-weight:bold; color:#767676"> {{ userName }} , ようこそ! </span>
+      <span class="ml-md" style="font-size:24px; font-weight:bold; color:#767676"> {{ userName }} , 欢迎回来! </span>
     </div>
 
     <nz-divider></nz-divider>

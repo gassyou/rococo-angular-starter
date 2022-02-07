@@ -12,20 +12,20 @@ import { isValidForm } from 'src/app/freamwork/util/form-valid-checker';
   template: `
     <h2>
       Hi,{{ value }}!
-      <span style="color:#9e9e9e;margin-left:5px; font-size:11px">ここでパスワードを再設定できる。</span>
+      <span style="color:#9e9e9e;margin-left:5px; font-size:11px">请设置新密码！</span>
     </h2>
     <form nz-form [formGroup]="editForm" se-container="1" labelWidth="130">
       <se
-        label="古いパスワード"
+        label="旧密码"
         required
         [error]="{
-          required: '古いパスワードを入力してください',
-          minlength: 'パスワードは６桁以上必要です',
-          maxlength: 'パスワードは20桁を超過できない'
+          required: '请输入旧密码',
+          minlength: '密码长度不小于6位',
+          maxlength: '密码长度不能超过20位'
         }"
       >
         <nz-input-group [nzSuffix]="oldPwTemplate">
-          <input [type]="oldPWVisible ? 'text' : 'password'" nz-input placeholder="パスワード" formControlName="oldPassword" />
+          <input [type]="oldPWVisible ? 'text' : 'password'" nz-input placeholder="请输入旧密码" formControlName="oldPassword" />
         </nz-input-group>
         <ng-template #oldPwTemplate>
           <i nz-icon [nzType]="oldPWVisible ? 'eye-invisible' : 'eye'" (click)="oldPWVisible = !oldPWVisible"></i>
@@ -33,36 +33,36 @@ import { isValidForm } from 'src/app/freamwork/util/form-valid-checker';
       </se>
 
       <se
-        label="新しいパスワード"
+        label="新密码"
         required
         [error]="{
-          required: '新しいパスワードを入力してください',
-          minlength: 'パスワードは６桁以上必要です',
-          maxlength: 'パスワードは20桁を超過できない'
+          required: '请输入新密码',
+          minlength: '密码长度不小于6位',
+          maxlength: '密码长度不能超过20位'
         }"
       >
         <nz-input-group [nzSuffix]="newPwTemplate">
-          <input [type]="newPWVisible ? 'text' : 'password'" nz-input placeholder="新しいパスワード" formControlName="newPassword" />
+          <input [type]="newPWVisible ? 'text' : 'password'" nz-input placeholder="请输入新密码" formControlName="newPassword" />
         </nz-input-group>
         <ng-template #newPwTemplate>
           <i nz-icon [nzType]="newPWVisible ? 'eye-invisible' : 'eye'" (click)="newPWVisible = !newPWVisible"></i>
         </ng-template>
       </se>
       <se
-        label="パスワードの確認"
+        label="新密码确认"
         required
         [error]="{
-          required: '新しいパスワードを再入力してください',
-          minlength: 'パスワードは６桁以上必要です',
-          maxlength: 'パスワードは20桁を超過できない',
-          confirm: '新しいパスワードの２回入力が不一致です'
+          required: '请再次输入新密码',
+          minlength: '密码长度不小于6位',
+          maxlength: '密码长度不能超过20位',
+          confirm: '两次密码输入不一致'
         }"
       >
         <nz-input-group [nzSuffix]="newPwConfirmTemplate">
           <input
             [type]="newPwConfirmVisible ? 'text' : 'password'"
             nz-input
-            placeholder="パスワードの確認"
+            placeholder="请再次输入新密码"
             formControlName="newPwConfirm"
           />
         </nz-input-group>

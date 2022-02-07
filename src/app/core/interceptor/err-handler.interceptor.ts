@@ -22,22 +22,21 @@ export class ErrorHandlerInterceptor implements HttpInterceptor {
     return next.handle(request).pipe(
       catchError((error: any, caught: Observable<HttpEvent<any>>) => {
         if (error['name'] === 'TimeoutError') {
-          this.notification.warning('タイムアウト', 'サーバーからレスポンスがタイムアウトになりました！');
+          this.notification.warning('服务器超时', '服务器端的响应超时了！');
           return throwError(error.error);
         }
 
         if (error instanceof HttpErrorResponse) {
           switch ((<HttpErrorResponse>error).status) {
             case 400:
-              this.message.error('処理できないリクエストです！');
+              this.message.error('相关数据不存在，可以尝试刷新后重试！');
               return throwError(error.error);
             case 401:
               this.modalSrv.closeAll();
               this.app.logout();
-              this.message.error('ログインが異常しました。もう一度ログインしてください！');
+              this.message.error('授权信息发生变更或者已经失效，请再次登录系统');
               return throwError(error.error);
             case 403:
-              this.message.error('aa');
               this.router.navigate(['/exception/403']);
               return throwError(error.error);
             case 404:
@@ -46,7 +45,7 @@ export class ErrorHandlerInterceptor implements HttpInterceptor {
             case 410:
               this.modalSrv.closeAll();
               this.app.logout();
-              this.message.error('ログインが異常しました。もう一度ログインしてください！');
+              this.message.error('登录异常，请重新登录！');
               return throwError(error.error);
             case 500:
               return throwError(error.error);

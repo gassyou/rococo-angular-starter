@@ -22,27 +22,24 @@ export function isValidForm(form: FormGroup | undefined) {
  */
 export function CheckForm(form: any) {
   return (target: any, propOrMethod: string, descriptor?: PropertyDescriptor) => {
-    console.log(target);
-
     if (!descriptor) {
       return;
     }
     const originalMethod = descriptor?.value;
     descriptor.value = function () {
       const args = arguments;
-
-      if (!target[form]) {
+      if (!this[form]) {
         throw new Error(`${form} is not exist.`);
       }
 
-      for (const i in target[form].controls) {
-        if (target[form].contains(i)) {
-          target[form].controls[i].markAsDirty();
-          target[form].controls[i].updateValueAndValidity({ onlySelf: true });
+      for (const i in this[form].controls) {
+        if (this[form].contains(i)) {
+          this[form].controls[i].markAsDirty();
+          this[form].controls[i].updateValueAndValidity({ onlySelf: true });
         }
       }
 
-      if (!target[form].valid) {
+      if (!this[form].valid) {
         return;
       }
 

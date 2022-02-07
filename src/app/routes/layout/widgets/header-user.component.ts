@@ -19,16 +19,16 @@ import { MyInfoComponent } from './my-info.component';
       <div nz-menu class="width-sm">
         <div nz-menu-item (click)="showMyInfo()">
           <i nz-icon nzType="user" class="mr-sm"></i>
-          アカウント情報
+          个人信息
         </div>
         <div nz-menu-item (click)="editPassword()">
           <i nz-icon nzType="setting" class="mr-sm"></i>
-          パスワード変更
+          修改密码
         </div>
         <li nz-menu-divider></li>
         <div nz-menu-item (click)="logout()">
           <i nz-icon nzType="logout" class="mr-sm"></i>
-          ログアウト
+          退出
         </div>
       </div>
     </nz-dropdown-menu>
@@ -54,11 +54,11 @@ export class HeaderUserComponent implements OnInit, OnDestroy {
   }
 
   editPassword() {
-    modalCreator(this.nzModal, 'パスワードの変更', 'キャンセル', '変更', EditMyPasswordComponent, this.myInfo?.name);
+    modalCreator(this.nzModal, '修改密码', '取消', '修改密码', EditMyPasswordComponent, this.myInfo?.name);
   }
 
   showMyInfo() {
-    modalCreator(this.nzModal, '個人情報', null, null, MyInfoComponent, this.myInfo, true);
+    modalCreator(this.nzModal, '个人信息', null, null, MyInfoComponent, this.myInfo, true);
   }
 
   logout(): void {

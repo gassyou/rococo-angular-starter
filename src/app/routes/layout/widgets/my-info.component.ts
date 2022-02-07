@@ -11,7 +11,7 @@ import { CheckForm } from 'src/app/freamwork/util/form-valid-checker';
       <div nz-row class="info-div">
         <label nz-col [nzSm]="12" [nzXs]="12" class="info-label">
           <i nz-icon nzType="idcard"></i>
-          &nbsp;アカウント
+          &nbsp;账号
         </label>
 
         <label nz-col [nzSm]="12" [nzXs]="12" style="text-align: right">
@@ -21,7 +21,7 @@ import { CheckForm } from 'src/app/freamwork/util/form-valid-checker';
       <div nz-row class="info-div">
         <label nz-col [nzSm]="12" [nzXs]="12" class="info-label">
           <i nz-icon nzType="user"></i>
-          &nbsp;名前
+          &nbsp;姓名
         </label>
 
         <label nz-col [nzSm]="12" [nzXs]="12" style="text-align: right" *ngIf="!isEdit">
@@ -29,8 +29,8 @@ import { CheckForm } from 'src/app/freamwork/util/form-valid-checker';
         </label>
 
         <ng-container *ngIf="isEdit">
-          <nz-form-control nzErrorTip="名前は20文字以内にお願いします">
-            <input nz-input formControlName="name" placeholder="名前を入力してください" />
+          <nz-form-control nzErrorTip="名字最大不能超过20个字">
+            <input nz-input formControlName="name" placeholder="请输入名字" />
           </nz-form-control>
         </ng-container>
       </div>
@@ -38,7 +38,7 @@ import { CheckForm } from 'src/app/freamwork/util/form-valid-checker';
       <div nz-row class="info-div">
         <label nz-col [nzSm]="12" [nzXs]="12" class="info-label">
           <i nz-icon nzType="phone"></i>
-          &nbsp;電話
+          &nbsp;手机号
         </label>
 
         <label nz-col [nzSm]="12" [nzXs]="12" style="text-align: right" *ngIf="!isEdit">
@@ -46,8 +46,8 @@ import { CheckForm } from 'src/app/freamwork/util/form-valid-checker';
         </label>
 
         <ng-container *ngIf="isEdit">
-          <nz-form-control nzErrorTip="11桁の数字を入力してください!">
-            <input nz-input formControlName="phone" placeholder="電話を入力してください" />
+          <nz-form-control nzErrorTip="请输入11位手机号!">
+            <input nz-input formControlName="phone" placeholder="请输入手机号" />
           </nz-form-control>
         </ng-container>
       </div>
@@ -55,7 +55,7 @@ import { CheckForm } from 'src/app/freamwork/util/form-valid-checker';
       <div nz-row class="info-div">
         <label nz-col [nzSm]="12" [nzXs]="12" class="info-label">
           <i nz-icon nzType="team" nzTheme="outline"></i>
-          &nbsp;役割
+          &nbsp;角色
         </label>
         <label nz-col [nzSm]="12" [nzXs]="12" style="text-align: right">
           {{ value ? (value.roleName ? value.roleName : '') : '' }}
@@ -63,7 +63,7 @@ import { CheckForm } from 'src/app/freamwork/util/form-valid-checker';
       </div>
 
       <div nz-row class="operation-div">
-        <button *ngIf="!isEdit" nz-button title="編集" nzType="primary" (click)="isEdit = true" class="ml-sm">
+        <button *ngIf="!isEdit" nz-button title="编辑" nzType="primary" (click)="isEdit = true" class="ml-sm">
           <i nz-icon nzType="edit"></i>
         </button>
 
@@ -71,7 +71,7 @@ import { CheckForm } from 'src/app/freamwork/util/form-valid-checker';
           <button nz-button title="保存" nzType="primary" (click)="saveMyInfo()" class="ml-sm">
             <i nz-icon nzType="save"></i>
           </button>
-          <button nz-button title="キャンセル" (click)="isEdit = false">
+          <button nz-button title="取消" (click)="isEdit = false">
             <i nz-icon nzType="close"></i>
           </button>
         </ng-container>
