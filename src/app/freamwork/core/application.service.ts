@@ -4,6 +4,7 @@ import { ACLService } from '@delon/acl';
 import { TokenService } from '@delon/auth';
 import { CacheService } from '@delon/cache';
 import { _HttpClient } from '@delon/theme';
+import { environment } from '@env/environment';
 import { NzMessageService } from 'ng-zorro-antd/message';
 import { BehaviorSubject, Observable, of } from 'rxjs';
 import { filter, map, switchMap } from 'rxjs/operators';
@@ -59,6 +60,12 @@ export abstract class ApplicationService {
    * @returns Observable<any>
    */
   public login(loginInfo: LoginInfo, autoLogin = false): Observable<ResponseData> {
+    if (environment.demo) {
+      console.log('test');
+      this.router.navigate([this.homePageUrl]);
+      return of();
+    }
+
     let passwordEpt = loginInfo.password;
     if (!autoLogin) {
       passwordEpt = encryptForServer(loginInfo.password);
