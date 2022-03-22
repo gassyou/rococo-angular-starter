@@ -61,7 +61,13 @@ export abstract class ApplicationService {
    */
   public login(loginInfo: LoginInfo, autoLogin = false): Observable<ResponseData> {
     if (environment.demo) {
-      console.log('test');
+      this.token.set({
+        uid: '0001',
+        token: 'test001',
+        longToken: 'test001',
+        time: new Date().getTime(),
+        roleList: ['1']
+      });
       this.router.navigate([this.homePageUrl]);
       return of();
     }
@@ -150,6 +156,29 @@ export abstract class ApplicationService {
    * 获取菜单信息
    */
   public getMenuData(): Observable<any> {
+    if (environment.demo) {
+      return of([
+        {
+          text: '设定',
+          group: true,
+          acl: ['1'],
+          children: [
+            {
+              text: '用户管理',
+              link: '/sys/user',
+              group: false,
+              acl: ['1']
+            },
+            {
+              text: '角色管理',
+              link: '/sys/role',
+              group: false,
+              acl: ['1']
+            }
+          ]
+        }
+      ]);
+    }
     if (!this.menuUrl) {
       return of(null);
     }
@@ -170,6 +199,9 @@ export abstract class ApplicationService {
    * 获取各个画面的按钮的ACL信息
    */
   public getACLInfo(): Observable<any[] | null> {
+    if (environment.demo) {
+      return of(['1']);
+    }
     if (!this.actionAclUrl) {
       return of(null);
     }

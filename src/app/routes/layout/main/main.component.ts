@@ -19,6 +19,9 @@ export class MainComponent implements OnInit {
   constructor(public myApp: MyApplicationService, public menu: MenuService, public token: TokenService, public acl: ACLService) {}
 
   ngOnInit(): void {
+
+    console.log(this.menu.menus);
+    console.log(this.token.get().roleList);
     this.acl.setRole(this.token.get().roleList);
     this.menu.add(this.menu.menus);
   }

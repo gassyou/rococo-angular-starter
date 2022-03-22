@@ -16,7 +16,7 @@ export class AuthGuard implements CanActivate, CanActivateChild {
     if (environment.demo) {
       return true;
     }
-
+    console.log('test1');
     if (!this.myApp.isLogined()) {
       return this.myApp.autoLogin().pipe(
         switchMap((data: any) => {
