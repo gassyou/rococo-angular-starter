@@ -9,13 +9,13 @@ import { CRUDService } from 'src/app/freamwork/core/crud.service';
 import { SharedModule } from 'src/app/shared/shared.module';
 import { ZORRO_MODULES } from 'src/app/shared/zorro.module';
 
+import { EditDemoComponent } from './edit-demo.component';
 import { EditComponent } from './edit.component';
 import { PageComponent } from './page.component';
 import { RoleRoutingModule } from './role-routing.module';
 
-
 @NgModule({
-  declarations: [PageComponent, EditComponent],
+  declarations: [PageComponent, EditComponent, EditDemoComponent],
   imports: [CommonModule, RoleRoutingModule, SharedModule, FormsModule, ReactiveFormsModule, ZORRO_MODULES, DelonFormModule],
   providers: [NzModalService, NzMessageService, RoleService, { provide: CRUDService, useExisting: RoleService }]
 })

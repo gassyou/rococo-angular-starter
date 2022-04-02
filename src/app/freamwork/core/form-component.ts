@@ -9,7 +9,8 @@ export abstract class FormComponent {
   constructor(public crudService: CRUDService) {}
 
   submit(): Observable<any> | null {
-    if (!this.checkFormValid()) {
+    console.log(this.isValidForm());
+    if (!this.isValidForm()) {
       return null;
     }
 
@@ -20,7 +21,7 @@ export abstract class FormComponent {
     }
   }
 
-  checkFormValid(): boolean {
+  isValidForm(): boolean {
     for (const i in this.editForm?.controls) {
       if (this.editForm?.contains(i)) {
         this.editForm.controls[i].markAsDirty();

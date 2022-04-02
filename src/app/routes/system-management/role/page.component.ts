@@ -3,6 +3,7 @@ import { NzModalService } from 'ng-zorro-antd/modal';
 import { RoleService } from 'src/app/core/service/role.service';
 import { ListComponent } from 'src/app/freamwork/core/list-component';
 
+import { EditDemoComponent } from './edit-demo.component';
 import { EditComponent } from './edit.component';
 
 @Component({
@@ -85,7 +86,7 @@ export class PageComponent extends ListComponent implements OnInit {
   }
 
   edit(data?: any) {
-    super.openModal(data ? '编辑' : '添加角色', '取消', '确定', EditComponent, data);
+    super.openModal(data ? '编辑' : '添加角色', '取消', '确定', EditDemoComponent, data);
   }
 
   deleteData(data?: any) {

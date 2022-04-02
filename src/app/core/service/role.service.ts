@@ -8,10 +8,10 @@ export class RoleService extends CRUDService {
   constructor(http: _HttpClient, @Optional() message: NzMessageService) {
     super(http, message);
 
-    super.searchUrl = '/roles';
-    super.addUrl = '/role/add';
-    super.deleteUrl = '/role/delete';
-    super.updateUrl = '/role/update';
-    super.allDataUrl = '/all-roles';
+    super.searchUrl = 'roles';
+    super.addUrl = 'role/add';
+    super.deleteUrl = 'role/delete';
+    super.updateUrl = 'role/update';
+    super.allDataUrl = 'all-roles';
   }
 }

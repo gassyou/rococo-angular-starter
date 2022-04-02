@@ -103,7 +103,7 @@ export class PasswordEditComponent extends FormComponent implements OnInit {
   }
 
   submit(): Observable<any> | null {
-    if (!super.checkFormValid()) {
+    if (!super.isValidForm()) {
       return null;
     }
     return this.userService.updatePassword({
