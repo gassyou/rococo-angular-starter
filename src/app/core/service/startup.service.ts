@@ -17,9 +17,7 @@ export class StartupService {
     return zip(this.myApp.getACLInfo(), this.myApp.getMenuData()).pipe(
       map(([aclInfo, menu]: any[]) => {
         if (menu) {
-          console.log('menu', menu);
           this.menuService.add(menu);
-          console.log(aclInfo);
         }
       })
     );

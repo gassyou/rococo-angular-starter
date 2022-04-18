@@ -9,7 +9,7 @@ export abstract class FormComponent {
   constructor(public crudService: CRUDService) {}
 
   submit(): Observable<any> | null {
-    console.log(this.isValidForm());
+
     if (!this.isValidForm()) {
       return null;
     }
