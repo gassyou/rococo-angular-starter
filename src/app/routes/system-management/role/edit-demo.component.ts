@@ -1,34 +1,26 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { FormBuilder, FormControl, Validators } from '@angular/forms';
-import { of } from 'rxjs';
+import { FormArray, FormBuilder, FormControl, Validators } from '@angular/forms';
+import { Observable, of } from 'rxjs';
 import { RoleService } from 'src/app/core/service/role.service';
 import { FormComponent } from 'src/app/freamwork/core/form-component';
+import { CheckForm } from 'src/app/freamwork/util/form-valid-checker';
 
 @Component({
   selector: 'app-edit-demo',
   template: `
     <form nz-form [formGroup]="editForm">
-      <nz-input-group form-item required="true" [nzAddOnBefore]="addOnBeforeTemplate" [nzAddOnAfter]="addOnAfterTemplate">
-        <input type="text" nz-input formControlName="website" placeholder="请输入角色website" />
-      </nz-input-group>
-      <ng-template #addOnBeforeTemplate>
-        <nz-select [nzValue]="'Http://'">
-          <nz-option nzLabel="Http://" nzValue="Http://"></nz-option>
-          <nz-option nzLabel="Https://" nzValue="Https://"></nz-option>
-        </nz-select>
-      </ng-template>
-      <ng-template #addOnAfterTemplate>
-        <nz-select [nzValue]="'.com'">
-          <nz-option nzLabel=".com" nzValue=".com"></nz-option>
-          <nz-option nzLabel=".jp" nzValue=".jp"></nz-option>
-          <nz-option nzLabel=".cn" nzValue=".cn"></nz-option>
-          <nz-option nzLabel=".org" nzValue=".org"></nz-option>
-        </nz-select>
-      </ng-template>
-      <input form-item required="true" nz-input formControlName="name" placeholder="请输入角色" />
-      <nz-textarea-count form-item required="true" [nzMaxCharacterCount]="200">
-        <textarea rows="3" nz-input formControlName="detail" placeholder="请输入角色说明"></textarea>
-      </nz-textarea-count>
+      <input nz-input formControlName="name" placeholder="Name" />
+      <input nz-input formControlName="age" placeholder="age" />
+      <div formArrayName="addressList">
+        <button nz-button (click)="addAddress()">+ Add another Address</button>
+        <ng-container *ngFor="let item of addressList.controls; let i = index">
+          <div [formGroupName]="i">
+            <input nz-input formControlName="street" placeholder="Street" />
+            <input nz-input formControlName="city" placeholder="city" />
+            <input nz-input formControlName="state" placeholder="state" />
+          </div>
+        </ng-container>
+      </div>
     </form>
   `,
   styles: []
@@ -41,22 +33,40 @@ export class EditDemoComponent extends FormComponent implements OnInit {
     super(roleService);
   }
 
+  get addressList() {
+    return this.editForm?.get('addressList') as FormArray;
+  }
+
+  addAddress() {
+    this.addressList.push(
+      this.fb.group({
+        street: [null, Validators.required],
+        city: [null, Validators.required],
+        state: [null, Validators.required]
+      })
+    );
+  }
+
   ngOnInit(): void {
     this.isEdit = this.value ? true : false;
     this.editForm = this.fb.group({
-      id: [this.value ? this.value.id : null],
-      website: [this.value ? this.value.id : null],
-      name: [
-        this.value ? this.value.name : null,
-        {
-          validators: [Validators.required, Validators.maxLength(20)],
-          // asyncValidators: [this.checkRoleNameValidator.bind(this)],
-          updateOn: 'blur'
-        }
-      ],
-
-      detail: [this.value ? this.value.detail : null, [Validators.required, Validators.maxLength(200)]]
+      name: [this.value?.name, Validators.required],
+      age: [this.value?.age, Validators.required],
+      addressList: this.fb.array(
+        this.value?.address?.map((item: any) => {
+          return this.fb.group({
+            street: [item.street, Validators.required],
+            city: [item.city, Validators.required],
+            state: [item.state, Validators.required]
+          });
+        })
+      )
     });
+  }
+
+  @CheckForm('editForm')
+  submit(): Observable<any> | null {
+    return of(this.editForm?.value);
   }
 
   checkRoleNameValidator = (control: FormControl): { [key: string]: any } => {

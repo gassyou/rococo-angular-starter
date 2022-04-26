@@ -86,6 +86,22 @@ export class PageComponent extends ListComponent implements OnInit {
   }
 
   edit(data?: any) {
+    data = {
+      name: 'Test',
+      age: 33,
+      address: [
+        {
+          street: 'test',
+          city: 'test',
+          state: 'test'
+        },
+        {
+          street: 'test',
+          city: 'test',
+          state: 'test'
+        }
+      ]
+    };
     super.openModal(data ? '编辑' : '添加角色', '取消', '确定', EditDemoComponent, data);
   }
 

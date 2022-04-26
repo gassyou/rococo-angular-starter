@@ -18,7 +18,7 @@ export function isValidForm(form: FormGroup | undefined) {
  * 这是一个方法装饰器。使用方法`@CheckForm(formName)`
  * 在表单提交前，进行判断表单中各个输入项目是否正常。
  *
- * @param form 表单变量
+ * @param form 表单变量名称，字符串类型
  * @returns
  */
 export function CheckForm(form: any) {
