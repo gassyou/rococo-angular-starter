@@ -6,14 +6,16 @@ import { RouterModule } from '@angular/router';
 import { DelonACLModule } from '@delon/acl';
 import { DelonFormModule } from '@delon/form';
 
-import { AdvanceSearchComponent } from './components/advance-search/advance-search.component';
+import { AdvanceSearchV2Component } from './components/advance-search-v2.component';
+import { AdvanceSearchComponent } from './components/advance-search.component';
 import { FormItemDirective } from './components/form-item.directive';
+import { PageContainerV2Component } from './components/page-container-v2.component';
 import { PageContainerComponent } from './components/page-container.component';
 import { DELON_MODULES } from './delon.module';
 import { ZORRO_MODULES } from './zorro.module';
 
 @NgModule({
-  declarations: [AdvanceSearchComponent, PageContainerComponent, FormItemDirective],
+  declarations: [AdvanceSearchComponent, AdvanceSearchV2Component, PageContainerComponent, PageContainerV2Component, FormItemDirective],
   imports: [
     CommonModule,
     FormsModule,
@@ -24,6 +26,14 @@ import { ZORRO_MODULES } from './zorro.module';
     DelonACLModule,
     RouterModule
   ],
-  exports: [AdvanceSearchComponent, FormItemDirective, PageContainerComponent, ...ZORRO_MODULES, ...DELON_MODULES]
+  exports: [
+    AdvanceSearchComponent,
+    AdvanceSearchV2Component,
+    FormItemDirective,
+    PageContainerComponent,
+    PageContainerV2Component,
+    ...ZORRO_MODULES,
+    ...DELON_MODULES
+  ]
 })
 export class SharedModule {}

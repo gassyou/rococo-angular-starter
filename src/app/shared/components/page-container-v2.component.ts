@@ -1,13 +1,13 @@
-import { Component, Input } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output, TemplateRef } from '@angular/core';
 import { Router } from '@angular/router';
 import { SFSchema } from '@delon/form';
 import { Menu, MenuService } from '@delon/theme';
 
 @Component({
-  selector: 'app-page',
+  selector: 'app-page-v2',
   template: `
     <div class="alain-default__content-title" style="min-height: 54px">
-    <nz-breadcrumb [nzAutoGenerate]="true">
+      <nz-breadcrumb [nzAutoGenerate]="true">
         <ng-container *ngFor="let item of breadcrumbItems">
           <nz-breadcrumb-item>
             <a *ngIf="item.link; else noLink" [routerLink]="[item.link]">
@@ -23,14 +23,8 @@ import { Menu, MenuService } from '@delon/theme';
           </nz-breadcrumb-item>
         </ng-container>
       </nz-breadcrumb>
+
       <div>
-        <app-advance-search
-          class="mr-sm"
-          *ngIf="simpleSearchKeys"
-          [advanceSearchForm]="advanceSearchForm"
-          [simpleSearchKeys]="simpleSearchKeys"
-        >
-        </app-advance-search>
         <ng-container *ngFor="let operation of operations">
           <button
             nz-button
@@ -63,6 +57,13 @@ import { Menu, MenuService } from '@delon/theme';
       </div>
     </div>
     <div class="content">
+      <app-advance-search-v2
+        *ngIf="simpleSearchKeys"
+        [advanceSearchForm]="advanceSearchForm"
+        [simpleSearchKeys]="simpleSearchKeys"
+        [inlineMode]="inlineMode"
+      >
+      </app-advance-search-v2>
       <ng-content></ng-content>
     </div>
   `,
@@ -80,7 +81,7 @@ import { Menu, MenuService } from '@delon/theme';
     `
   ]
 })
-export class PageContainerComponent {
+export class PageContainerV2Component {
   @Input() pageTitle: string | undefined;
   @Input() advanceSearchForm: SFSchema | undefined;
   @Input() simpleSearchKeys: string[] | null | undefined;
