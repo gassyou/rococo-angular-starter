@@ -13,7 +13,8 @@ import { MyApplicationService } from 'src/app/core/service/my-application.servic
 export class MainComponent implements OnInit {
   options: LayoutDefaultOptions = {
     logoExpanded: '../../../assets/logo-full.png',
-    logoCollapsed: '../../../assets/logo.png'
+    logoCollapsed: '../../../assets/logo.png',
+    logoLink: this.myApp.homePageUrl
   };
 
   constructor(public myApp: MyApplicationService, public menu: MenuService, public token: TokenService, public acl: ACLService) {}
