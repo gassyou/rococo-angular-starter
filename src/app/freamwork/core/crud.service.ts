@@ -1,7 +1,8 @@
 import { Injectable, Optional } from '@angular/core';
 import { _HttpClient } from '@delon/theme';
+import { environment } from '@env/environment';
 import { NzMessageService } from 'ng-zorro-antd/message';
-import { BehaviorSubject, Observable } from 'rxjs';
+import { BehaviorSubject, Observable, of } from 'rxjs';
 import { filter, map, switchMap } from 'rxjs/operators';
 
 import { combineSearchParams, SearchParams } from './search-params.interface';
@@ -14,6 +15,7 @@ export abstract class CRUDService {
   public updateUrl: string = '';
   public exportUrl: string = '';
   public allDataUrl: string = '';
+  public demoDataSource: any[] = [];
 
   public tableDataLoading = false;
 
@@ -23,6 +25,16 @@ export abstract class CRUDService {
     .pipe(filter((params: SearchParams | null) => params !== null))
     .pipe(
       switchMap((params: SearchParams | null) => {
+        if (environment.demo) {
+          this.tableDataLoading = false;
+          return of({
+            data: {
+              total: this.demoDataSource.length,
+              records: [...this.demoDataSource]
+            }
+          });
+        }
+
         return this.http.post(this.searchUrl, params).pipe(
           map((response: any) => {
             this.tableDataLoading = false;
@@ -48,6 +60,10 @@ export abstract class CRUDService {
    * @returns
    */
   public all(): Observable<any> | null {
+    if (environment.demo) {
+      return of(this.demoDataSource);
+    }
+
     if (!this.allDataUrl) {
       return null;
     }
@@ -93,6 +109,14 @@ export abstract class CRUDService {
    * @param param 更新后的
    */
   public add(param: any): Observable<any> | null {
+    if (environment.demo) {
+      this.message.info('添加成功');
+      param.id = this.demoDataSource.length + 1;
+      this.demoDataSource.push(param);
+      this.search();
+      return of(true);
+    }
+
     if (!this.addUrl) {
       return null;
     }
@@ -121,6 +145,18 @@ export abstract class CRUDService {
    * @param param 更新后的
    */
   public update(param: any): Observable<any> | null {
+    if (environment.demo) {
+      this.message.info('修改成功');
+      this.demoDataSource = this.demoDataSource.map((item: any) => {
+        if (item.id === param.id) {
+          item = { ...param };
+        }
+        return item;
+      });
+      this.search();
+      return of(true);
+    }
+
     if (!this.updateUrl) {
       return null;
     }
@@ -151,6 +187,15 @@ export abstract class CRUDService {
    * @param id 记录ID，
    */
   public delete(id: number): Observable<any> | null {
+    if (environment.demo) {
+      this.message.info('删除成功');
+      this.demoDataSource = this.demoDataSource.filter((item: any) => {
+        return item.id !== id;
+      });
+      this.search();
+      return of(true);
+    }
+
     if (!this.deleteUrl) {
       return null;
     }
@@ -158,7 +203,7 @@ export abstract class CRUDService {
     return this.http.post(this.deleteUrl, { id }).pipe(
       map((response: any) => {
         if (response['meta']['success']) {
-          this.message.info('削除成功');
+          this.message.info('删除成功');
           this.search();
           return response.data;
         } else {
@@ -204,6 +249,9 @@ export abstract class CRUDService {
    * @param params 参数。比如电话号码。{mobile:13800000000,id:1}
    */
   public asyncValidate(checkUrl: string, params: any): Observable<any> {
+    if (environment.demo) {
+      return of(null);
+    }
     return this.http.post(checkUrl, params).pipe(
       map((result: any) => {
         if (result['meta']['success']) {
@@ -217,6 +265,9 @@ export abstract class CRUDService {
 
   // get类型校验
   public asyncValidateGet(checkUrl: string, params: any): Observable<any> {
+    if (environment.demo) {
+      return of(null);
+    }
     return this.http.get(checkUrl, params).pipe(
       map((result: any) => {
         if (result['meta']['success']) {
