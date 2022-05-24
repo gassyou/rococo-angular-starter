@@ -70,6 +70,7 @@ export abstract class ListComponent implements OnDestroy {
     okText: string,
     content: FormComponent | any,
     contentParams?: any,
+    width?: string,
     callbak?: Function
   ) {
     const modal = this.nzModal.create({
@@ -79,6 +80,7 @@ export abstract class ListComponent implements OnDestroy {
         value: contentParams
       },
       nzMaskClosable: false,
+      nzWidth: width || '500px',
       nzFooter: [
         {
           label: cancelText,
