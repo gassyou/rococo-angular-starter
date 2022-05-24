@@ -58,7 +58,7 @@ import { Menu, MenuService } from '@delon/theme';
     </div>
     <div class="content">
       <app-advance-search-v2
-        *ngIf="simpleSearchKeys"
+        *ngIf="advanceSearchForm"
         [advanceSearchForm]="advanceSearchForm"
         [simpleSearchKeys]="simpleSearchKeys"
         [inlineMode]="inlineMode"
