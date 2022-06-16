@@ -1,11 +1,12 @@
 import { Component, OnDestroy } from '@angular/core';
 import { NzModalService } from 'ng-zorro-antd/modal';
-import { Observable, Subscription } from 'rxjs';
+import { Subscription } from 'rxjs';
 import { CRUDService } from 'src/app/freamwork/core/crud.service';
 import { SearchParams } from 'src/app/freamwork/core/search-params.interface';
 import { environment } from 'src/environments/environment';
 
 import { download } from '../util/file-util';
+import { modalCreator } from '../util/modal-creator';
 import { FormComponent } from './form-component';
 
 @Component({ template: `` })
@@ -71,50 +72,9 @@ export abstract class ListComponent implements OnDestroy {
     content: FormComponent | any,
     contentParams?: any,
     width?: string,
-    callbak?: Function
+    top?: string,
+    okCallbak?: Function
   ) {
-    const modal = this.nzModal.create({
-      nzTitle: title,
-      nzContent: content,
-      nzComponentParams: {
-        value: contentParams
-      },
-      nzMaskClosable: false,
-      nzWidth: width || '500px',
-      nzFooter: [
-        {
-          label: cancelText,
-          type: 'default',
-          onClick(): void {
-            const instance: FormComponent | any = modal.getContentComponent();
-            instance.cancel();
-            modal.destroy();
-          }
-        },
-        {
-          label: okText,
-          type: 'primary',
-          loading: false,
-          onClick(): void {
-            this.loading = true;
-            const instance: FormComponent | any = modal.getContentComponent();
-            const submit: Observable<any> = instance.submit();
-            if (submit) {
-              submit.subscribe((result: any) => {
-                this.loading = false;
-                if (callbak) {
-                  callbak();
-                }
-                if (result) {
-                  modal.destroy();
-                }
-              });
-            } else {
-              this.loading = false;
-            }
-          }
-        }
-      ]
-    });
+    modalCreator(this.nzModal, title, cancelText, okText, content, contentParams, width, top, okCallbak);
   }
 }

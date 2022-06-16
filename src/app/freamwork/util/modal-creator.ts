@@ -1,4 +1,4 @@
-import { ModalButtonOptions, ModalOptions, NzModalService } from 'ng-zorro-antd/modal';
+import { ModalOptions, NzModalService } from 'ng-zorro-antd/modal';
 import { Observable } from 'rxjs';
 
 import { FormComponent } from '../core/form-component';
@@ -9,8 +9,11 @@ export function modalCreator(
   cancelText: string | null,
   okText: string | null,
   content: FormComponent | any,
-  contentParams?: any,
-  nzMaskClosable = false
+  contentParams?: any | null,
+  width?: string | null,
+  top?: string | null,
+  okCallbak?: Function,
+  nzMaskClosable: boolean = false
 ) {
   const cancelButton = {
     label: cancelText,
@@ -33,7 +36,12 @@ export function modalCreator(
       if (submit) {
         submit.subscribe(result => {
           this.loading = false;
-          modal.destroy();
+          if (okCallbak) {
+            okCallbak();
+          }
+          if (result) {
+            modal.destroy();
+          }
         });
       } else {
         this.loading = false;
@@ -47,7 +55,9 @@ export function modalCreator(
     nzComponentParams: {
       value: contentParams
     },
+    nzStyle: top ? { top: top } : {},
     nzFooter: null,
+    nzWidth: width || '500px',
     nzMaskClosable: nzMaskClosable
   };
 

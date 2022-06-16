@@ -58,7 +58,7 @@ export class HeaderUserComponent implements OnInit, OnDestroy {
   }
 
   showMyInfo() {
-    modalCreator(this.nzModal, '个人信息', null, null, MyInfoComponent, this.myInfo, true);
+    modalCreator(this.nzModal, '个人信息', null, null, MyInfoComponent, this.myInfo);
   }
 
   logout(): void {

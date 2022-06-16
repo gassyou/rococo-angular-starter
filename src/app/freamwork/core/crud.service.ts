@@ -17,6 +17,11 @@ export abstract class CRUDService {
   public allDataUrl: string = '';
   public demoDataSource: any[] = [];
 
+  public beforeSearch: (<T, P>(formValue: T | any) => P | any) | undefined;
+  public afterSearch: (<T, P>(formValue: T | any) => P | any) | undefined;
+  public beforeFormCommit: (<T, P>(formValue: T | any) => P | any) | undefined;
+  public afterFormCommit: (<T, P>(formValue: T | any) => P | any) | undefined;
+
   public tableDataLoading = false;
 
   private _search$ = new BehaviorSubject<SearchParams | null>(null);

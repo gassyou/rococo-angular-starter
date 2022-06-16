@@ -6,25 +6,20 @@ import { CRUDService } from '../../freamwork/core/crud.service';
 @Component({
   selector: 'app-advance-search-v2',
   template: `
-    <nz-card style="padding: 8px">
+    <nz-card id="searchForm" class="p-md">
       <sf
-        [style.display]="inlineMode ? 'inline-block' : 'block'"
-        [style.width]="inlineMode ? '300px' : '100%'"
-        [mode]="inlineMode ? 'search' : 'default'"
+        [style.width]="inlineMode ? (formItemCount <= 1 ? '500px' : '1000px') : '100%'"
         #sf
         [formData]="advanceSearchValue"
         [schema]="showForm"
         button="none"
         compact="true"
+        [class]="inlineMode ? 'mr-md' : ''"
       >
       </sf>
-      <div
-        [style.text-align]="inlineMode ? 'left' : 'center'"
-        [style.display]="inlineMode ? 'inline-block' : 'block'"
-        [style.width]="inlineMode ? 'calc(100% - 300px)' : '100%'"
-      >
-        <button nz-button nzSize="small" (click)="reset()">重置 </button>
-        <button nz-button nzType="primary" nzSize="small" (click)="advanceSearch(sf.value)">查询 </button>
+      <div [style.text-align]="inlineMode ? 'left' : 'center'" [style.width]="inlineMode ? '120px' : '100%'">
+        <button nz-button style="height: 28px" nzSize="small" (click)="reset()">重置 </button>
+        <button nz-button style="height: 28px" nzType="primary" nzSize="small" (click)="advanceSearch(sf.value)">查询 </button>
         <a *ngIf="canExpand" nz-button nzType="link" (click)="onExpand()">
           <span *ngIf="isExpanded">
             <i nz-icon nzType="up" nzTheme="outline" class="mr-sm"></i>
@@ -58,6 +53,17 @@ import { CRUDService } from '../../freamwork/core/crud.service';
         width: 100%;
         padding-bottom: 6px;
       }
+
+      ::ng-deep #searchForm .ant-card-body {
+        display: flex;
+        flex-wrap: wrap !important;
+        padding: 8px;
+        width: 100%;
+      }
+
+      ::ng-deep #searchForm .ant-picker {
+        width: 100%;
+      }
     `
   ]
 })
@@ -74,6 +80,14 @@ export class AdvanceSearchV2Component extends SearchComponent {
     }
 
     this.showForm = { ...this.getShowForm() };
+  }
+
+  public get formItemCount() {
+    if (this.originalForm && !(this.originalForm instanceof Component) && this.originalForm.properties) {
+      let keys = Object.keys(this.originalForm.properties);
+      return keys.length;
+    }
+    return 0;
   }
 
   @Input('simpleSearchKeys')
