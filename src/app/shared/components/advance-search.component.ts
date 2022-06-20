@@ -5,7 +5,13 @@ import { SearchComponent } from 'src/app/freamwork/core/search-component';
 import { CRUDService } from '../../freamwork/core/crud.service';
 @Component({
   selector: 'app-advance-search',
-  template: `<nz-input-group nzSearch cdkOverlayOrigin #trigger [nzSuffix]="searchButton" [nzPrefix]="form ? moreButton : null">
+  template: `<nz-input-group
+      nzSearch
+      cdkOverlayOrigin
+      #trigger="cdkOverlayOrigin"
+      [nzSuffix]="searchButton"
+      [nzPrefix]="form ? moreButton : null"
+    >
       <input
         type="text"
         class="search-input"
@@ -64,6 +70,17 @@ import { CRUDService } from '../../freamwork/core/crud.service';
         border: 1px solid rgba(0, 0, 0, 0.2);
         width: 100%;
         padding-bottom: 6px;
+      }
+      .search-input {
+        width: 350px;
+
+        @media screen and (max-width: 1000px) {
+          width: 200px;
+        }
+
+        @media screen and (max-width: 900px) {
+          width: 100px;
+        }
       }
     `
   ]
