@@ -1,5 +1,5 @@
-import { Component, Input, OnInit, Optional, SkipSelf } from '@angular/core';
-import { SFSchema } from '@delon/form';
+import { AfterViewInit, Component, Input, OnInit, Optional, SkipSelf, ViewChild } from '@angular/core';
+import { SFComponent, SFSchema } from '@delon/form';
 import { SearchComponent } from 'src/app/freamwork/core/search-component';
 
 import { CRUDService } from '../../freamwork/core/crud.service';
@@ -11,7 +11,7 @@ import { CRUDService } from '../../freamwork/core/crud.service';
         [style.width]="inlineMode ? (formItemCount <= 1 ? '500px' : '1000px') : '100%'"
         #sf
         [formData]="advanceSearchValue"
-        [schema]="showForm"
+        [schema]="originalForm"
         button="none"
         compact="true"
         [class]="inlineMode ? 'mr-md' : ''"
@@ -67,19 +67,23 @@ import { CRUDService } from '../../freamwork/core/crud.service';
     `
   ]
 })
-export class AdvanceSearchV2Component extends SearchComponent {
+@Component({
+  selector: 'app-advance-search',
+  templateUrl: './advance-search.component.html',
+  styleUrls: ['./advance-search.component.less']
+})
+export class AdvanceSearchComponent extends SearchComponent implements AfterViewInit {
+  @ViewChild('sf', { static: true }) sf!: SFComponent;
+
   @Input() placeholder: string = '查询';
 
   @Input('advanceSearchForm')
   set form(value: SFSchema | Component | null) {
     this.originalForm = value;
-
     if (this.originalForm && !(this.originalForm instanceof Component) && this.originalForm.properties) {
       let keys = Object.keys(this.originalForm.properties);
       this.canExpand = keys.length > 3;
     }
-
-    this.showForm = { ...this.getShowForm() };
   }
 
   public get formItemCount() {
@@ -96,6 +100,9 @@ export class AdvanceSearchV2Component extends SearchComponent {
   @Input()
   inlineMode = false;
 
+  @Input()
+  isShowExport = false;
+
   isOpen: boolean = false;
   simpleSearchValue = '';
   advanceSearchValue: any = {};
@@ -105,10 +112,13 @@ export class AdvanceSearchV2Component extends SearchComponent {
   canExpand: boolean = false;
 
   originalForm: SFSchema | Component | null = null;
-  showForm: SFSchema | Component | null = null;
 
   constructor(@Optional() @SkipSelf() public searchService: CRUDService) {
     super(searchService);
+  }
+
+  ngAfterViewInit(): void {
+    this.onExpand(false);
   }
 
   showAdvance() {
@@ -123,6 +133,7 @@ export class AdvanceSearchV2Component extends SearchComponent {
     this.isOpen = false;
   }
 
+
   simpleSearch() {
     super.simpleSearch(this.simpleSearchKeys, this.simpleSearchValue);
   }
@@ -131,45 +142,33 @@ export class AdvanceSearchV2Component extends SearchComponent {
     super.reset();
     this.advanceSearchValue = { ...this.searchService.params };
     this.simpleSearchValue = '';
-    // this.isOpen = false;
   }
 
-  onExpand() {
-    this.isExpanded = !this.isExpanded;
-    this.showForm = { ...this.getShowForm() };
-  }
-
-  getShowForm() {
-    if (this.isExpanded) {
-      return this.originalForm;
-    }
-
+  onExpand(value: boolean = false) {
+    this.isExpanded = value;
     if (!this.originalForm) {
-      return this.originalForm;
+      return;
     }
-
     if (this.originalForm instanceof Component) {
-      return this.originalForm;
+      return;
     }
 
     if (!this.originalForm.properties) {
-      return this.originalForm;
+      return;
     }
 
     let keys = Object.keys(this.originalForm.properties);
 
-    if (keys.length <= 3) {
-      return this.originalForm;
+    let itemCount = 0;
+    for (let item of keys) {
+      const itemProperty = this.sf.getProperty(`/${item}`);
+
+      if (!this.isExpanded && itemCount > 2) {
+        itemProperty?.setVisible(false)?.widget?.detectChanges();
+      } else {
+        itemProperty?.setVisible(true)?.widget?.detectChanges();
+      }
+      itemCount++;
     }
-
-    let newForm: SFSchema = {};
-    newForm.ui = this.originalForm.ui;
-
-    let properties = {};
-    properties[keys[0]] = this.originalForm.properties[keys[0]];
-    properties[keys[1]] = this.originalForm.properties[keys[1]];
-    properties[keys[2]] = this.originalForm.properties[keys[2]];
-    newForm.properties = properties;
-    return newForm;
   }
 }
