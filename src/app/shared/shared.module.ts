@@ -15,7 +15,14 @@ import { DELON_MODULES } from './delon.module';
 import { ZORRO_MODULES } from './zorro.module';
 
 @NgModule({
-  declarations: [AdvanceSearchComponent, AdvanceSearchV2Component, PageContainerComponent, PageContainerV2Component, FormItemDirective],
+  declarations: [
+    AdvanceSearchComponent,
+    AdvanceSearchV2Component,
+    AdvanceSearchComponent,
+    PageContainerComponent,
+    PageContainerV2Component,
+    FormItemDirective
+  ],
   imports: [
     CommonModule,
     FormsModule,

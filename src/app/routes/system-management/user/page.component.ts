@@ -62,7 +62,7 @@ export class PageComponent extends ListComponent implements OnInit {
   simpleSearchKeys = ['name', 'role'];
   advanceSearchForm = {
     properties: {
-      name: { type: 'string', title: '姓名' },
+      name: { type: 'string', title: '姓名', ui: { placeholder: '姓名' } },
       role: { type: 'string', title: '角色' },
       mobile: { type: 'string', title: '电话' }
     }

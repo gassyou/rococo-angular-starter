@@ -92,13 +92,15 @@ export abstract class CRUDService {
    *
    * @param param 查询参数。没有分页参数时，会自动添加分页参数。当不传参数时，则按照上次条件进行查询
    */
-  public search(query?: SearchParams | any) {
+  public search(query?: SearchParams | any, before = true) {
     if (!this.searchUrl) {
       return;
     }
-
     if (query) {
       this._params = combineSearchParams(this._params, query);
+      if (before && this.beforeSearch) {
+        this._params = this.beforeSearch(this._params);
+      }
     }
     this.tableDataLoading = true;
     this._search$.next(this._params);

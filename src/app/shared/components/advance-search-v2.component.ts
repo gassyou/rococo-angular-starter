@@ -72,7 +72,7 @@ import { CRUDService } from '../../freamwork/core/crud.service';
   templateUrl: './advance-search.component.html',
   styleUrls: ['./advance-search.component.less']
 })
-export class AdvanceSearchComponent extends SearchComponent implements AfterViewInit {
+export class AdvanceSearchV2Component extends SearchComponent implements AfterViewInit {
   @ViewChild('sf', { static: true }) sf!: SFComponent;
 
   @Input() placeholder: string = '查询';
