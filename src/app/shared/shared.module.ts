@@ -5,6 +5,7 @@ import { FormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 import { DelonACLModule } from '@delon/acl';
 import { DelonFormModule } from '@delon/form';
+import { AlainThemeModule } from '@delon/theme';
 
 import { AdvanceSearchV2Component } from './components/advance-search-v2.component';
 import { AdvanceSearchComponent } from './components/advance-search.component';
@@ -30,6 +31,7 @@ import { ZORRO_MODULES } from './zorro.module';
     ...DELON_MODULES,
     OverlayModule,
     DelonFormModule.forRoot(),
+    AlainThemeModule.forChild(),
     DelonACLModule,
     RouterModule
   ],

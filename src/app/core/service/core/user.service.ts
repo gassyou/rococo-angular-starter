@@ -4,7 +4,7 @@ import { NzMessageService } from 'ng-zorro-antd/message';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 
-import { CRUDService } from '../../freamwork/core/crud.service';
+import { CRUDService } from '../../../freamwork/core/crud.service';
 
 @Injectable()
 export class UserService extends CRUDService {

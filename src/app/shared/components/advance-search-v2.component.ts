@@ -17,17 +17,18 @@ import { CRUDService } from '../../freamwork/core/crud.service';
         [class]="inlineMode ? 'mr-md' : ''"
       >
       </sf>
-      <div [style.text-align]="inlineMode ? 'left' : 'center'" [style.width]="inlineMode ? '120px' : '100%'">
-        <button nz-button style="height: 28px" nzSize="small" (click)="reset()">重置 </button>
-        <button nz-button style="height: 28px" nzType="primary" nzSize="small" (click)="advanceSearch(sf.value)">查询 </button>
-        <a *ngIf="canExpand" nz-button nzType="link" (click)="onExpand()">
+      <div [style.text-align]="inlineMode ? 'left' : 'center'" [style.width]="inlineMode ? '180px' : '100%'">
+        <button nz-button (click)="reset()">{{ 'common.reset' | i18n }} </button>
+        <button nz-button nzType="primary" (click)="advanceSearch(sf.value)">{{ 'common.search' | i18n }} </button>
+        <button *ngIf="isShowExport" nz-button (click)="export(sf.value)">{{ 'common.export' | i18n }} </button>
+        <a *ngIf="canExpand" nz-button nzType="link" (click)="onExpand(!isExpanded)">
           <span *ngIf="isExpanded">
             <i nz-icon nzType="up" nzTheme="outline" class="mr-sm"></i>
-            收起
+            {{ 'common.hidden' | i18n }}
           </span>
           <span *ngIf="!isExpanded">
             <i nz-icon nzType="down" nzTheme="outline" class="mr-sm"></i>
-            展开
+            {{ 'common.open' | i18n }}
           </span>
         </a>
       </div>
@@ -66,11 +67,6 @@ import { CRUDService } from '../../freamwork/core/crud.service';
       }
     `
   ]
-})
-@Component({
-  selector: 'app-advance-search',
-  templateUrl: './advance-search.component.html',
-  styleUrls: ['./advance-search.component.less']
 })
 export class AdvanceSearchV2Component extends SearchComponent implements AfterViewInit {
   @ViewChild('sf', { static: true }) sf!: SFComponent;
@@ -132,7 +128,6 @@ export class AdvanceSearchV2Component extends SearchComponent implements AfterVi
     super.advanceSearch(value);
     this.isOpen = false;
   }
-
 
   simpleSearch() {
     super.simpleSearch(this.simpleSearchKeys, this.simpleSearchValue);

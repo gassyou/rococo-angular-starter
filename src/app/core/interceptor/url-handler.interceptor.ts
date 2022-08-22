@@ -11,7 +11,7 @@ export class UrlHandlerInterceptor implements HttpInterceptor {
   intercept(request: HttpRequest<unknown>, next: HttpHandler): Observable<HttpEvent<unknown>> {
     let url = request.url;
 
-    if (!url.startsWith('https://') && !url.startsWith('http://')) {
+    if (!url.startsWith('https://') && !url.startsWith('http://') && !url.startsWith('assets/tmp/i18n/')) {
       url = environment.SERVER_URL + url;
     }
 

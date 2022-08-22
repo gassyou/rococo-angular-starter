@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { NzModalService } from 'ng-zorro-antd/modal';
-import { RoleService } from 'src/app/core/service/role.service';
+import { RoleService } from 'src/app/core/service/core/role.service';
 import { ListComponent } from 'src/app/freamwork/core/list-component';
 
 import { EditDemoComponent } from './edit-demo.component';

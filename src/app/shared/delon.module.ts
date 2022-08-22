@@ -34,7 +34,7 @@ export const alainConfig: AlainConfig = {
   },
   auth: {
     token_send_key: 'Authorization',
-    ignores: [/assets\//, /\/passport\//, /\/login/, /\/init\//, /\/unlock/, /\/ZKIDROnline\//, /check-mail-exist/]
+    ignores: [/assets\//, /\/passport\//, /\/login/, /\/init\//, /\/unlock/, /\/ZKIDROnline\//, /check-mail-exist/, /\/realms/]
   },
   acl: {
     guard_url: '/exception/403'

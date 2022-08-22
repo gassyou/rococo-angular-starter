@@ -1,7 +1,7 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { FormArray, FormBuilder, FormControl, Validators } from '@angular/forms';
 import { Observable, of } from 'rxjs';
-import { RoleService } from 'src/app/core/service/role.service';
+import { RoleService } from 'src/app/core/service/core/role.service';
 import { FormComponent } from 'src/app/freamwork/core/form-component';
 import { CheckForm } from 'src/app/freamwork/util/form-valid-checker';
 

@@ -1,7 +1,7 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, Validators } from '@angular/forms';
 import { of } from 'rxjs';
-import { RoleService } from 'src/app/core/service/role.service';
+import { RoleService } from 'src/app/core/service/core/role.service';
 import { FormComponent } from 'src/app/freamwork/core/form-component';
 
 @Component({

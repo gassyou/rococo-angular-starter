@@ -1,8 +1,9 @@
 /* eslint-disable import/order */
 import { ModuleWithProviders, NgModule, Optional, SkipSelf } from '@angular/core';
 import { SessionStorageStore, DA_STORE_TOKEN } from '@delon/auth';
+import { DelonLocaleService } from '@delon/theme';
 
-const alainProvides: any[] = [];
+const alainProvides: any[] = [DelonLocaleService];
 // #region reuse-tab
 /**
  * 若需要[路由复用](https://ng-alain.com/components/reuse-tab)需要：
