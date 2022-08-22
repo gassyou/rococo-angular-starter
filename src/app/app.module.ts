@@ -26,6 +26,7 @@ import { AppComponent } from './app.component';
 import { CoreModule } from './core/core.module';
 import { AuthGuard } from './core/guard/auth-guard';
 import { ErrorHandlerInterceptor } from './core/interceptor/err-handler.interceptor';
+import { LangHandlerInterceptor } from './core/interceptor/lang-handler.interceptor';
 import { RefreshTokenHandlerInterceptor } from './core/interceptor/refresh-token-handler.interceptor';
 import { TimeoutHandlerInterceptor } from './core/interceptor/timeout-handler.interceptor';
 import { UrlHandlerInterceptor } from './core/interceptor/url-handler.interceptor';
@@ -75,6 +76,7 @@ const APPINIT_PROVIDES = [
     { provide: HTTP_INTERCEPTORS, useClass: RefreshTokenHandlerInterceptor, multi: true },
     { provide: HTTP_INTERCEPTORS, useClass: SimpleInterceptor, multi: true },
     { provide: HTTP_INTERCEPTORS, useClass: TimeoutHandlerInterceptor, multi: true },
+    { provide: HTTP_INTERCEPTORS, useClass: LangHandlerInterceptor, multi: true },
     { provide: HTTP_INTERCEPTORS, useClass: ErrorHandlerInterceptor, multi: true },
     { provide: ALAIN_I18N_TOKEN, useClass: I18NService, multi: false },
     {
