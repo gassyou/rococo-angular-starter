@@ -27,15 +27,30 @@ export abstract class ListComponent implements OnDestroy {
     }
   }
 
-  init() {
+  init(param?: any, doSearch = true) {
     this.dataSourceSubscription = this.crudService.datasource$.subscribe((result: any) => {
-      this.tableDataSource = result.data.records;
+      this.tableDataSource = result.data.records ? result.data.records : result.data;
+
       this.total = result.data.total;
+      this.currentPage = this.crudService.params.currentPage ? this.crudService.params.currentPage : 1;
     });
-    this.crudService.search({
-      currentPage: this.currentPage,
-      pageSize: this.pageSize
-    });
+
+    if (doSearch) {
+      let params: any = {};
+      if (param) {
+        params = {
+          current: this.currentPage,
+          pageSize: this.pageSize,
+          ...param
+        };
+      } else {
+        params = {
+          current: this.currentPage,
+          pageSize: this.pageSize
+        };
+      }
+      this.crudService.search(params);
+    }
   }
 
   onPageIndexChange() {
