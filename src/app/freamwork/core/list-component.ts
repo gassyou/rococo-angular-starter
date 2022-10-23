@@ -1,6 +1,7 @@
 import { Component, OnDestroy } from '@angular/core';
 import { NzModalService } from 'ng-zorro-antd/modal';
-import { Subscription } from 'rxjs';
+import { Observable, Subscription } from 'rxjs';
+import { map } from 'rxjs/operators';
 import { CRUDService } from 'src/app/freamwork/core/crud.service';
 import { SearchParams } from 'src/app/freamwork/core/search-params.interface';
 import { environment } from 'src/environments/environment';
@@ -29,6 +30,7 @@ export abstract class ListComponent implements OnDestroy {
 
   init(param?: any, doSearch = true) {
     this.dataSourceSubscription = this.crudService.datasource$.subscribe((result: any) => {
+      // new Date(data).getDay()
       this.tableDataSource = result.data.records ? result.data.records : result.data;
 
       this.total = result.data.total;
@@ -39,18 +41,46 @@ export abstract class ListComponent implements OnDestroy {
       let params: any = {};
       if (param) {
         params = {
-          current: this.currentPage,
+          currentPage: this.currentPage,
           pageSize: this.pageSize,
           ...param
         };
       } else {
         params = {
-          current: this.currentPage,
+          currentPage: this.currentPage,
           pageSize: this.pageSize
         };
       }
       this.crudService.search(params);
     }
+  }
+
+  initWithObservable(param?: any, doSearch = true): Observable<any> {
+    if (doSearch) {
+      let params: any = {};
+      if (param) {
+        params = {
+          currentPage: this.currentPage,
+          pageSize: this.pageSize,
+          ...param
+        };
+      } else {
+        params = {
+          currentPage: this.currentPage,
+          pageSize: this.pageSize
+        };
+      }
+      this.crudService.search(params);
+    }
+
+    return this.crudService.datasource$.pipe(
+      map((result: any) => {
+        this.total = result.data.total;
+        this.currentPage = this.crudService.params.currentPage ? this.crudService.params.currentPage : 1;
+
+        return result.data.records ? result.data.records : result.data;
+      })
+    );
   }
 
   onPageIndexChange() {

@@ -92,7 +92,7 @@ export class PageComponent extends ListComponent implements OnInit {
         ui: {
           widget: 'select',
           asyncData: () =>
-            this.roleService.all().pipe(
+            this.roleService.all()?.pipe(
               map(item => {
                 return item.map((i: any) => {
                   return { label: i.name, value: [i.id] };

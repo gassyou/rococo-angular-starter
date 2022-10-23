@@ -1,60 +1,38 @@
-import { ListComponent } from "src/app/freamwork/core/list-component";
-import { AuthModuleEditComponent } from "./component/auth-module-edit.component";
-import { Component, Inject, OnInit, ViewChild } from "@angular/core";
-import { ALAIN_I18N_TOKEN } from "@delon/theme";
-import { NzContextMenuService } from "ng-zorro-antd/dropdown";
-import { NzModalService } from "ng-zorro-antd/modal";
-import {
-  AuthService,
-  viewModelFactory,
-} from "src/app/core/service/core/auth.service";
-import { buildTree } from "src/app/freamwork/util/tree/tree";
-import { FunctionModel } from "src/app/routes/system-management/auth/entity/function-model";
+import { Component, Inject, OnInit, ViewChild } from '@angular/core';
+import { ACLService } from '@delon/acl';
+import { ALAIN_I18N_TOKEN } from '@delon/theme';
+import { NzContextMenuService } from 'ng-zorro-antd/dropdown';
+import { NzModalService } from 'ng-zorro-antd/modal';
+import { of } from 'rxjs';
+import { map, switchMap } from 'rxjs/operators';
+import { AuthService, viewModelFactory } from 'src/app/core/service/core/auth.service';
+import { RoleService } from 'src/app/core/service/core/role.service';
+import { I18NService } from 'src/app/core/service/i18n.service';
+import { ListComponent } from 'src/app/freamwork/core/list-component';
+import { AclById, ACLConfig } from 'src/app/freamwork/util/permission.decorator';
+import { buildTree } from 'src/app/freamwork/util/tree/tree';
+import { FunctionModel } from 'src/app/routes/system-management/auth/entity/function-model';
 
-import { RoleService } from "src/app/core/service/core/role.service";
-import { I18NService } from "src/app/core/service/i18n.service";
-import { AuthHostDirective } from "./component/auth-host.directive";
-import { AuthViewModel } from "./view-model/auth-view-model";
-import { map, switchMap } from "rxjs/operators";
-import { of } from "rxjs";
-
-import {
-  AclById,
-  ACLConfig,
-} from "src/app/freamwork/util/permission.decorator";
-import { ACLService } from "@delon/acl";
-
+import { AuthHostDirective } from './component/auth-host.directive';
+import { AuthModuleEditComponent } from './component/auth-module-edit.component';
+import { AuthViewModel } from './view-model/auth-view-model';
 
 @Component({
-  selector: "app-auth",
+  selector: 'app-auth',
   template: `<app-page-v2>
     <div class="operation">
-      <nz-select
-        [ngModel]="selectRole"
-        (ngModelChange)="changeRole($event)"
-        style="width:200px"
-        class="mr-sm"
-      >
-        <nz-option
-          *ngFor="let item of roleList"
-          [nzValue]="item"
-          [nzLabel]="item.name"
-        ></nz-option>
+      <nz-select [ngModel]="selectRole" (ngModelChange)="changeRole($event)" style="width:200px" class="mr-sm">
+        <nz-option *ngFor="let item of roleList" [nzValue]="item" [nzLabel]="item.name"></nz-option>
       </nz-select>
       <span [acl]="updateAcl">
-        <button
-          [nzLoading]="updateLoading"
-          nz-button
-          nzType="primary"
-          (click)="updateAuth()">
+        <button [nzLoading]="updateLoading" nz-button nzType="primary" (click)="updateAuth()">
           <span nz-icon nzType="sync" nzTheme="outline"></span>
-          {{ "common.update" | i18n }}
+          {{ 'common.update' | i18n }}
         </button>
       </span>
       <span [acl]="addModuleAcl">
-        <a nz-button nzType="link" (click)="addModule()">{{
-          "auth.addModule" | i18n}}</a>
-      </span>  
+        <a nz-button nzType="link" (click)="addModule()">{{ 'auth.addModule' | i18n }}</a>
+      </span>
     </div>
 
     <div class="content">
@@ -76,9 +54,9 @@ import { ACLService } from "@delon/acl";
         padding: 24px;
         overflow-y: auto;
       }
-    `,
+    `
   ],
-  providers: [AuthHostDirective],
+  providers: [AuthHostDirective]
 })
 export class AuthComponent extends ListComponent implements OnInit {
   selectRole: any;
@@ -101,51 +79,50 @@ export class AuthComponent extends ListComponent implements OnInit {
   }
 
   @AclById(79)
-  updateAcl : any;
+  updateAcl: any;
 
   @AclById(80)
-  addModuleAcl : any;
-
+  addModuleAcl: any;
 
   @ACLConfig()
   ngOnInit(): void {
-    this.roleService.all().subscribe((data) => {
+    this.roleService.all()?.subscribe(data => {
       this.roleList = data;
       this.selectRole = this.roleList[0];
     });
     super.dataSourceSubscription = super
       .initWithObservable()
       .pipe(
-        switchMap((functionData: FunctionModel[]) => {
-          const roleObservable =
-            this.roleList && this.roleList.length > 0
-              ? of(this.roleList)
-              : this.roleService.all();
+        switchMap((functionData: FunctionModel[], index: number) => {
+          const roleObservable = this.roleList && this.roleList.length > 0 ? of(this.roleList) : this.roleService.all();
+
+          if (!roleObservable) {
+            return of({
+              roleData: [],
+              functionData: functionData
+            });
+          }
 
           return roleObservable.pipe(
             map((roleData: any[]) => {
               return {
                 roleData: roleData,
-                functionData: functionData,
+                functionData: functionData
               };
             })
           );
         })
       )
-      .subscribe((result) => {
+      .subscribe((result: any) => {
         this.roleList = result.roleData;
         this.selectRole = this.roleList[0];
 
-        result.functionData = (result.functionData as FunctionModel[]).map(
-          (item) => {
-            return new FunctionModel(item);
-          }
-        );
-        this.actionModuleList = [
-          ...buildTree<AuthViewModel>(result.functionData, viewModelFactory),
-        ];
+        result.functionData = (result.functionData as FunctionModel[]).map(item => {
+          return new FunctionModel(item);
+        });
+        this.actionModuleList = [...buildTree<AuthViewModel>(result.functionData, viewModelFactory)];
         this.parentHost.viewContainerRef.clear();
-        this.actionModuleList.forEach((item) => {
+        this.actionModuleList.forEach(item => {
           item.createComponent(this.parentHost.viewContainerRef, false);
           item.changeCheckStatus(this.selectRole?.functionId);
         });
@@ -154,16 +131,16 @@ export class AuthComponent extends ListComponent implements OnInit {
 
   changeRole(value: any) {
     this.selectRole = value;
-    this.actionModuleList.forEach((item) => {
+    this.actionModuleList.forEach(item => {
       item.changeCheckStatus(this.selectRole?.functionId);
     });
   }
 
   addModule() {
     super.openModal(
-      this.i18n.fanyi("auth.addModule"),
-      this.i18n.fanyi("common.cancel"),
-      this.i18n.fanyi("common.ok"),
+      this.i18n.fanyi('auth.addModule'),
+      this.i18n.fanyi('common.cancel'),
+      this.i18n.fanyi('common.ok'),
       AuthModuleEditComponent
     );
   }
@@ -174,13 +151,13 @@ export class AuthComponent extends ListComponent implements OnInit {
     }
     const functionIdList: number[] = [];
 
-    this.actionModuleList.forEach((item) => {
+    this.actionModuleList.forEach(item => {
       item.fetchAllFunctionId(functionIdList, true);
     });
 
     const param = {
       roleId: this.selectRole.id,
-      functionIdList: functionIdList,
+      functionIdList: functionIdList
     };
 
     this.updateLoading = true;
