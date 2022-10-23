@@ -76,7 +76,9 @@
               "ajv",
               "ajv-formats",
               "date-fns",
-              "file-saver"
+              "extend",
+              "file-saver",
+              "mockjs"
             ],
             "stylePreprocessorOptions": {
               "includePaths": [
@@ -180,6 +182,10 @@
     }
   },
   "cli": {
-    "analytics": "5c298e8a-c97d-436b-a2b0-b2410f788d56"
+    "analytics": "5c298e8a-c97d-436b-a2b0-b2410f788d56",
+    "schematicCollections": [
+      "@schematics/angular",
+      "ng-alain"
+    ]
   }
 }
