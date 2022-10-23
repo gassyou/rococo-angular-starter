@@ -1,5 +1,5 @@
 import { Component, Inject, Input, OnInit } from '@angular/core';
-import { FormBuilder, FormControl, Validators } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormControl, Validators } from '@angular/forms';
 import { ALAIN_I18N_TOKEN } from '@delon/theme';
 import { of } from 'rxjs';
 import { RoleService } from 'src/app/core/service/core/role.service';
@@ -58,7 +58,7 @@ export class EditComponent extends FormComponent implements OnInit {
   constructor(
     public roleService: RoleService,
     public userService: UserService,
-    public fb: FormBuilder,
+    public fb: UntypedFormBuilder,
     @Inject(ALAIN_I18N_TOKEN) public i18n: I18NService
   ) {
     super(userService);
@@ -93,7 +93,7 @@ export class EditComponent extends FormComponent implements OnInit {
     });
   }
 
-  checkMobileValidator = (control: FormControl): { [key: string]: any } => {
+  checkMobileValidator = (control: UntypedFormControl): { [key: string]: any } => {
     if (!control.value) {
       return of();
     }
@@ -108,7 +108,7 @@ export class EditComponent extends FormComponent implements OnInit {
     return of();
   };
   // 验证account唯一性
-  checkAccountValidator = (control: FormControl): { [key: string]: any } => {
+  checkAccountValidator = (control: UntypedFormControl): { [key: string]: any } => {
     if (this.editForm && control.value) {
       const param = {
         id: this.editForm.controls['id'].value,

@@ -1,5 +1,5 @@
 import { Component, Inject, Input, OnInit } from '@angular/core';
-import { FormBuilder, FormControl, Validators } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormControl, Validators } from '@angular/forms';
 import { ALAIN_I18N_TOKEN } from '@delon/theme';
 import { of } from 'rxjs';
 import { RoleService } from 'src/app/core/service/core/role.service';
@@ -43,7 +43,7 @@ export class EditComponent extends FormComponent implements OnInit {
   @Input()
   value: any;
 
-  constructor(public roleService: RoleService, public fb: FormBuilder, @Inject(ALAIN_I18N_TOKEN) public i18n: I18NService) {
+  constructor(public roleService: RoleService, public fb: UntypedFormBuilder, @Inject(ALAIN_I18N_TOKEN) public i18n: I18NService) {
     super(roleService);
   }
 
@@ -64,7 +64,7 @@ export class EditComponent extends FormComponent implements OnInit {
   }
 
   // 验证角色名唯一性
-  checkRoleNameValidator = (control: FormControl): { [key: string]: any } => {
+  checkRoleNameValidator = (control: UntypedFormControl): { [key: string]: any } => {
     if (this.editForm && control.value) {
       const param = {
         id: this.editForm.controls['id'].value,

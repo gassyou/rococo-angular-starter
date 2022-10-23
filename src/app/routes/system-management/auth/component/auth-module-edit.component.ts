@@ -1,5 +1,5 @@
 import { Component, Inject, Input, OnInit } from '@angular/core';
-import { FormBuilder, Validators } from '@angular/forms';
+import { UntypedFormBuilder, Validators } from '@angular/forms';
 import { ALAIN_I18N_TOKEN } from '@delon/theme';
 import { AuthService } from 'src/app/core/service/core/auth.service';
 import { I18NService } from 'src/app/core/service/i18n.service';
@@ -66,7 +66,7 @@ export class AuthModuleEditComponent extends FormComponent implements OnInit {
     validateNull: this.i18n.fanyi('commonErrMsg.validateNull')
   };
 
-  constructor(public authService: AuthService, public fb: FormBuilder, @Inject(ALAIN_I18N_TOKEN) public i18n: I18NService) {
+  constructor(public authService: AuthService, public fb: UntypedFormBuilder, @Inject(ALAIN_I18N_TOKEN) public i18n: I18NService) {
     super(authService);
   }
   ngOnInit(): void {

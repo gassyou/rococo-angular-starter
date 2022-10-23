@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { MyApplicationService } from 'src/app/core/service/my-application.service';
 import { CheckForm } from 'src/app/freamwork/util/form-valid-checker';
 
@@ -64,11 +64,11 @@ import { CheckForm } from 'src/app/freamwork/util/form-valid-checker';
   ]
 })
 export class LoginComponent implements OnInit {
-  loginForm: FormGroup | undefined;
+  loginForm: UntypedFormGroup | undefined;
   passwordVisible = false;
   islogining = false;
 
-  constructor(private fb: FormBuilder, private myApp: MyApplicationService) {}
+  constructor(private fb: UntypedFormBuilder, private myApp: MyApplicationService) {}
 
   ngOnInit(): void {
     this.loginForm = this.fb.group({

@@ -1,7 +1,7 @@
-import { FormGroup } from '@angular/forms';
+import { UntypedFormGroup } from '@angular/forms';
 import { environment } from '@env/environment';
 
-export function isValidForm(form: FormGroup | undefined) {
+export function isValidForm(form: UntypedFormGroup | undefined) {
   if (!form) {
     return false;
   }

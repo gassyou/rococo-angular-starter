@@ -1,5 +1,5 @@
 import { Component, Inject, Input, OnInit } from '@angular/core';
-import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormControl, UntypedFormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { TokenService } from '@delon/auth';
 import { ALAIN_I18N_TOKEN } from '@delon/theme';
@@ -93,7 +93,7 @@ import { isValidForm } from 'src/app/freamwork/util/form-valid-checker';
   providers: [UserService, NzNotificationService]
 })
 export class EditMyPasswordComponent implements OnInit {
-  public editForm: FormGroup | undefined;
+  public editForm: UntypedFormGroup | undefined;
 
   oldPWVisible = false;
   newPWVisible = false;
@@ -104,7 +104,7 @@ export class EditMyPasswordComponent implements OnInit {
 
   constructor(
     public app: MyApplicationService,
-    public fb: FormBuilder,
+    public fb: UntypedFormBuilder,
     public router: Router,
     public token: TokenService,
     @Inject(ALAIN_I18N_TOKEN) public i18n: I18NService,
@@ -175,7 +175,7 @@ export class EditMyPasswordComponent implements OnInit {
 
   cancel() {}
 
-  checkConfirmPw = (control: FormControl): { [key: string]: any } | null => {
+  checkConfirmPw = (control: UntypedFormControl): { [key: string]: any } | null => {
     if (!control.value) {
       return { required: true };
     }
@@ -185,7 +185,7 @@ export class EditMyPasswordComponent implements OnInit {
     return null;
   };
 
-  checkOldPw = (control: FormControl): { [key: string]: any } | null => {
+  checkOldPw = (control: UntypedFormControl): { [key: string]: any } | null => {
     if (!control.value) {
       return of();
     }

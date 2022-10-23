@@ -1,5 +1,5 @@
 import { Component, Inject, Input, OnInit } from '@angular/core';
-import { FormBuilder, Validators } from '@angular/forms';
+import { UntypedFormBuilder, Validators } from '@angular/forms';
 import { ALAIN_I18N_TOKEN } from '@delon/theme';
 import { NzMessageService } from 'ng-zorro-antd/message';
 import { Observable, of } from 'rxjs';
@@ -70,7 +70,7 @@ export class PasswordEditComponent extends FormComponent implements OnInit {
 
   constructor(
     public userService: UserService,
-    public fb: FormBuilder,
+    public fb: UntypedFormBuilder,
     public message: NzMessageService,
     @Inject(ALAIN_I18N_TOKEN) public i18n: I18NService
   ) {

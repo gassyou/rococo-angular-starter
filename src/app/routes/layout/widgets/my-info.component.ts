@@ -1,5 +1,5 @@
 import { Component, Inject, Input, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { ALAIN_I18N_TOKEN } from '@delon/theme';
 import { I18NService } from 'src/app/core/service/i18n.service';
 import { MyApplicationService } from 'src/app/core/service/my-application.service';
@@ -158,10 +158,10 @@ export class MyInfoComponent implements OnInit {
   @Input()
   value: MyInfo | undefined;
 
-  myForm: FormGroup | undefined;
+  myForm: UntypedFormGroup | undefined;
 
   isEdit = false;
-  constructor(public app: MyApplicationService, public fb: FormBuilder, @Inject(ALAIN_I18N_TOKEN) public i18n: I18NService) {}
+  constructor(public app: MyApplicationService, public fb: UntypedFormBuilder, @Inject(ALAIN_I18N_TOKEN) public i18n: I18NService) {}
 
   ngOnInit(): void {
     this.myForm = this.fb.group({

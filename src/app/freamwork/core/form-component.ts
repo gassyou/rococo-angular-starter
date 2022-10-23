@@ -1,9 +1,9 @@
-import { AbstractControl, FormArray, FormControl, FormGroup } from '@angular/forms';
+import { AbstractControl, UntypedFormArray, UntypedFormControl, UntypedFormGroup } from '@angular/forms';
 import { Observable } from 'rxjs';
 
 import { CRUDService } from './crud.service';
 export abstract class FormComponent {
-  public editForm: FormGroup | undefined;
+  public editForm: UntypedFormGroup | undefined;
   public isEdit: boolean = false;
 
   constructor(public crudService: CRUDService) {}
@@ -32,12 +32,12 @@ export abstract class FormComponent {
   cancel() {}
 
   makeControlDirty(control: AbstractControl) {
-    if (control instanceof FormControl) {
+    if (control instanceof UntypedFormControl) {
       control.markAsDirty();
       control.updateValueAndValidity({ onlySelf: true });
     }
 
-    if (control instanceof FormGroup) {
+    if (control instanceof UntypedFormGroup) {
       for (const i in control.controls) {
         if (control.contains(i)) {
           this.makeControlDirty(control.controls[i]);
@@ -45,7 +45,7 @@ export abstract class FormComponent {
       }
     }
 
-    if (control instanceof FormArray) {
+    if (control instanceof UntypedFormArray) {
       for (let item of control.controls) {
         this.makeControlDirty(item);
       }
