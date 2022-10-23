@@ -1,15 +1,23 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Inject, OnInit } from '@angular/core';
+import { ACLService } from '@delon/acl';
+import { ALAIN_I18N_TOKEN } from '@delon/theme';
 import { NzModalService } from 'ng-zorro-antd/modal';
 import { RoleService } from 'src/app/core/service/core/role.service';
+import { I18NService } from 'src/app/core/service/i18n.service';
 import { ListComponent } from 'src/app/freamwork/core/list-component';
+import { AclById, ACLConfig } from 'src/app/freamwork/util/permission.decorator';
 
-import { EditDemoComponent } from './edit-demo.component';
 import { EditComponent } from './edit.component';
 
 @Component({
   selector: 'app-role-page',
   template: `
-    <app-page [advanceSearchForm]="advanceSearchForm" [simpleSearchKeys]="simpleSearchKeys" [operations]="operation">
+    <app-page-v2
+      [advanceSearchForm]="advanceSearchForm"
+      [simpleSearchKeys]="simpleSearchKeys"
+      [operations]="operation"
+      [searchAcl]="searchAcl"
+    >
       <nz-table
         #basicTable
         [nzData]="tableDataSource"
@@ -27,89 +35,149 @@ import { EditComponent } from './edit.component';
       >
         <thead>
           <tr>
-            <th>序号</th>
-            <th>角色名称</th>
-            <th>角色说明</th>
-            <th>启用</th>
-            <th>操作</th>
+            <th>{{ 'common.no' | i18n }}</th>
+            <th>{{ 'role.name' | i18n }}</th>
+            <th>{{ 'role.remark' | i18n }}</th>
+            <th>{{ 'common.enable' | i18n }}</th>
+            <th>{{ 'common.operate' | i18n }}</th>
           </tr>
         </thead>
         <tbody>
-          <tr *ngFor="let data of basicTable.data">
-            <td>{{ data.id }}</td>
+          <tr *ngFor="let data of basicTable.data; let idx = index">
+            <td>{{ idx + (currentPage - 1) * pageSize + 1 }}</td>
             <td>{{ data.name }}</td>
-            <td>{{ data.detail }}</td>
+            <td>{{ data.remark }}</td>
             <td>
-              <nz-switch nzSize="small" [ngModel]="data.enable === 0" (ngModelChange)="enableData(data)"></nz-switch>
+              <span [acl]="startusingAcl">
+                <nz-switch nzSize="small" [ngModel]="data.enable === 0" (ngModelChange)="clickEnableSwitch(data)"></nz-switch>
+              </span>
             </td>
-            <td
-              ><a (click)="edit(data)">编辑</a> <nz-divider nzType="vertical"></nz-divider>
-              <a nz-popconfirm nzPopconfirmTitle="确认删除?" nzOkText="ok" nzCancelText="cancel" (nzOnConfirm)="deleteData(data)">删除</a>
+            <td>
+              <span *aclIf="editAcl">
+                <a (click)="edit(data)">{{ 'role.edit' | i18n }}</a>
+                <nz-divider nzType="vertical"></nz-divider>
+              </span>
+
+              <span *aclIf="passwordChangeAcl">
+                <a
+                  nz-popconfirm
+                  nzPopconfirmTitle="{{ 'common.delete-confirm' | i18n }}?"
+                  nzOkText="{{ 'common.ok' | i18n }}"
+                  nzCancelText="{{ 'common.cancel' | i18n }}"
+                  (nzOnConfirm)="deleteData(data)"
+                  >{{ 'common.delete' | i18n }}</a
+                >
+                <nz-divider nzType="vertical"></nz-divider>
+              </span>
             </td>
           </tr>
         </tbody>
       </nz-table>
-      <ng-template #totalTemplate let-total> 共 {{ total }} 条记录 </ng-template>
-    </app-page>
+      <ng-template #totalTemplate let-total> {{ 'common.total' | i18n }} {{ total }} {{ 'common.record' | i18n }} </ng-template>
+    </app-page-v2>
   `,
   styles: []
 })
 export class PageComponent extends ListComponent implements OnInit {
-  simpleSearchKeys = ['name', 'detail'];
+  simpleSearchKeys = ['name', 'remark', 'enable'];
   advanceSearchForm = {
     properties: {
-      name: { type: 'string', title: '名称' },
-      detail: { type: 'string', title: '说明' }
-    }
-  };
-  operation = [
-    {
-      text: '添加角色',
-      onClick: () => {
-        this.edit();
+      name: { type: 'string', title: this.i18n.fanyi('role.name') },
+      remark: { type: 'string', title: this.i18n.fanyi('role.remark') },
+      enable: {
+        type: 'string',
+        title: this.i18n.fanyi('role.enable'),
+        enum: [
+          { label: this.i18n.fanyi('role.enableTrue'), value: '0' },
+          { label: this.i18n.fanyi('role.enableFalse'), value: '1' }
+        ],
+        ui: {
+          widget: 'select',
+          allowClear: true
+        }
       }
     },
-    { text: '导出', onClick: () => {} }
-  ];
+    ui: {
+      spanLabelFixed: 100,
+      grid: {
+        span: 8
+      }
+    }
+  };
+  operation: any;
 
-  constructor(public roleService: RoleService, public nzModal: NzModalService) {
+  constructor(
+    public roleService: RoleService,
+    public nzModal: NzModalService,
+    public acl: ACLService,
+    @Inject(ALAIN_I18N_TOKEN) public i18n: I18NService
+  ) {
     super(roleService, nzModal);
   }
 
-  enableData(data: any) {
+  clickEnableSwitch(data: any) {
+    var temp = data.enable;
     if (data.enable === 0) {
       data.enable = 1;
+      data.deleteFlag = 1;
     } else {
       data.enable = 0;
+      data.deleteFlag = 0;
     }
-    this.roleService.update(data)?.subscribe();
+    var param = {
+      id: data ? data.id : null,
+      name: data ? data.name : null,
+      remark: data ? data.remark : null,
+      deleteFlag: data ? data.deleteFlag : null
+    };
+
+    this.roleService.update(param)?.subscribe(response => {
+      if (!response) {
+        data.enable = temp;
+      }
+    });
   }
 
   edit(data?: any) {
-    data = {
-      name: 'Test',
-      age: 33,
-      address: [
-        {
-          street: 'test',
-          city: 'test',
-          state: 'test'
-        },
-        {
-          street: 'test',
-          city: 'test',
-          state: 'test'
-        }
-      ]
-    };
-    super.openModal(data ? '编辑' : '添加角色', '取消', '确定', EditDemoComponent, data);
+    super.openModal(
+      data ? this.i18n.fanyi('role.edit') : this.i18n.fanyi('role.addRole'),
+      this.i18n.fanyi('common.cancel'),
+      this.i18n.fanyi('common.ok'),
+      EditComponent,
+      data
+    );
   }
 
   deleteData(data?: any) {
     this.roleService.delete(data.id)?.subscribe();
   }
 
+  @AclById(72)
+  startusingAcl: any;
+
+  @AclById(73)
+  editAcl: any;
+
+  @AclById(74)
+  passwordChangeAcl: any;
+
+  @AclById(75)
+  addUserAcl: any;
+
+  @AclById(76)
+  searchAcl: any;
+  @ACLConfig()
   ngOnInit(): void {
     super.init();
+    this.operation = [
+      {
+        text: this.i18n.fanyi('role.addRole'),
+        acl: this.addUserAcl,
+        icon: 'plus',
+        onClick: () => {
+          this.edit();
+        }
+      }
+    ];
   }
 }

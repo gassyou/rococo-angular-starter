@@ -1,5 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
+import { AlainThemeModule } from '@delon/theme';
 import { NzMessageService } from 'ng-zorro-antd/message';
 import { NzModalService } from 'ng-zorro-antd/modal';
 import { SharedModule } from 'src/app/shared/shared.module';
@@ -11,7 +12,7 @@ import { UserModule } from './user/user.module';
 
 @NgModule({
   declarations: [],
-  imports: [CommonModule, UserModule, RoleModule, SysMgtRoutingModule, SharedModule, ZORRO_MODULES],
+  imports: [CommonModule, UserModule, RoleModule, SysMgtRoutingModule, SharedModule, ZORRO_MODULES, AlainThemeModule.forChild()],
   providers: [NzModalService, NzMessageService]
 })
 export class SysmMgtModule {}

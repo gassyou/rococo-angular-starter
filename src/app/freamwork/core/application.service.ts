@@ -3,47 +3,47 @@ import { Router } from '@angular/router';
 import { ACLService } from '@delon/acl';
 import { TokenService } from '@delon/auth';
 import { CacheService } from '@delon/cache';
-import { _HttpClient } from '@delon/theme';
-import { environment } from '@env/environment';
+import { Menu, _HttpClient } from '@delon/theme';
+import { NzSafeAny } from 'ng-zorro-antd/core/types';
 import { NzMessageService } from 'ng-zorro-antd/message';
 import { BehaviorSubject, Observable, of } from 'rxjs';
 import { filter, map, switchMap } from 'rxjs/operators';
+import { I18NService } from 'src/app/core/service/i18n.service';
+import { FunctionModel } from 'src/app/routes/system-management/auth/entity/function-model';
 
 import { getCookie, setCookie } from '../util/cookie-util';
 import { encryptForServer } from '../util/crypto';
+import { buildTree } from '../util/tree/tree';
+import { MyMenu } from './my-menu';
 import { ResponseData, ResponseContentData } from './response-data';
 
 @Injectable({
   providedIn: 'root'
 })
 export abstract class ApplicationService {
-  public abstract loginUrl: string;
-  public abstract myInfoUrl: string;
-  public abstract myInfoEditUrl: string;
-  public abstract myPasswordEditUrl: string;
+  public loginUrl: string = '';
+  public myInfoUrl: string = '';
+  public myInfoEditUrl: string = '';
+  public myPasswordEditUrl: string = '';
 
-  public abstract LOGIN_COOKIE_NAME: string;
+  public LOGIN_COOKIE_NAME: string = '';
 
-  public abstract loginPageUrl: string;
-  public abstract homePageUrl: string;
-  public abstract appName: string;
-  public abstract menuUrl: string;
-  public abstract actionAclUrl: string;
+  public loginPageUrl: string = '';
+  public homePageUrl: string = '';
+  public menuUrl: string = '';
+  public actionAclUrl: string = '';
+
+  public demoPersonInfo: MyInfo | null = null;
+  public demoLoginResponeseInfo: LoginResponseInfo | null = null;
+  public demoMenuWithAclInfo: FunctionModel[] = [];
+  public demoActionWithACLInfo: ActionAclInfo[] = [];
 
   private _myInfo$ = new BehaviorSubject<number | null>(null);
   public myInfo$ = this._myInfo$.asObservable().pipe(
     filter((params: number | null) => params !== null),
     switchMap((params: number | null) => {
-      if (environment.demo) {
-        return of({
-          data: {
-            id: '0001',
-            account: 'admin',
-            name: '测试用户',
-            phone: '13000000000',
-            roleName: '配置管理员'
-          }
-        });
+      if (this.demoPersonInfo) {
+        return of({ data: this.demoPersonInfo });
       }
 
       return this.http.get(this.myInfoUrl, { uid: params }).pipe(
@@ -63,7 +63,8 @@ export abstract class ApplicationService {
     public router: Router,
     public token: TokenService,
     public acl: ACLService,
-    public cache: CacheService
+    public cache: CacheService,
+    public i18n: I18NService
   ) {}
 
   /**
@@ -71,58 +72,48 @@ export abstract class ApplicationService {
    *
    * @returns Observable<any>
    */
-  public login(loginInfo: LoginInfo, autoLogin = false): Observable<ResponseData> {
-    if (environment.demo) {
-      this.token.set({
-        uid: '0001',
-        token: 'test001',
-        longToken: 'test001',
-        time: new Date().getTime(),
-        roleList: ['1']
-      });
-      this.router.navigate([this.homePageUrl]);
-      return of();
-    }
-
+  public login(loginInfo: LoginFormInfo, autoLogin = false): Observable<ResponseData> {
     let passwordEpt = loginInfo.password;
     if (!autoLogin) {
       passwordEpt = encryptForServer(loginInfo.password);
     }
 
-    return this.http
-      .post(this.loginUrl, {
-        account: loginInfo.account,
-        password: passwordEpt
-      })
-      .pipe(
-        map((response: ResponseData) => {
-          if (!response.meta.success) {
-            this.message.error(response.meta.message);
-            return response;
-          }
-          if (loginInfo.autoLogin) {
-            setCookie(
-              this.LOGIN_COOKIE_NAME,
-              btoa(
-                JSON.stringify({
-                  account: loginInfo.account,
-                  password: passwordEpt
-                })
-              )
-            );
-          }
-          this.token.set({
-            uid: (response.data as ResponseContentData)['id'],
-            token: (response.data as ResponseContentData)['token'] as string,
-            longToken: (response.data as ResponseContentData)['longToken'] as string,
-            time: new Date().getTime(),
-            roleList: (response.data as ResponseContentData)['roleList'] as string[]
-          });
+    const login: Observable<ResponseData> = this.demoLoginResponeseInfo
+      ? of({ meta: { success: true }, data: this.demoLoginResponeseInfo })
+      : this.http.post(this.loginUrl, {
+          account: loginInfo.account,
+          password: passwordEpt
+        });
 
-          this.router.navigate([this.homePageUrl]);
+    return login.pipe(
+      map((response: ResponseData) => {
+        if (!response.meta.success) {
+          this.message.error(response.meta.message);
           return response;
-        })
-      );
+        }
+        if (loginInfo.autoLogin) {
+          setCookie(
+            this.LOGIN_COOKIE_NAME,
+            btoa(
+              JSON.stringify({
+                account: loginInfo.account,
+                password: passwordEpt
+              })
+            )
+          );
+        }
+        this.token.set({
+          uid: (response.data as ResponseContentData)['id'],
+          token: (response.data as ResponseContentData)['token'] as string,
+          longToken: (response.data as ResponseContentData)['longToken'] as string,
+          time: new Date().getTime(),
+          roleList: (response.data as ResponseContentData)['roleList'] as number[]
+        });
+
+        this.router.navigate([this.homePageUrl]);
+        return response;
+      })
+    );
   }
 
   /**
@@ -168,256 +159,28 @@ export abstract class ApplicationService {
    * 获取菜单信息
    */
   public getMenuData(): Observable<any> {
-    if (environment.demo) {
-      return of([
-        {
-          text: 'ESG系统',
-          link: '/front/home',
-          group: false,
-          hideInBreadcrumb: true,
-          hide: false,
-          acl: ['1'],
-          reuse: false,
-          children: [
-            {
-              text: '首页',
-              link: '/front/home',
-              group: false,
-              icon: 'anticon anticon-home',
-              acl: ['1']
-            },
-            {
-              text: '资讯列表',
-              group: false,
-              hide: true,
-              link: '/front/news-list',
-              acl: ['1']
-            },
-            {
-              text: '通告列表',
-              group: false,
-              hide: true,
-              link: '/front/info-list',
-              acl: ['1']
-            },
-            {
-              text: '常见问题列表',
-              group: false,
-              hide: true,
-              link: '/front/question-list',
-              acl: ['1']
-            },
-            {
-              text: '新闻详情',
-              group: false,
-              hide: true,
-              link: '/front/news',
-              acl: ['1']
-            },
-            {
-              text: '基础配置',
-              group: false,
-              icon: 'anticon anticon-appstore-add',
-              acl: ['1'],
-              children: [
-                {
-                  text: '范畴管理',
-                  link: '/basic/category',
-                  group: false,
-                  acl: ['1']
-                },
-                {
-                  text: '组织管理',
-                  link: '/basic/organization',
-                  group: false,
-                  acl: ['1']
-                },
-                {
-                  text: '议题管理',
-                  link: '/basic/subject-management',
-                  group: false,
-                  acl: ['1']
-                },
-                {
-                  text: '系数管理',
-                  link: '/basic/coefficient',
-                  group: false,
-                  acl: ['1']
-                }
-              ]
-            },
-            {
-              text: '进度管理',
-              group: false,
-              icon: 'anticon anticon-import',
-              acl: ['1'],
-              children: [
-                {
-                  text: '填报进度',
-                  link: '/setting/task-progress',
-                  group: false,
-                  acl: ['1']
-                },
-                {
-                  text: '指标进度',
-                  link: '/setting/target-progress',
-                  group: false,
-                  acl: ['1']
-                },
-              ]
-            },
-            {
-              text: '配置管理',
-              group: false,
-              icon: 'anticon anticon-control',
-              acl: ['1'],
-              children: [
-                {
-                  text: '指标规则',
-                  link: '/setting/rule',
-                  group: false,
-                  acl: ['1']
-                },
-                {
-                  text: '指标属性',
-                  link: '/setting/attribute',
-                  group: false,
-                  acl: ['1']
-                },
-                {
-                  text: '填报任务',
-                  link: '/setting/task-fill',
-                  group: false,
-                  acl: ['1']
-                }
-              ]
-            },
-            {
-              text: '填报管理',
-              group: false,
-              icon: 'anticon anticon-file-done',
-              acl: ['1'],
-              children: [
-                {
-                  text: '指标字典',
-                  link: '/fill/dictionary'
-                },
-                {
-                  text: '待我填报',
-                  link: '/fill/add',
-                  group: false,
-                  acl: ['1']
-                },
-                {
-                  text: '填报历史',
-                  link: '/fill/history',
-                  group: false,
-                  acl: ['1']
-                },
-                {
-                  text: '待填报任务',
-                  hide: true,
-                  link: '/fill/wait',
-                  group: false,
-                  acl: ['1']
-                }
-              ]
-            },
-            {
-              text: 'ESG看板',
-              link: '/esg',
-              icon: 'anticon anticon-dashboard',
-              group: false,
-              acl: ['1']
-            },
-            {
-              text: '分析报告',
-              group: false,
-              icon: 'anticon anticon-line-chart',
-              acl: ['1'],
-              children: [
-                {
-                  text: '填报数据',
-                  link: '/analysis/fill-data',
-                  group: false,
-                  acl: ['1']
-                },
-                {
-                  text: '报告数据',
-                  link: '/analysis/report-data',
-                  group: false,
-                  acl: ['1']
-                }
-              ]
-            },
-            {
-              text: '内容管理',
-              group: false,
-              icon: 'anticon anticon-share-alt',
-              acl: ['1'],
-              children: [
-                {
-                  text: '新闻资讯',
-                  link: '/content/news',
-                  group: false,
-                  acl: ['1']
-                },
-                {
-                  text: '最新通告',
-                  link: '/content/annunciate',
-                  group: false,
-                  acl: ['1']
-                },
-                {
-                  text: '问题帮助',
-                  link: '/content/question',
-                  group: false,
-                  acl: ['1']
-                },
-                {
-                  text: '投资人回应',
-                  link: '/content/respond',
-                  group: false,
-                  acl: ['1']
-                }
-              ]
-            },
-            {
-              text: '系统设置',
-              group: false,
-              icon: 'anticon anticon-setting',
-              acl: ['1'],
-              children: [
-                {
-                  text: '用户管理',
-                  link: '/sys/user',
-                  group: false,
-                  acl: ['1']
-                },
-                {
-                  text: '权限设置',
-                  link: '/sys/auth',
-                  group: false,
-                  acl: ['1']
-                }
-              ]
-            }
-          ]
-        }
-      ]);
-    }
     if (!this.menuUrl) {
       return of(null);
     }
 
-    this.acl.setRole(this.token.get().roleList);
-    return this.http.get(this.menuUrl).pipe(
+    this.acl.setAbility(this.token.get().roleList);
+    const menu: Observable<ResponseData> =
+      this.demoMenuWithAclInfo && this.demoMenuWithAclInfo.length > 0
+        ? of({ meta: { success: true }, data: this.demoMenuWithAclInfo })
+        : this.http.get(this.menuUrl);
+
+    return menu.pipe(
       map((response: ResponseData) => {
         if (!response.meta.success) {
           this.message.error(response.meta.message);
           return null;
         }
-        return response.data;
+        const menu: Menu[] = [
+          ...buildTree<MyMenu>(response.data as FunctionModel[], (v: FunctionModel) => {
+            return new MyMenu(v);
+          })
+        ];
+        return menu;
       })
     );
   }
@@ -425,9 +188,12 @@ export abstract class ApplicationService {
   /**
    * 获取各个画面的按钮的ACL信息
    */
-  public getACLInfo(): Observable<any[] | null> {
-    if (environment.demo) {
-      return of(['1']);
+  public getACLInfo(): Observable<any> {
+    if (this.demoActionWithACLInfo && this.demoActionWithACLInfo.length > 0) {
+      this.cache.set(this.actionAclUrl, {
+        meta: { success: true },
+        data: this.demoActionWithACLInfo
+      });
     }
     if (!this.actionAclUrl) {
       return of(null);
@@ -435,10 +201,10 @@ export abstract class ApplicationService {
 
     return this.cache.get(this.actionAclUrl).pipe(
       map((response: any) => {
-        if (!response.meta.success) {
+        if (!response?.meta?.success) {
           this.message.error(response.meta.message);
         }
-        return response.data as any[];
+        return response.data;
       })
     );
   }
@@ -455,7 +221,7 @@ export abstract class ApplicationService {
         if (!response.meta.success) {
           this.message.error(response.meta.message);
         } else {
-          this.message.success('個人情報を成功に更新しました');
+          this.message.success(this.i18n.fanyi('common.handle-ok'));
           this.getMyInfo();
         }
         return response;
@@ -475,7 +241,7 @@ export abstract class ApplicationService {
     return this.http.post(this.myPasswordEditUrl, info).pipe(
       map((response: ResponseData) => {
         if (response.meta.success) {
-          this.message.success('パスワードが成功に変更しました。');
+          this.message.success(this.i18n.fanyi('common.handle-ok'));
         } else {
           this.message.error(response.meta.message);
         }
@@ -484,7 +250,7 @@ export abstract class ApplicationService {
     );
   }
 
-  private getLoginInfoFromCookie(): LoginInfo | null {
+  private getLoginInfoFromCookie(): LoginFormInfo | null {
     const loginCookie = getCookie(this.LOGIN_COOKIE_NAME);
     if (loginCookie && loginCookie.length > 0) {
       return JSON.parse(atob(loginCookie));
@@ -493,16 +259,32 @@ export abstract class ApplicationService {
   }
 }
 
-export interface LoginInfo {
+export interface LoginFormInfo {
   account: string;
   password: string;
   autoLogin: boolean;
 }
 
+export interface LoginResponseInfo {
+  id: number;
+  token: string;
+  longToken: string;
+  roleList: number[];
+}
+
 export interface MyInfo {
   id: number;
   account?: string;
-  name: string;
-  phone: string;
+  name?: string;
+  phone?: string;
+  mail?: string;
   roleName?: string;
+}
+
+export interface ActionAclInfo {
+  [key: string]: NzSafeAny;
+  id?: number;
+  text?: string;
+  moduleType?: string;
+  acl?: number[];
 }

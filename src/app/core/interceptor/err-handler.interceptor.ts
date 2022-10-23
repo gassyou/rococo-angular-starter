@@ -1,12 +1,15 @@
 import { HttpRequest, HttpHandler, HttpInterceptor, HttpErrorResponse, HttpEvent } from '@angular/common/http';
-import { Injectable } from '@angular/core';
+import { Inject, Injectable } from '@angular/core';
 import { Router } from '@angular/router';
+import { ALAIN_I18N_TOKEN } from '@delon/theme';
 import { NzMessageService } from 'ng-zorro-antd/message';
 import { NzModalService } from 'ng-zorro-antd/modal';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { Observable, throwError } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 import { MyApplicationService } from 'src/app/core/service/my-application.service';
+
+import { I18NService } from '../service/i18n.service';
 
 @Injectable()
 export class ErrorHandlerInterceptor implements HttpInterceptor {
@@ -15,26 +18,28 @@ export class ErrorHandlerInterceptor implements HttpInterceptor {
     private router: Router,
     private modalSrv: NzModalService,
     private app: MyApplicationService,
-    private notification: NzNotificationService
+    private notification: NzNotificationService,
+    @Inject(ALAIN_I18N_TOKEN) public i18n: I18NService
   ) {}
 
   intercept(request: HttpRequest<unknown>, next: HttpHandler): Observable<any> {
     return next.handle(request).pipe(
       catchError((error: any, caught: Observable<HttpEvent<any>>) => {
         if (error['name'] === 'TimeoutError') {
-          this.notification.warning('服务器超时', '服务器端的响应超时了！');
+          this.message.error(this.i18n.fanyi('commonErrMsg.requestTimeout'));
           return throwError(error.error);
         }
 
         if (error instanceof HttpErrorResponse) {
           switch ((<HttpErrorResponse>error).status) {
             case 400:
-              this.message.error('相关数据不存在，可以尝试刷新后重试！');
+              this.message.error(this.i18n.fanyi('commonErrMsg.dataNotExisted'));
               return throwError(error.error);
             case 401:
               this.modalSrv.closeAll();
+              this.message.remove();
               this.app.logout();
-              this.message.error('授权信息发生变更或者已经失效，请再次登录系统');
+              this.message.error(this.i18n.fanyi('commonErrMsg.authError'));
               return throwError(error.error);
             case 403:
               this.router.navigate(['/exception/403']);
@@ -44,10 +49,17 @@ export class ErrorHandlerInterceptor implements HttpInterceptor {
               return throwError(error.error);
             case 410:
               this.modalSrv.closeAll();
+              this.message.remove();
               this.app.logout();
-              this.message.error('登录异常，请重新登录！');
+              this.message.error(this.i18n.fanyi('commonErrMsg.loginError'));
               return throwError(error.error);
             case 500:
+              return throwError(error.error);
+            case 511:
+              this.modalSrv.closeAll();
+              this.message.remove();
+              this.app.logout();
+              this.message.error(error.error.meta?.message);
               return throwError(error.error);
           }
         }

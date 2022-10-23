@@ -1,7 +1,9 @@
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { DelonACLModule } from '@delon/acl';
 import { DelonFormModule } from '@delon/form';
+import { AlainThemeModule } from '@delon/theme';
 import { NzMessageService } from 'ng-zorro-antd/message';
 import { NzModalService } from 'ng-zorro-antd/modal';
 import { RoleService } from 'src/app/core/service/core/role.service';
@@ -16,7 +18,17 @@ import { RoleRoutingModule } from './role-routing.module';
 
 @NgModule({
   declarations: [PageComponent, EditComponent, EditDemoComponent],
-  imports: [CommonModule, RoleRoutingModule, SharedModule, FormsModule, ReactiveFormsModule, ZORRO_MODULES, DelonFormModule],
+  imports: [
+    CommonModule,
+    RoleRoutingModule,
+    SharedModule,
+    FormsModule,
+    ReactiveFormsModule,
+    ZORRO_MODULES,
+    DelonFormModule,
+    AlainThemeModule.forChild(),
+    DelonACLModule
+  ],
   providers: [NzModalService, NzMessageService, RoleService, { provide: CRUDService, useExisting: RoleService }]
 })
 export class RoleModule {}

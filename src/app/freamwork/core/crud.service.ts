@@ -34,13 +34,13 @@ export abstract class CRUDService {
     .pipe(filter((params: SearchParams | null) => params !== null))
     .pipe(
       switchMap((params: SearchParams | null) => {
-        if (this.demoDataSource && this.demoDataSource.length>0) {
+        if (this.demoDataSource && this.demoDataSource.length > 0) {
           this.tableDataLoading = false;
           return of({
             data: {
               total: this.demoDataSource.length,
-              records: [...this.demoDataSource],
-            },
+              records: [...this.demoDataSource]
+            }
           });
         }
         return this.http.post(this.searchUrl, params).pipe(
@@ -71,11 +71,11 @@ export abstract class CRUDService {
    * @returns
    */
   public all(): Observable<any> | null {
-    if (this.demoDataSource && this.demoDataSource.length>0) {
+    if (this.demoDataSource && this.demoDataSource.length > 0) {
       return of(this.demoDataSource);
     }
     if (!this.allDataUrl) {
-      return null;
+      return of(null);
     }
 
     return this.http.post(this.allDataUrl).pipe(
@@ -121,7 +121,7 @@ export abstract class CRUDService {
    * @param param 更新后的
    */
   public add(param: any): Observable<any> | null {
-    if (this.demoDataSource && this.demoDataSource.length>0) {
+    if (this.demoDataSource && this.demoDataSource.length > 0) {
       this.message.info('添加成功');
       param.id = this.demoDataSource.length + 1;
       this.demoDataSource.push(param);
@@ -163,7 +163,7 @@ export abstract class CRUDService {
    * @param param 更新后的
    */
   public update(param: any): Observable<any> | null {
-    if (this.demoDataSource && this.demoDataSource.length>0) {
+    if (this.demoDataSource && this.demoDataSource.length > 0) {
       this.message.info('修改成功');
       this.demoDataSource = this.demoDataSource.map((item: any) => {
         if (item.id === param.id) {
@@ -210,7 +210,7 @@ export abstract class CRUDService {
    * @param id 记录ID，
    */
   public delete(id: number): Observable<any> | null {
-    if (this.demoDataSource && this.demoDataSource.length>0) {
+    if (this.demoDataSource && this.demoDataSource.length > 0) {
       this.message.info('删除成功');
       this.demoDataSource = this.demoDataSource.filter((item: any) => {
         return item.id !== id;
@@ -222,7 +222,46 @@ export abstract class CRUDService {
       return null;
     }
 
+    if (!id) {
+      return null;
+    }
+
     return this.http.post(`${this.deleteUrl}/${id}`).pipe(
+      map((response: any) => {
+        if (response['meta']['success']) {
+          this.message.success(this.i18n.fanyi('common.handle-ok'));
+          this.search();
+          return response.data;
+        } else {
+          this.message.error(response['meta']['message']);
+          return false;
+        }
+      })
+    );
+  }
+
+  public deleteBatch(idList: number[]): Observable<any> | null {
+    if (this.demoDataSource && this.demoDataSource.length > 0) {
+      this.message.info('删除成功');
+
+      idList.forEach(item => {
+        this.demoDataSource = this.demoDataSource.filter((item: any) => {
+          return item.id !== item;
+        });
+      });
+
+      this.search();
+      return of(true);
+    }
+    if (!this.deleteUrl) {
+      return null;
+    }
+
+    if (!idList || idList.length === 0) {
+      return null;
+    }
+
+    return this.http.post(this.deleteUrl, [...idList]).pipe(
       map((response: any) => {
         if (response['meta']['success']) {
           this.message.success(this.i18n.fanyi('common.handle-ok'));
@@ -245,26 +284,24 @@ export abstract class CRUDService {
     }
 
     this.tableDataLoading = true;
-    return this.http
-      .post(this.exportUrl, this.params, null, { responseType: 'arraybuffer' })
-      .pipe(
-        map((response: any) => {
-          try {
-            const result = JSON.parse(new TextDecoder().decode(response));
-            if (result.meta && result.meta.success === false) {
-              this.message.error(result.meta.message);
-              return false;
-            }
-          } catch (e) {}
-
-          if (response.byteLength === 0) {
-            this.message.error(this.i18n.fanyi('common.file-not-exist'));
+    return this.http.post(this.exportUrl, this.params, null, { responseType: 'arraybuffer' }).pipe(
+      map((response: any) => {
+        try {
+          const result = JSON.parse(new TextDecoder().decode(response));
+          if (result.meta && result.meta.success === false) {
+            this.message.error(result.meta.message);
             return false;
           }
-          this.tableDataLoading = false;
-          return response;
-        })
-      );
+        } catch (e) {}
+
+        if (response.byteLength === 0) {
+          this.message.error(this.i18n.fanyi('common.file-not-exist'));
+          return false;
+        }
+        this.tableDataLoading = false;
+        return response;
+      })
+    );
   }
 
   public exportToExcel(param: SearchParams | any): Observable<any> | null {
@@ -279,17 +316,15 @@ export abstract class CRUDService {
       return null;
     }
     this.tableDataLoading = true;
-    this.http
-      .post(this.exportUrl, param, null, { responseType: 'arraybuffer' })
-      .subscribe(
-        (json) => {
-          this.tableDataLoading = false;
-          return download(json, `${filename}.xlsx`);
-        },
-        (error) => {
-          console.log(error);
-        }
-      );
+    this.http.post(this.exportUrl, param, null, { responseType: 'arraybuffer' }).subscribe(
+      json => {
+        this.tableDataLoading = false;
+        return download(json, `${filename}.xlsx`);
+      },
+      error => {
+        console.log(error);
+      }
+    );
     return null;
   }
 

@@ -1,5 +1,7 @@
-import { AfterViewInit, Component, Input, OnInit, Optional, SkipSelf, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, Inject, Input, OnInit, Optional, SkipSelf, ViewChild } from '@angular/core';
 import { SFComponent, SFSchema } from '@delon/form';
+import { ALAIN_I18N_TOKEN } from '@delon/theme';
+import { I18NService } from 'src/app/core/service/i18n.service';
 import { SearchComponent } from 'src/app/freamwork/core/search-component';
 
 import { CRUDService } from '../../freamwork/core/crud.service';
@@ -17,7 +19,7 @@ import { CRUDService } from '../../freamwork/core/crud.service';
         [class]="inlineMode ? 'mr-md' : ''"
       >
       </sf>
-      <div [style.text-align]="inlineMode ? 'left' : 'center'" [style.width]="inlineMode ? '180px' : '100%'">
+      <div [acl]="searchAcl" [style.text-align]="inlineMode ? 'left' : 'center'" [style.width]="inlineMode ? '180px' : '100%'">
         <button nz-button (click)="reset()">{{ 'common.reset' | i18n }} </button>
         <button nz-button nzType="primary" (click)="advanceSearch(sf.value)">{{ 'common.search' | i18n }} </button>
         <button *ngIf="isShowExport" nz-button (click)="export(sf.value)">{{ 'common.export' | i18n }} </button>
@@ -73,6 +75,8 @@ export class AdvanceSearchV2Component extends SearchComponent implements AfterVi
 
   @Input() placeholder: string = '查询';
 
+  @Input() searchAcl: any;
+
   @Input('advanceSearchForm')
   set form(value: SFSchema | Component | null) {
     this.originalForm = value;
@@ -109,7 +113,7 @@ export class AdvanceSearchV2Component extends SearchComponent implements AfterVi
 
   originalForm: SFSchema | Component | null = null;
 
-  constructor(@Optional() @SkipSelf() public searchService: CRUDService) {
+  constructor(@Optional() @SkipSelf() public searchService: CRUDService, @Inject(ALAIN_I18N_TOKEN) private i18n: I18NService) {
     super(searchService);
   }
 
@@ -153,7 +157,6 @@ export class AdvanceSearchV2Component extends SearchComponent implements AfterVi
     }
 
     let keys = Object.keys(this.originalForm.properties);
-
     let itemCount = 0;
     for (let item of keys) {
       const itemProperty = this.sf.getProperty(`/${item}`);

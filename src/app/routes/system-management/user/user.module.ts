@@ -1,7 +1,9 @@
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { DelonACLModule } from '@delon/acl';
 import { DelonFormModule } from '@delon/form';
+import { AlainThemeModule } from '@delon/theme';
 import { NzMessageService } from 'ng-zorro-antd/message';
 import { NzModalService } from 'ng-zorro-antd/modal';
 import { RoleService } from 'src/app/core/service/core/role.service';
@@ -17,7 +19,17 @@ import { UserRoutingModule } from './user-routing.module';
 
 @NgModule({
   declarations: [PageComponent, EditComponent, PasswordEditComponent],
-  imports: [CommonModule, UserRoutingModule, SharedModule, FormsModule, ReactiveFormsModule, ZORRO_MODULES, DelonFormModule],
+  imports: [
+    CommonModule,
+    UserRoutingModule,
+    SharedModule,
+    FormsModule,
+    ReactiveFormsModule,
+    ZORRO_MODULES,
+    DelonFormModule,
+    AlainThemeModule.forChild(),
+    DelonACLModule
+  ],
   providers: [NzModalService, NzMessageService, UserService, RoleService, { provide: CRUDService, useExisting: UserService }]
 })
 export class UserModule {}

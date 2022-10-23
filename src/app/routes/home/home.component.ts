@@ -1,7 +1,8 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, Inject, OnDestroy, OnInit } from '@angular/core';
 import { TokenService } from '@delon/auth';
-import { Menu, MenuService } from '@delon/theme';
+import { ALAIN_I18N_TOKEN, Menu, MenuService } from '@delon/theme';
 import { Subscription } from 'rxjs';
+import { I18NService } from 'src/app/core/service/i18n.service';
 import { MyApplicationService } from 'src/app/core/service/my-application.service';
 
 @Component({
@@ -9,15 +10,15 @@ import { MyApplicationService } from 'src/app/core/service/my-application.servic
   template: `
     <div style="margin-top:80px">
       <nz-avatar [nzSize]="64" nzIcon="user" style="color:#f56a00; background-color:#fde3cf;"></nz-avatar>
-      <span class="ml-md" style="font-size:24px; font-weight:bold; color:#767676"> {{ userName }} , 欢迎回来! </span>
+      <span class="ml-md" style="font-size:24px; font-weight:bold; color:#767676"> {{ userName }} , {{ 'home.welcome' | i18n }}! </span>
     </div>
 
     <nz-divider></nz-divider>
 
     <div style="text-align:center;" nz-row [nzGutter]="[16, 8]">
       <div style="text-align:center;" nz-col [nzSm]="12" [nzMd]="8" [nzLg]="6" *ngFor="let item of menuList">
-        <nz-card style="background:white">
-          <a style="font-size:20px" [routerLink]="[item.link]">{{ item.text }}</a>
+        <nz-card nzHoverable="true" style="background:white" [routerLink]="[item.link]">
+          <a style="font-size:20px">{{ item.text }}</a>
         </nz-card>
       </div>
     </div>
@@ -30,7 +31,12 @@ export class HomeComponent implements OnInit, OnDestroy {
   roleList: string[] = [];
 
   myInfoSubscription: Subscription | undefined;
-  constructor(private app: MyApplicationService, private menu: MenuService, private token: TokenService) {}
+  constructor(
+    private app: MyApplicationService,
+    private menu: MenuService,
+    private token: TokenService,
+    @Inject(ALAIN_I18N_TOKEN) public i18n: I18NService
+  ) {}
   ngOnDestroy(): void {
     this.myInfoSubscription?.unsubscribe();
   }
@@ -46,7 +52,7 @@ export class HomeComponent implements OnInit, OnDestroy {
 
   private setMenu(menuList: Menu[]) {
     menuList.forEach(item => {
-      if (item.link && this.hasRoleToAccessMenu(item.acl as string[])) {
+      if (item.link && item.link !== '' && this.hasRoleToAccessMenu(item.acl as string[]) && !item.group) {
         this.menuList.push(item);
       }
 
@@ -60,7 +66,7 @@ export class HomeComponent implements OnInit, OnDestroy {
     let canAccess = false;
 
     for (let role of this.roleList) {
-      if (menuAcl.includes(role)) {
+      if (menuAcl && menuAcl.includes(role)) {
         canAccess = true;
         break;
       }

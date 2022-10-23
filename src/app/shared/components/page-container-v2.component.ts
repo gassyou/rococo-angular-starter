@@ -28,6 +28,8 @@ import { Menu, MenuService } from '@delon/theme';
         <ng-container *ngFor="let operation of operations">
           <button
             nz-button
+            [acl]="operation.acl"
+            [nzLoading]="operation.loading ? operation.loading : false"
             *ngIf="!operation.children; else moreAction"
             [nzType]="operation.type ? operation.type : 'primary'"
             (click)="operation?.onClick()"
@@ -44,7 +46,7 @@ import { Menu, MenuService } from '@delon/theme';
             </button>
             <nz-dropdown-menu #menu="nzDropdownMenu">
               <ul nz-menu>
-                <li nz-menu-item *ngFor="let item of operation.children">
+                <li nz-menu-item *ngFor="let item of operation.children" [acl]="item.acl">
                   <a (click)="item?.onClick()">
                     <i *ngIf="item.icon" nz-icon [nzType]="item.icon"></i>
                     {{ item.text }}
@@ -58,6 +60,7 @@ import { Menu, MenuService } from '@delon/theme';
     </div>
     <div class="content">
       <app-advance-search-v2
+        [searchAcl]="searchAcl"
         *ngIf="advanceSearchForm"
         [advanceSearchForm]="advanceSearchForm"
         [simpleSearchKeys]="simpleSearchKeys"
@@ -87,6 +90,7 @@ export class PageContainerV2Component {
   @Input() simpleSearchKeys: string[] | null | undefined;
 
   @Input() operations: Operation[] = [];
+  @Input() searchAcl: any;
 
   @Input()
   inlineMode = false;
@@ -101,4 +105,5 @@ export interface Operation {
   type?: 'primary' | 'default' | 'dashed' | 'link' | 'text';
   icon?: string;
   children?: Operation[];
+  loading?: boolean;
 }

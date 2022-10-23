@@ -1,6 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
+import { AlainThemeModule } from '@delon/theme';
 
 import { SharedModule } from '../shared/shared.module';
 import { HomeComponent } from './home/home.component';
@@ -9,6 +10,6 @@ import { RoutesRoutingModule } from './routes-routing.module';
 
 @NgModule({
   declarations: [HomeComponent],
-  imports: [CommonModule, RoutesRoutingModule, LayoutModule, SharedModule, FormsModule]
+  imports: [CommonModule, RoutesRoutingModule, LayoutModule, SharedModule, FormsModule, AlainThemeModule.forChild()]
 })
 export class RoutesModule {}

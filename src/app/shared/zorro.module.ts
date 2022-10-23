@@ -142,5 +142,5 @@ export const ZORRO_MODULES = [
 export const ngZorroConfig: NzConfig = {
   // 注意组件名称没有 nz 前缀
   message: { nzTop: 35, nzDuration: 3000 },
-  notification: { nzTop: 240, nzDuration: 3000  }
+  notification: { nzTop: 240, nzDuration: 3000 }
 };

@@ -67,10 +67,11 @@ export abstract class ListComponent implements OnDestroy {
     this.crudService.search(params);
   }
 
-  onSortChange($event: { key: string; value: string }) {
+  onSortChange($event: any) {
+    const currentSort = $event.sort.find((item: any) => item.value !== null);
     const params: SearchParams = { ...this.crudService.params };
-    params.sortName = $event.key;
-    params.sortValue = $event.value;
+    params.sortName = currentSort?.key;
+    params.sortValue = currentSort?.value;
     this.crudService.search(params);
   }
 

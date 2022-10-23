@@ -2,7 +2,6 @@ import { Injectable } from '@angular/core';
 import { ActivatedRouteSnapshot, CanActivate, CanActivateChild, Router, RouterStateSnapshot } from '@angular/router';
 import { TokenService } from '@delon/auth';
 import { MenuService } from '@delon/theme';
-import { environment } from '@env/environment';
 import { Observable, of } from 'rxjs';
 import { switchMap } from 'rxjs/operators';
 
@@ -13,13 +12,7 @@ export class AuthGuard implements CanActivate, CanActivateChild {
   constructor(private router: Router, private myApp: MyApplicationService, private token: TokenService, private menu: MenuService) {}
 
   canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<boolean> | boolean {
-    if (environment.demo) {
-      if (this.token.get().uid !== '0001') {
-        this.router.navigate([this.myApp.loginPageUrl]);
-        return false;
-      }
-      return true;
-    }
+
     if (!this.myApp.isLogined()) {
       return this.myApp.autoLogin().pipe(
         switchMap((data: any) => {

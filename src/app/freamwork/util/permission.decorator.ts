@@ -7,9 +7,10 @@ const ACL_DECORATORS = '__acl_decorators__';
 const ACL_INFO_NAME = 'acl_info_data';
 
 export interface ActionCofing {
-  module: string;
-  action: string;
-  tab: string;
+  id?: number;
+  module?: string;
+  action?: string;
+  tab?: string;
 }
 
 export interface ActionPropertyCofing {
@@ -27,7 +28,7 @@ export interface ActionPropertyCofing {
 export function UsingAcl(aclList: string[], messageInfo?: string) {
   return (target: any, name: string, descriptor: PropertyDescriptor) => {
     const method = descriptor.value;
-    descriptor.value = function (...args) {
+    descriptor.value = function (...args: any) {
       const roleList = DecoratorService.getAclService().data['roles'];
 
       if (hasPermission(roleList, aclList)) {
@@ -61,6 +62,24 @@ export function ACL(moduleName: string, actionName: string, tabName?: string) {
   };
 }
 
+/**
+ * 根据FunctionID，从缓存中获取某个按钮所需要的权限集合
+ */
+export function AclById(id: number) {
+  return (target: any, key: string) => {
+    if (!target[ACL_DECORATORS]) {
+      target[ACL_DECORATORS] = [];
+    }
+
+    (target[ACL_DECORATORS] as ActionPropertyCofing[]).push({
+      name: key,
+      config: {
+        id: id
+      }
+    });
+  };
+}
+
 export function ACLConfig() {
   return (target: any, name: string, descriptor: PropertyDescriptor) => {
     if (!target[ACL_DECORATORS] || (target[ACL_DECORATORS] as ActionCofing[]).length <= 0) {
@@ -68,9 +87,13 @@ export function ACLConfig() {
     }
 
     const originalMethod = descriptor.value;
-    descriptor.value = function (...args) {
+    descriptor.value = function (...args: any) {
       (target[ACL_DECORATORS] as ActionPropertyCofing[]).forEach(item => {
-        getAcl(item.config.module, item.config.action, item.config.tab).subscribe(data => (this[item.name] = data));
+        if (item.config.id) {
+          getAclById(item.config.id).subscribe(data => (this[item.name] = data));
+        } else {
+          getAcl(item.config.module, item.config.action, item.config.tab).subscribe(data => (this[item.name] = data));
+        }
       });
 
       originalMethod.apply(this, args);
@@ -78,7 +101,17 @@ export function ACLConfig() {
   };
 }
 
-export function getAcl(moduleName: string, actionName: string, tabName?: string): Observable<any[]> {
+export function getAclById(functionId: number): Observable<any[]> {
+  return DecoratorService.getMyAppService()
+    .getACLInfo()
+    .pipe(
+      map((response: any[]) => {
+        return getAclByFunctionID(response, functionId);
+      })
+    );
+}
+
+export function getAcl(moduleName: string | undefined, actionName: string | undefined, tabName?: string): Observable<any[]> {
   return DecoratorService.getMyAppService()
     .getACLInfo()
     .pipe(
@@ -93,7 +126,11 @@ export function saveAclInfoToLocalStorage(data: any[]) {
 }
 
 export function getACLInfoFromLocalStorage(): any[] {
-  return JSON.parse(localStorage.getItem(ACL_INFO_NAME));
+  const acl = localStorage.getItem(ACL_INFO_NAME);
+  if (!acl) {
+    return [];
+  }
+  return JSON.parse(acl);
 }
 
 export function removeACLInfoFromLocalStorage(): void {
@@ -101,7 +138,7 @@ export function removeACLInfoFromLocalStorage(): void {
 }
 
 export function hasAclInfoInLocalStorage(): boolean {
-  return localStorage.hasItem(ACL_INFO_NAME);
+  return localStorage.getItem(ACL_INFO_NAME) !== null;
 }
 
 // permission : 该登录用户拥有的权限
@@ -127,7 +164,22 @@ export function hasPermission(permission: any[], aclList: any[]): boolean {
   return false;
 }
 
-function getAclByName(aclInfo: any[], moduleName: string, actionName: string, tabName?: string): any[] {
+function getAclByFunctionID(aclInfo: any[], funcitonId: number): any[] {
+  const aclObject = aclInfo.filter(item => {
+    return item.id === funcitonId;
+  });
+  if (!aclObject || aclObject.length <= 0 || !aclObject[0].acl) {
+    return [];
+  } else {
+    return aclObject[0].acl;
+  }
+}
+
+function getAclByName(aclInfo: any[], moduleName: string | undefined, actionName: string | undefined, tabName?: string): any[] {
+  if (!moduleName || !actionName) {
+    return [];
+  }
+
   const aclObject = aclInfo.filter(item => {
     return item.pageName === moduleName && (tabName ? item.tag === tabName : true) && item.i18n === actionName;
   });
@@ -135,6 +187,6 @@ function getAclByName(aclInfo: any[], moduleName: string, actionName: string, ta
   if (!aclObject || aclObject.length <= 0 || !aclObject[0].acl) {
     return [];
   } else {
-    return aclObject[0].acl.split(',');
+    return aclObject[0].acl;
   }
 }
