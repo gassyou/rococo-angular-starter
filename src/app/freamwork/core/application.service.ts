@@ -21,8 +21,7 @@ import { ResponseData, ResponseContentData } from './response-data';
   providedIn: 'root'
 })
 export abstract class ApplicationService {
-
-  public appName: string = '';
+  public appName: string = 'app.name';
   public loginUrl: string = '';
   public myInfoUrl: string = '';
   public myInfoEditUrl: string = '';

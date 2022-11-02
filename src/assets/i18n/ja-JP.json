@@ -1,5 +1,6 @@
 {
   "app": {
+    "name": "Demo Application",
     "myInfo": "個人情報",
     "editMyPw": "パスワード変更",
     "logOut": "ログアウト",

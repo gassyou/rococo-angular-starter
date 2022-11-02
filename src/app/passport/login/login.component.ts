@@ -96,13 +96,8 @@ export class LoginComponent implements OnInit {
   @CheckForm('loginForm')
   login() {
     this.islogining = true;
-    this.myApp.login(this.loginForm?.value).subscribe(
-      () => {
-        this.islogining = false;
-      },
-      () => {
-        this.islogining = false;
-      }
-    );
+    this.myApp.login(this.loginForm?.value).subscribe(() => {
+      this.islogining = false;
+    });
   }
 }
