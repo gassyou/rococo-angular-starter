@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Menu, MenuService } from '@delon/theme';
-import { Observable, zip } from 'rxjs';
+import { Observable, of, zip } from 'rxjs';
 import { map } from 'rxjs/operators';
 
 import { MyApplicationService } from './my-application.service';
@@ -14,6 +14,7 @@ export class StartupService {
   constructor(private menuService: MenuService, private myApp: MyApplicationService) {}
 
   load(): Observable<void> {
+    // return of();
     return zip(this.myApp.getACLInfo(), this.myApp.getMenuData()).pipe(
       map(([aclInfo, menu]: any[]) => {
         if (menu) {

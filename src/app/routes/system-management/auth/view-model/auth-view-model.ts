@@ -1,14 +1,13 @@
-import { Type, ViewContainerRef } from "@angular/core";
-import {
-  viewModelFactory,
-} from "src/app/core/service/core/auth.service";
-import { Tree } from "src/app/freamwork/util/tree/tree";
-import { FunctionModel } from "src/app/routes/system-management/auth/entity/function-model";
-import { AuthBaseComponent } from "../component/auth-base.component";
+import { Type, ViewContainerRef } from '@angular/core';
+import { viewModelFactory } from 'src/app/core/service/core/auth.service';
+import { Tree } from 'src/app/freamwork/util/tree/tree';
+import { FunctionModel } from 'src/app/routes/system-management/auth/entity/function-model';
+
+import { AuthBaseComponent } from '../component/auth-base.component';
 
 export abstract class AuthViewModel implements Tree {
   public rank = 1;
-  public titleBackgroundColor = "hsl(220, 50%, 50%)";
+  public titleBackgroundColor = 'hsl(220, 50%, 50%)';
 
   public isCollapsed = false;
   public isChecked = false;
@@ -16,13 +15,10 @@ export abstract class AuthViewModel implements Tree {
   public abstract add(component: AuthViewModel): void;
   public abstract getChildren(): AuthViewModel[];
 
-  constructor(
-    public component: Type<AuthBaseComponent>,
-    public data: FunctionModel
-  ) {}
+  constructor(public component: Type<AuthBaseComponent>, public data: FunctionModel) {}
 
   get key(): string {
-    return this.data.id + "";
+    return `${this.data.id}`;
   }
 
   get showCollapse(): boolean {
@@ -30,44 +26,41 @@ export abstract class AuthViewModel implements Tree {
   }
 
   get titleIcon(): string {
-    if (this.data.moduleType === "module") {
-      return "appstore";
+    if (this.data.moduleType === 'module') {
+      return 'appstore';
     }
-    if (this.data.moduleType === "page") {
-      return "file";
+    if (this.data.moduleType === 'page') {
+      return 'file';
     }
-    return "folder";
+    return 'folder';
   }
 
   get icon(): string {
     if (this.data.icon) {
-      return this.data.icon.split("anticon-")[1];
+      return this.data.icon.split('anticon-')[1];
     } else {
-      return "";
+      return '';
     }
   }
 
   get showModuleButton(): boolean {
-    return this.data.moduleType === "module" && this.data.isTopNode;
+    return this.data.moduleType === 'module' && this.data.isTopNode;
   }
 
   get showPageButton(): boolean {
-    return this.data.moduleType === "module";
+    return this.data.moduleType === 'module';
   }
 
   get showTabButton(): boolean {
-    return this.data.moduleType === "page";
+    return this.data.moduleType === 'page';
   }
 
   get showActionButton(): boolean {
-    return this.data.moduleType === "page" || this.data.moduleType === "tab";
+    return this.data.moduleType === 'page' || this.data.moduleType === 'tab';
   }
 
   get showActionContainer(): boolean {
-    return (
-      this.hasChildren &&
-      (this.data.moduleType === "page" || this.data.moduleType === "tab")
-    );
+    return this.hasChildren && (this.data.moduleType === 'page' || this.data.moduleType === 'tab');
   }
 
   get hasChildren(): boolean {
@@ -88,7 +81,7 @@ export abstract class AuthViewModel implements Tree {
     }
 
     if (this.getChildren() && this.getChildren().length > 0) {
-      this.getChildren().forEach((child) => {
+      this.getChildren().forEach(child => {
         child.fetchAllFunctionId(result, onlyChecked);
       });
     }
@@ -133,7 +126,7 @@ export abstract class AuthViewModel implements Tree {
     this.isChecked = roleFunList && roleFunList.includes(this.data.id);
 
     if (this.getChildren() && this.getChildren().length > 0) {
-      this.getChildren().forEach((child) => {
+      this.getChildren().forEach(child => {
         child.changeCheckStatus(roleFunList);
       });
     }
@@ -148,9 +141,7 @@ export abstract class AuthViewModel implements Tree {
       viewRef.clear();
     }
 
-    const componentRef = viewRef.createComponent<AuthBaseComponent>(
-      this.component
-    );
+    const componentRef = viewRef.createComponent<AuthBaseComponent>(this.component);
 
     componentRef.instance.viewModel = this;
 
@@ -169,6 +160,6 @@ export abstract class AuthViewModel implements Tree {
         }
       });
     }
-    this.getChildren().forEach((child) => child.fillInChildren(datasource));
+    this.getChildren().forEach(child => child.fillInChildren(datasource));
   }
 }

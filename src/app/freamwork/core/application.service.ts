@@ -21,6 +21,8 @@ import { ResponseData, ResponseContentData } from './response-data';
   providedIn: 'root'
 })
 export abstract class ApplicationService {
+
+  public appName: string = '';
   public loginUrl: string = '';
   public myInfoUrl: string = '';
   public myInfoEditUrl: string = '';
@@ -189,7 +191,7 @@ export abstract class ApplicationService {
    * 获取各个画面的按钮的ACL信息
    */
   public getACLInfo(): Observable<any> {
-    if (this.demoActionWithACLInfo && this.demoActionWithACLInfo.length > 0) {
+    if (this.demoActionWithACLInfo) {
       this.cache.set(this.actionAclUrl, {
         meta: { success: true },
         data: this.demoActionWithACLInfo

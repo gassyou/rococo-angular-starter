@@ -1,7 +1,7 @@
-import { TreeDataSource } from "src/app/freamwork/util/tree/tree-datasource";
+import { TreeDataSource } from 'src/app/freamwork/util/tree/tree-datasource';
 
 export class FunctionModel extends TreeDataSource {
-  public moduleType!: "module" | "page" | "tab" | "action";
+  public moduleType!: 'module' | 'page' | 'tab' | 'action';
   public text!: string;
   public i18n?: string;
   public parentText?: string;
@@ -23,7 +23,7 @@ export class FunctionModel extends TreeDataSource {
   }
   get parentName(): string {
     let name = this.parentI18n ? this.parentI18n : this.parentText;
-    return name ? name : "common.none";
+    return name ? name : 'common.none';
   }
 
   get name(): string {
