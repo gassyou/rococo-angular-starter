@@ -56,7 +56,7 @@ export class MyApplicationService extends ApplicationService {
 
     super.demoMenuWithAclInfo = [
       new FunctionModel({ id: 1, i18n: '', groupFlag: 1, childCount: 1, module: 'module', text: 'DEMO系统', acl: [1] }),
-      new FunctionModel({ id: 2, i18n: '', childCount: 0, parentId: 1, module: 'page', text: '首页', acl: [1] }),
+      new FunctionModel({ id: 2, i18n: '', childCount: 0, parentId: 1, module: 'page', text: '首页', acl: [1], link: '/home' }),
       new FunctionModel({ id: 3, i18n: '', childCount: 3, parentId: 1, module: 'module', text: '系统管理', acl: [1] }),
       new FunctionModel({
         id: 4,
