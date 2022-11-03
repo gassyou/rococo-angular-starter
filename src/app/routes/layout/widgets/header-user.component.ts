@@ -30,7 +30,7 @@ import { MyInfoComponent } from './my-info.component';
         </div>
         <div nz-menu-item nz-dropdown [nzDropdownMenu]="langMenu" nzPlacement="left">
           <i nz-icon nzType="global" class="mr-sm"></i>
-          {{ 'menu.lang' | i18n }}
+          {{ 'app.changLang' | i18n }}
         </div>
         <nz-dropdown-menu #langMenu="nzDropdownMenu">
           <ul nz-menu>

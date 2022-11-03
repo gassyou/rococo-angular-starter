@@ -12,7 +12,7 @@ import { CheckForm } from 'src/app/freamwork/util/form-valid-checker';
         <h1 class="title">{{ myApp.appName | i18n }}</h1>
         <form nz-form [formGroup]="loginForm">
           <nz-form-item>
-            <nz-form-control nzErrorTip="{{ 'login.userPlaceholder' | i18n }}">
+            <nz-form-control nzErrorTip="{{ 'common.msg.requireErr' | i18n: { item: 'login.user' } }}">
               <nz-input-group nzPrefixIcon="user" nzSize="large">
                 <input formControlName="account" nz-input placeholder="{{ 'login.user' | i18n }}" />
               </nz-input-group>
@@ -20,7 +20,7 @@ import { CheckForm } from 'src/app/freamwork/util/form-valid-checker';
           </nz-form-item>
 
           <nz-form-item>
-            <nz-form-control nzErrorTip="{{ 'login.userPlaceholder' | i18n }}">
+            <nz-form-control nzErrorTip="{{ 'common.msg.requireErr' | i18n: { item: 'login.pw' } }}">
               <nz-input-group nzPrefixIcon="lock" [nzSuffix]="suffixTemplate" nzSize="large">
                 <input
                   formControlName="password"

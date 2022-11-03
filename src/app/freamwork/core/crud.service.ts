@@ -122,7 +122,7 @@ export abstract class CRUDService {
    */
   public add(param: any): Observable<any> | null {
     if (this.demoDataSource && this.demoDataSource.length > 0) {
-      this.message.info('添加成功');
+      this.message.success(this.i18n.fanyi('common.msg.handle-ok'));
       param.id = this.demoDataSource.length + 1;
       this.demoDataSource.push(param);
       this.search();
@@ -138,7 +138,7 @@ export abstract class CRUDService {
     return this.http.post(this.addUrl, param).pipe(
       map((response: any) => {
         if (response['meta']['success']) {
-          this.message.success(this.i18n.fanyi('common.handle-ok'));
+          this.message.success(this.i18n.fanyi('common.msg.handle-ok'));
           this.search();
           // 无返回则直接返回true，否则弹出框无法关闭
           if (this.afterFormCommit && response.data) {
@@ -164,7 +164,7 @@ export abstract class CRUDService {
    */
   public update(param: any): Observable<any> | null {
     if (this.demoDataSource && this.demoDataSource.length > 0) {
-      this.message.info('修改成功');
+      this.message.success(this.i18n.fanyi('common.msg.handle-ok'));
       this.demoDataSource = this.demoDataSource.map((item: any) => {
         if (item.id === param.id) {
           item = { ...param };
@@ -184,7 +184,7 @@ export abstract class CRUDService {
     return this.http.post(this.updateUrl, param).pipe(
       map((response: any) => {
         if (response['meta']['success']) {
-          this.message.success(this.i18n.fanyi('common.handle-ok'));
+          this.message.success(this.i18n.fanyi('common.msg.handle-ok'));
           this.search();
           // 无返回则直接返回true，否则弹出框无法关闭
           if (this.afterFormCommit && response.data) {
@@ -211,7 +211,7 @@ export abstract class CRUDService {
    */
   public delete(id: number): Observable<any> | null {
     if (this.demoDataSource && this.demoDataSource.length > 0) {
-      this.message.info('删除成功');
+      this.message.success(this.i18n.fanyi('common.msg.handle-ok'));
       this.demoDataSource = this.demoDataSource.filter((item: any) => {
         return item.id !== id;
       });
@@ -229,7 +229,7 @@ export abstract class CRUDService {
     return this.http.post(`${this.deleteUrl}/${id}`).pipe(
       map((response: any) => {
         if (response['meta']['success']) {
-          this.message.success(this.i18n.fanyi('common.handle-ok'));
+          this.message.success(this.i18n.fanyi('common.msg.handle-ok'));
           this.search();
           return response.data;
         } else {
@@ -242,7 +242,7 @@ export abstract class CRUDService {
 
   public deleteBatch(idList: number[]): Observable<any> | null {
     if (this.demoDataSource && this.demoDataSource.length > 0) {
-      this.message.info('删除成功');
+      this.message.success(this.i18n.fanyi('common.msg.handle-ok'));
 
       idList.forEach(item => {
         this.demoDataSource = this.demoDataSource.filter((item: any) => {
@@ -264,7 +264,7 @@ export abstract class CRUDService {
     return this.http.post(this.deleteUrl, [...idList]).pipe(
       map((response: any) => {
         if (response['meta']['success']) {
-          this.message.success(this.i18n.fanyi('common.handle-ok'));
+          this.message.success(this.i18n.fanyi('common.msg.handle-ok'));
           this.search();
           return response.data;
         } else {

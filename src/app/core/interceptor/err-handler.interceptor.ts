@@ -26,41 +26,41 @@ export class ErrorHandlerInterceptor implements HttpInterceptor {
     return next.handle(request).pipe(
       catchError((error: any, caught: Observable<HttpEvent<any>>) => {
         if (error['name'] === 'TimeoutError') {
-          this.message.error(this.i18n.fanyi('commonErrMsg.requestTimeout'));
-          return throwError(error.error);
+          this.message.error(this.i18n.fanyi('common.msg.requestTimeout'));
+          return throwError(() => new Error(error.error));
         }
 
         if (error instanceof HttpErrorResponse) {
           switch ((<HttpErrorResponse>error).status) {
             case 400:
-              this.message.error(this.i18n.fanyi('commonErrMsg.dataNotExisted'));
-              return throwError(error.error);
+              this.message.error(this.i18n.fanyi('common.msg.dataNotExisted'));
+              return throwError(() => new Error(error.error));
             case 401:
               this.modalSrv.closeAll();
               this.message.remove();
               this.app.logout();
-              this.message.error(this.i18n.fanyi('commonErrMsg.authError'));
-              return throwError(error.error);
+              this.message.error(this.i18n.fanyi('common.msg.authError'));
+              return throwError(() => new Error(error.error));
             case 403:
               this.router.navigate(['/exception/403']);
               return throwError(error.error);
             case 404:
               this.router.navigate(['/exception/404']);
-              return throwError(error.error);
+              return throwError(() => new Error(error.error));
             case 410:
               this.modalSrv.closeAll();
               this.message.remove();
               this.app.logout();
-              this.message.error(this.i18n.fanyi('commonErrMsg.loginError'));
-              return throwError(error.error);
+              this.message.error(this.i18n.fanyi('common.msg.loginError'));
+              return throwError(() => new Error(error.error));
             case 500:
-              return throwError(error.error);
+              return throwError(() => new Error(error.error));
             case 511:
               this.modalSrv.closeAll();
               this.message.remove();
               this.app.logout();
               this.message.error(error.error.meta?.message);
-              return throwError(error.error);
+              return throwError(() => new Error(error.error));
           }
         }
         return error;

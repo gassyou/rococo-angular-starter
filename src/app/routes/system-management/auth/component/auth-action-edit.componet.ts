@@ -7,21 +7,20 @@ import { FormComponent } from 'src/app/freamwork/core/form-component';
 import { FunctionModel } from 'src/app/routes/system-management/auth/entity/function-model';
 import { emptyValidator } from 'src/app/shared/empty.validator';
 
-
 @Component({
   selector: 'app-auth-page-edit',
   template: `
     <form nz-form [formGroup]="editForm" se-container="1" labelWidth="100">
       <se label="{{ 'auth.lblParent' | i18n }}">
-        <div>{{ (value ? value.parentName : 'common.none') | i18n }}</div>
+        <div>{{ (value ? value.parentName : 'common.lbl.none') | i18n }}</div>
       </se>
 
       <se required label="{{ 'auth.lblText' | i18n }}" [error]="textError">
-        <input nz-input formControlName="text" placeholder="{{ 'auth.lblTextPlaceholder' | i18n }}" />
+        <input nz-input formControlName="text" placeholder="{{ 'auth.lblText' | i18n }}" />
       </se>
 
       <se label="{{ 'auth.lblI18n' | i18n }}" [error]="i18nError">
-        <input nz-input formControlName="i18n" placeholder="{{ 'auth.lblI18nPlaceholder' | i18n }}" />
+        <input nz-input formControlName="i18n" placeholder="{{ 'auth.lblI18n' | i18n }}" />
       </se>
     </form>
   `,
@@ -32,21 +31,13 @@ export class AuthActionEditComponent extends FormComponent implements OnInit {
   value?: FunctionModel;
 
   textError = {
-    required: this.i18n.fanyi('auth.lblTextPlaceholder'),
-    maxlength: this.i18n.fanyi('auth.lblTextLengthError'),
-    validateNull: this.i18n.fanyi('commonErrMsg.validateNull')
+    required: this.i18n.fanyi('common.msg.requireErr', { item: 'auth.lblText' }),
+    maxlength: this.i18n.fanyi('common.msg.maxLengthErr', { item: 'auth.lblText', length: 100 }),
+    empty: this.i18n.fanyi('common.msg.empty')
   };
   i18nError = {
-    maxlength: this.i18n.fanyi('auth.lblI18nLengthError'),
-    validateNull: this.i18n.fanyi('commonErrMsg.validateNull')
-  };
-  iconError = {
-    maxlength: this.i18n.fanyi('auth.lblIconLengthError'),
-    validateNull: this.i18n.fanyi('commonErrMsg.validateNull')
-  };
-  linkError = {
-    maxlength: this.i18n.fanyi('auth.lblLinkLengthError'),
-    validateNull: this.i18n.fanyi('commonErrMsg.validateNull')
+    maxlength: this.i18n.fanyi('common.msg.maxLengthErr', { item: 'auth.lblI18n', length: 100 }),
+    empty: this.i18n.fanyi('common.msg.empty')
   };
 
   constructor(public authService: AuthService, public fb: UntypedFormBuilder, @Inject(ALAIN_I18N_TOKEN) public i18n: I18NService) {

@@ -1,5 +1,7 @@
-import { Component, Input, OnInit, Optional, SkipSelf } from '@angular/core';
+import { Component, Inject, Input, OnInit, Optional, SkipSelf } from '@angular/core';
 import { SFSchema } from '@delon/form';
+import { ALAIN_I18N_TOKEN } from '@delon/theme';
+import { I18NService } from 'src/app/core/service/i18n.service';
 import { SearchComponent } from 'src/app/freamwork/core/search-component';
 
 import { CRUDService } from '../../freamwork/core/crud.service';
@@ -45,9 +47,9 @@ import { CRUDService } from '../../freamwork/core/crud.service';
       <nz-card class="sk">
         <sf #sf [formData]="advanceSearchValue" [schema]="form" button="none" compact="true"> </sf>
         <div class="modal-footer">
-          <button nz-button nzSize="small" (click)="reset()">重置 </button>
+          <button nz-button nzSize="small" (click)="reset()">{{ 'common.action.reset' | i18n }} </button>
 
-          <button nz-button nzType="primary" nzSize="small" (click)="advanceSearch(sf.value)">查询 </button>
+          <button nz-button nzType="primary" nzSize="small" (click)="advanceSearch(sf.value)">{{ 'common.action.search' | i18n }} </button>
         </div>
       </nz-card>
     </ng-template> `,
@@ -86,7 +88,7 @@ import { CRUDService } from '../../freamwork/core/crud.service';
   ]
 })
 export class AdvanceSearchComponent extends SearchComponent {
-  @Input() placeholder: string = '查询';
+  @Input() placeholder: string = this.i18n.fanyi('common.action.search');
 
   @Input('advanceSearchForm')
   form: SFSchema | Component | null = null;
@@ -100,7 +102,7 @@ export class AdvanceSearchComponent extends SearchComponent {
 
   isAdvanceMode: boolean = false;
 
-  constructor(@Optional() @SkipSelf() public searchService: CRUDService) {
+  constructor(@Optional() @SkipSelf() public searchService: CRUDService, @Inject(ALAIN_I18N_TOKEN) private i18n: I18NService) {
     super(searchService);
   }
 

@@ -20,17 +20,17 @@ import { CRUDService } from '../../freamwork/core/crud.service';
       >
       </sf>
       <div [acl]="searchAcl" [style.text-align]="inlineMode ? 'left' : 'center'" [style.width]="inlineMode ? '180px' : '100%'">
-        <button nz-button (click)="reset()">{{ 'common.reset' | i18n }} </button>
-        <button nz-button nzType="primary" (click)="advanceSearch(sf.value)">{{ 'common.search' | i18n }} </button>
-        <button *ngIf="isShowExport" nz-button (click)="export(sf.value)">{{ 'common.export' | i18n }} </button>
+        <button nz-button (click)="reset()">{{ 'common.action.reset' | i18n }} </button>
+        <button nz-button nzType="primary" (click)="advanceSearch(sf.value)">{{ 'common.action.search' | i18n }} </button>
+        <button *ngIf="isShowExport" nz-button (click)="export(sf.value)">{{ 'common.action.export' | i18n }} </button>
         <a *ngIf="canExpand" nz-button nzType="link" (click)="onExpand(!isExpanded)">
           <span *ngIf="isExpanded">
             <i nz-icon nzType="up" nzTheme="outline" class="mr-sm"></i>
-            {{ 'common.hidden' | i18n }}
+            {{ 'common.action.hidden' | i18n }}
           </span>
           <span *ngIf="!isExpanded">
             <i nz-icon nzType="down" nzTheme="outline" class="mr-sm"></i>
-            {{ 'common.open' | i18n }}
+            {{ 'common.action.open' | i18n }}
           </span>
         </a>
       </div>
@@ -73,7 +73,7 @@ import { CRUDService } from '../../freamwork/core/crud.service';
 export class AdvanceSearchV2Component extends SearchComponent implements AfterViewInit {
   @ViewChild('sf', { static: true }) sf!: SFComponent;
 
-  @Input() placeholder: string = '查询';
+  @Input() placeholder: string = this.i18n.fanyi('common.action.search');
 
   @Input() searchAcl: any;
 

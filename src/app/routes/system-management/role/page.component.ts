@@ -35,11 +35,11 @@ import { EditComponent } from './edit.component';
       >
         <thead>
           <tr>
-            <th>{{ 'common.no' | i18n }}</th>
+            <th>{{ 'common.lbl.no' | i18n }}</th>
             <th>{{ 'role.name' | i18n }}</th>
             <th>{{ 'role.remark' | i18n }}</th>
-            <th>{{ 'common.enable' | i18n }}</th>
-            <th>{{ 'common.operate' | i18n }}</th>
+            <th>{{ 'common.lbl.enable' | i18n }}</th>
+            <th>{{ 'common.lbl.operate' | i18n }}</th>
           </tr>
         </thead>
         <tbody>
@@ -54,18 +54,18 @@ import { EditComponent } from './edit.component';
             </td>
             <td>
               <span *aclIf="editAcl">
-                <a (click)="edit(data)">{{ 'role.edit' | i18n }}</a>
+                <a (click)="edit(data)">{{ 'common.action.edit' | i18n }}</a>
                 <nz-divider nzType="vertical"></nz-divider>
               </span>
 
               <span *aclIf="passwordChangeAcl">
                 <a
                   nz-popconfirm
-                  nzPopconfirmTitle="{{ 'common.delete-confirm' | i18n }}?"
-                  nzOkText="{{ 'common.ok' | i18n }}"
-                  nzCancelText="{{ 'common.cancel' | i18n }}"
+                  nzPopconfirmTitle="{{ 'common.msg.delete-confirm' | i18n }}?"
+                  nzOkText="{{ 'common.action.ok' | i18n }}"
+                  nzCancelText="{{ 'common.action.cancel' | i18n }}"
                   (nzOnConfirm)="deleteData(data)"
-                  >{{ 'common.delete' | i18n }}</a
+                  >{{ 'common.action.delete' | i18n }}</a
                 >
                 <nz-divider nzType="vertical"></nz-divider>
               </span>
@@ -73,7 +73,7 @@ import { EditComponent } from './edit.component';
           </tr>
         </tbody>
       </nz-table>
-      <ng-template #totalTemplate let-total> {{ 'common.total' | i18n }} {{ total }} {{ 'common.record' | i18n }} </ng-template>
+      <ng-template #totalTemplate let-total>{{ 'common.lbl.totalRecord' | i18n: { total: total } }} </ng-template>
     </app-page-v2>
   `,
   styles: []
@@ -86,7 +86,7 @@ export class PageComponent extends ListComponent implements OnInit {
       remark: { type: 'string', title: this.i18n.fanyi('role.remark') },
       enable: {
         type: 'string',
-        title: this.i18n.fanyi('role.enable'),
+        title: this.i18n.fanyi('common.lbl.enable'),
         enum: [
           { label: this.i18n.fanyi('role.enableTrue'), value: '0' },
           { label: this.i18n.fanyi('role.enableFalse'), value: '1' }
@@ -140,9 +140,9 @@ export class PageComponent extends ListComponent implements OnInit {
 
   edit(data?: any) {
     super.openModal(
-      data ? this.i18n.fanyi('role.edit') : this.i18n.fanyi('role.addRole'),
-      this.i18n.fanyi('common.cancel'),
-      this.i18n.fanyi('common.ok'),
+      data ? this.i18n.fanyi('common.action.edit') : this.i18n.fanyi('common.action.add'),
+      this.i18n.fanyi('common.action.cancel'),
+      this.i18n.fanyi('common.action.ok'),
       EditComponent,
       data
     );
@@ -171,7 +171,7 @@ export class PageComponent extends ListComponent implements OnInit {
     super.init();
     this.operation = [
       {
-        text: this.i18n.fanyi('role.addRole'),
+        text: this.i18n.fanyi('common.action.add'),
         acl: this.addUserAcl,
         icon: 'plus',
         onClick: () => {

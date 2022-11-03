@@ -6,7 +6,7 @@ import { MyApplicationService } from '../core/service/my-application.service';
 
 @Component({
   template: ` <exception type="403" style="min-height: 500px; height: 80%;">
-    <button nz-button nzType="primary" (click)="goToLongin()">返回登录页</button>
+    <button nz-button nzType="primary" (click)="goToLongin()">{{ 'login.backLogin' | i18n }}</button>
   </exception>`,
   styles: []
 })

@@ -38,15 +38,15 @@ import { PasswordEditComponent } from './password-edit.component';
     >
       <thead>
         <tr>
-          <th>{{ 'user.no' | i18n }}</th>
+          <th>{{ 'common.lbl.no' | i18n }}</th>
           <th>{{ 'user.name' | i18n }}</th>
           <th>{{ 'user.account' | i18n }}</th>
           <th>{{ 'user.role' | i18n }}</th>
           <th>{{ 'user.email' | i18n }}</th>
           <th>{{ 'user.lastLoginTime' | i18n }}</th>
           <th>{{ 'user.lastLoginIp' | i18n }}</th>
-          <th>{{ 'user.startusing' | i18n }}</th>
-          <th>{{ 'user.operate' | i18n }}</th>
+          <th>{{ 'common.lbl.enable' | i18n }}</th>
+          <th>{{ 'common.lbl.operate' | i18n }}</th>
         </tr>
       </thead>
       <tbody>
@@ -65,7 +65,7 @@ import { PasswordEditComponent } from './password-edit.component';
           </td>
           <td>
             <span *aclIf="editAcl">
-              <a (click)="edit(data)">{{ 'user.edit' | i18n }}</a>
+              <a (click)="edit(data)">{{ 'common.action.edit' | i18n }}</a>
               <nz-divider nzType="vertical"></nz-divider>
             </span>
 
@@ -77,7 +77,7 @@ import { PasswordEditComponent } from './password-edit.component';
         </tr>
       </tbody>
     </nz-table>
-    <ng-template #totalTemplate let-total> {{ 'user.total' | i18n }}{{ total }} {{ 'user.record' | i18n }} </ng-template>
+    <ng-template #totalTemplate let-total> {{ 'common.lbl.totalRecord' | i18n: { total: total } }} </ng-template>
   </app-page-v2>`
 })
 export class PageComponent extends ListComponent implements OnInit {
@@ -145,7 +145,7 @@ export class PageComponent extends ListComponent implements OnInit {
     super.init();
     this.operation = [
       {
-        text: this.i18n.fanyi('user.addUser'),
+        text: this.i18n.fanyi('common.action.add'),
         acl: this.addUserAcl,
         icon: 'plus',
         onClick: () => {
@@ -167,9 +167,9 @@ export class PageComponent extends ListComponent implements OnInit {
 
   edit(data?: any) {
     super.openModal(
-      data ? this.i18n.fanyi('user.edit') : this.i18n.fanyi('user.addUser'),
-      this.i18n.fanyi('user.cancel'),
-      this.i18n.fanyi('user.ok'),
+      data ? this.i18n.fanyi('common.action.edit') : this.i18n.fanyi('common.action.add'),
+      this.i18n.fanyi('common.action.cancel'),
+      this.i18n.fanyi('common.action.ok'),
       EditComponent,
       data
     );
@@ -178,8 +178,8 @@ export class PageComponent extends ListComponent implements OnInit {
   updatePassword(data?: any) {
     super.openModal(
       this.i18n.fanyi('user.changePassword'),
-      this.i18n.fanyi('user.cancel'),
-      this.i18n.fanyi('user.ok'),
+      this.i18n.fanyi('common.action.cancel'),
+      this.i18n.fanyi('common.action.ok'),
       PasswordEditComponent,
       data
     );

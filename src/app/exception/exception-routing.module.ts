@@ -6,7 +6,7 @@ import { ExceptionNotFoundComponent } from './exception-not-found.component';
 
 const routes: Routes = [
   { path: '403', component: ExceptionNoAuthComponent },
-  { path: '404', component: ExceptionNotFoundComponent },
+  { path: '404', component: ExceptionNotFoundComponent }
 ];
 
 @NgModule({

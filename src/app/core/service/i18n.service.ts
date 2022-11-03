@@ -115,4 +115,16 @@ export class I18NService extends AlainI18nBaseService {
   getLangs(): Array<{ code: string; text: string; abbr: string }> {
     return this._langs;
   }
+
+  fanyi(path: string, params?: Record<string, unknown>): string {
+    if (params) {
+      Object.keys(params).forEach(key => {
+        const value: string = `${params[key]}`;
+        const valueI18n: string = this._data[value] || '';
+
+        params[key] = valueI18n ? valueI18n : params[key];
+      });
+    }
+    return super.fanyi(path, params);
+  }
 }

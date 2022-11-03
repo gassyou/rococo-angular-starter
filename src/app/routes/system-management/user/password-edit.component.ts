@@ -17,16 +17,16 @@ import { FormComponent } from 'src/app/freamwork/core/form-component';
             label="{{ 'user.newPassword' | i18n }}"
             required
             [error]="{
-              required: this.i18n.fanyi('user.askNewPsd'),
-              minlength: this.i18n.fanyi('user.minlength'),
-              maxlength: this.i18n.fanyi('user.maxlength')
+              required: this.i18n.fanyi('common.msg.requireErr', { item: 'user.newPassword' }),
+              minlength: this.i18n.fanyi('common.msg.minLengthErr', { item: 'user.newPassword', length: 6 }),
+              maxlength: this.i18n.fanyi('common.msg.maxLengthErr', { item: 'user.newPassword', length: 20 })
             }"
           >
             <nz-input-group [nzSuffix]="newPwTemplate">
               <input
                 [type]="newPWVisible ? 'text' : 'password'"
                 nz-input
-                placeholder="{{ 'user.askNewPsd' | i18n }}"
+                placeholder="{{ 'user.newPassword' | i18n }}"
                 formControlName="newPw"
               />
             </nz-input-group>
@@ -38,16 +38,16 @@ import { FormComponent } from 'src/app/freamwork/core/form-component';
             label="{{ 'user.newPasswordComfirm' | i18n }}"
             required
             [error]="{
-              required: this.i18n.fanyi('user.askNewPsdAgain'),
-              minlength: this.i18n.fanyi('user.minlength'),
-              maxlength: this.i18n.fanyi('user.maxlength')
+              required: this.i18n.fanyi('common.msg.requireErr', { item: 'user.newPasswordComfirm' }),
+              minlength: this.i18n.fanyi('common.msg.minLengthErr', { item: 'user.newPasswordComfirm', length: 6 }),
+              maxlength: this.i18n.fanyi('common.msg.maxLengthErr', { item: 'user.newPasswordComfirm', length: 20 })
             }"
           >
             <nz-input-group [nzSuffix]="newPwConfirmTemplate">
               <input
                 [type]="newPwConfirmVisible ? 'text' : 'password'"
                 nz-input
-                placeholder="{{ 'user.askNewPsdAgain' | i18n }}"
+                placeholder="{{ 'user.newPasswordComfirm' | i18n }}"
                 formControlName="newPwConfirm"
               />
             </nz-input-group>

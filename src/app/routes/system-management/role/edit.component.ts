@@ -15,24 +15,24 @@ import { emptyValidator } from 'src/app/shared/empty.validator';
         label="{{ 'role.name' | i18n }}"
         required
         [error]="{
-          required: this.i18n.fanyi('role.namePlaceholder'),
-          maxlength: this.i18n.fanyi('role.nameMaxErrMsg'),
-          serverError: this.i18n.fanyi('role.nameIsExistErrMsg'),
-          validateNull: this.i18n.fanyi('commonErrMsg.validateNull')
+          required: this.i18n.fanyi('common.msg.requireErr', { item: 'role.name' }),
+          maxlength: this.i18n.fanyi('common.msg.maxLengthErr', { item: 'role.name', length: 32 }),
+          serverError: editForm?.controls['name'].errors.serverError,
+          empty: this.i18n.fanyi('common.msg.emptyErr')
         }"
       >
-        <input nz-input formControlName="name" placeholder="{{ 'role.namePlaceholder' | i18n }}" />
+        <input nz-input formControlName="name" placeholder="{{ 'role.name' | i18n }}" />
       </se>
 
       <se
         label="{{ 'role.remark' | i18n }}"
         [error]="{
-          maxlength: this.i18n.fanyi('role.remarkMaxErrMsg'),
-          validateNull: this.i18n.fanyi('commonErrMsg.validateNull')
+          maxlength: this.i18n.fanyi('common.msg.maxLengthErr', { item: 'role.remark', length: 200 }),
+          empty: this.i18n.fanyi('common.msg.emptyErr')
         }"
       >
         <nz-textarea-count [nzMaxCharacterCount]="200">
-          <textarea rows="3" nz-input formControlName="remark" placeholder="{{ 'role.remarkPlaceholder' | i18n }}"></textarea>
+          <textarea rows="3" nz-input formControlName="remark" placeholder="{{ 'role.remark' | i18n }}"></textarea>
         </nz-textarea-count>
       </se>
     </form>

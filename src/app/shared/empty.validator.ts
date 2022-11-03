@@ -5,7 +5,7 @@ export function emptyValidator(control: AbstractControl): { [key: string]: any }
   // value not blank
   if (v && v != null && typeof v === 'string' && v.trim() === '') {
     return {
-      validateNull: true
+      empty: true
     };
   }
   return null;

@@ -1,10 +1,13 @@
 import { Component, Inject, Input, OnInit } from '@angular/core';
-import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormControl, UntypedFormGroup, Validators } from '@angular/forms';
 import { ALAIN_I18N_TOKEN } from '@delon/theme';
+import { of } from 'rxjs';
+import { UserService } from 'src/app/core/service/core/user.service';
 import { I18NService } from 'src/app/core/service/i18n.service';
 import { MyApplicationService } from 'src/app/core/service/my-application.service';
 import { MyInfo } from 'src/app/freamwork/core/application.service';
 import { CheckForm } from 'src/app/freamwork/util/form-valid-checker';
+import { emptyValidator } from 'src/app/shared/empty.validator';
 
 @Component({
   selector: 'app-my-info',
@@ -13,7 +16,7 @@ import { CheckForm } from 'src/app/freamwork/util/form-valid-checker';
       <div nz-row class="info-div">
         <label nz-col [nzSm]="12" [nzXs]="12" class="info-label">
           <i nz-icon nzType="idcard"></i>
-          &nbsp;{{ 'app.account' | i18n }}
+          &nbsp;{{ 'user.account' | i18n }}
         </label>
 
         <label nz-col [nzSm]="12" [nzXs]="12" style="text-align: right">
@@ -23,7 +26,7 @@ import { CheckForm } from 'src/app/freamwork/util/form-valid-checker';
       <div nz-row class="info-div">
         <label nz-col [nzSm]="12" [nzXs]="12" class="info-label">
           <i nz-icon nzType="user"></i>
-          &nbsp;{{ 'app.userName' | i18n }}
+          &nbsp;{{ 'user.name' | i18n }}
         </label>
 
         <label nz-col [nzSm]="12" [nzXs]="12" style="text-align: right" *ngIf="!isEdit">
@@ -33,13 +36,16 @@ import { CheckForm } from 'src/app/freamwork/util/form-valid-checker';
         <ng-container *ngIf="isEdit">
           <nz-form-item style="width:100%">
             <nz-form-control [nzErrorTip]="nameErrorTpl">
-              <input nz-input formControlName="name" placeholder="{{ 'user.askName' | i18n }}" />
+              <input nz-input formControlName="name" placeholder="{{ 'user.name' | i18n }}" />
               <ng-template #nameErrorTpl let-control>
                 <ng-container *ngIf="control.hasError('maxlength')">
-                  {{ 'user.nameLength' | i18n }}
+                  {{ 'common.msg.maxLengthErr' | i18n: { item: 'user.name', length: 20 } }}
                 </ng-container>
                 <ng-container *ngIf="control.hasError('required')">
-                  {{ 'user.askName' | i18n }}
+                  {{ 'common.msg.requireErr' | i18n: { item: 'user.name' } }}
+                </ng-container>
+                <ng-container *ngIf="control.hasError('empty')">
+                  {{ 'common.msg.emptyErr' | i18n }}
                 </ng-container>
               </ng-template>
             </nz-form-control>
@@ -47,37 +53,10 @@ import { CheckForm } from 'src/app/freamwork/util/form-valid-checker';
         </ng-container>
       </div>
 
-      <!-- <div nz-row class="info-div">
-        <label nz-col [nzSm]="12" [nzXs]="12" class="info-label">
-          <i nz-icon nzType="phone"></i>
-          &nbsp;手机号
-        </label>
-
-        <label
-          nz-col
-          [nzSm]="12"
-          [nzXs]="12"
-          style="text-align: right"
-          *ngIf="!isEdit"
-        >
-          {{ value ? (value.phone ? value.phone : "") : "" }}&nbsp;
-        </label>
-
-        <ng-container *ngIf="isEdit">
-          <nz-form-control nzErrorTip="请输入11位手机号!">
-            <input
-              nz-input
-              formControlName="phone"
-              placeholder="请输入手机号"
-            />
-          </nz-form-control>
-        </ng-container>
-      </div> -->
-
       <div nz-row class="info-div">
         <label nz-col [nzSm]="12" [nzXs]="12" class="info-label">
           <i nz-icon nzType="mail"></i>
-          &nbsp;{{ 'app.mail' | i18n }}
+          &nbsp;{{ 'user.email' | i18n }}
         </label>
 
         <label nz-col [nzSm]="12" [nzXs]="12" style="text-align: right" *ngIf="!isEdit">
@@ -87,14 +66,20 @@ import { CheckForm } from 'src/app/freamwork/util/form-valid-checker';
         <ng-container *ngIf="isEdit">
           <nz-form-item style="width:100%">
             <nz-form-control [nzErrorTip]="mailErrorTpl">
-              <input nz-input formControlName="mail" placeholder="{{ 'user.askEmail' | i18n }}" />
+              <input nz-input formControlName="mail" placeholder="{{ 'user.email' | i18n }}" />
 
               <ng-template #mailErrorTpl let-control>
                 <ng-container *ngIf="control.hasError('maxlength')">
-                  {{ 'user.mailLength' | i18n }}
+                  {{ 'common.msg.maxLengthErr' | i18n: { item: 'user.email', length: 100 } }}
                 </ng-container>
                 <ng-container *ngIf="control.hasError('required')">
-                  {{ 'user.askEmail' | i18n }}
+                  {{ 'common.msg.requireErr' | i18n: { item: 'user.email' } }}
+                </ng-container>
+                <ng-container *ngIf="control.hasError('empty')">
+                  {{ 'common.msg.emptyErr' | i18n }}
+                </ng-container>
+                <ng-container *ngIf="control.hasError('serverError')">
+                  {{ myForm?.controls['mail'].errors.serverError }}
                 </ng-container>
               </ng-template>
             </nz-form-control>
@@ -105,7 +90,7 @@ import { CheckForm } from 'src/app/freamwork/util/form-valid-checker';
       <div nz-row class="info-div">
         <label nz-col [nzSm]="12" [nzXs]="12" class="info-label">
           <i nz-icon nzType="team" nzTheme="outline"></i>
-          &nbsp;{{ 'app.role' | i18n }}
+          &nbsp;{{ 'user.role' | i18n }}
         </label>
         <label nz-col [nzSm]="12" [nzXs]="12" style="text-align: right">
           {{ value ? (value.roleName ? value.roleName : '') : '' }}
@@ -161,11 +146,16 @@ export class MyInfoComponent implements OnInit {
   myForm: UntypedFormGroup | undefined;
 
   isEdit = false;
-  constructor(public app: MyApplicationService, public fb: UntypedFormBuilder, @Inject(ALAIN_I18N_TOKEN) public i18n: I18NService) {}
+  constructor(
+    public app: MyApplicationService,
+    public fb: UntypedFormBuilder,
+    @Inject(ALAIN_I18N_TOKEN) public i18n: I18NService,
+    public userService: UserService
+  ) {}
 
   ngOnInit(): void {
     this.myForm = this.fb.group({
-      name: [this.value?.name, [Validators.maxLength(32), Validators.required]],
+      name: [this.value?.name, [Validators.maxLength(20), Validators.required, emptyValidator]],
       phone: [
         this.value?.phone,
         [
@@ -174,9 +164,31 @@ export class MyInfoComponent implements OnInit {
           Validators.pattern(/^(((13[0-9]{1})|(15[0-9]{1})|(18[0-9]{1})|(17[0-9]{1}))+\d{8})$/)
         ]
       ],
-      mail: [this.value?.mail, [Validators.maxLength(100), Validators.required]]
+      mail: [
+        this.value?.mail,
+        {
+          Validators: [Validators.maxLength(100), Validators.required, emptyValidator],
+          asyncValidators: [this.checkEmailValidator.bind(this)],
+          updateOn: 'blur'
+        }
+      ]
     });
   }
+
+  checkEmailValidator = (control: UntypedFormControl): { [key: string]: any } => {
+    if (!control.value) {
+      return of();
+    }
+
+    if (this.myForm && control.value) {
+      const param = {
+        id: this.value?.id,
+        mail: this.myForm.controls['mail'].value
+      };
+      return this.userService.asyncValidate('/sys-user/is-mail-unique', param);
+    }
+    return of();
+  };
 
   @CheckForm('myForm')
   saveMyInfo() {

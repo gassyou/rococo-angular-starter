@@ -42,7 +42,7 @@ export class AuthService extends CRUDService {
           this.message.error(response['meta']['message']);
           return response;
         }
-        this.message.success(this.i18n.fanyi('common.handle-ok'));
+        this.message.success(this.i18n.fanyi('common.msg.handle-ok'));
         return response.data;
       })
     );

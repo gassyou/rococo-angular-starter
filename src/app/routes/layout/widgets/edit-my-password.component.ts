@@ -18,24 +18,24 @@ import { isValidForm } from 'src/app/freamwork/util/form-valid-checker';
   template: `
     <h2>
       Hi,{{ value }}!
-      <span style="color:#9e9e9e;margin-left:5px; font-size:11px">{{ 'user.passwordChange' | i18n }}</span>
+      <span style="color:#9e9e9e;margin-left:5px; font-size:11px">{{ 'user.changePassword' | i18n }}</span>
     </h2>
     <form nz-form [formGroup]="editForm" se-container="1" labelWidth="130">
       <se
         label="{{ 'user.oldPw' | i18n }}"
         required
         [error]="{
-          required: this.i18n.fanyi('user.oldPwAsk'),
-          minlength: this.i18n.fanyi('user.minlength'),
-          maxlength: this.i18n.fanyi('user.maxlength'),
-          serverError: this.i18n.fanyi('user.oldPwNotCorrect')
+          required: this.i18n.fanyi('common.msg.requireErr', { item: 'user.oldPw' }),
+          minlength: this.i18n.fanyi('common.msg.minLengthErr', { item: 'user.oldPw', length: 6 }),
+          maxlength: this.i18n.fanyi('common.msg.maxLengthErr', { item: 'user.oldPw', length: 20 }),
+          serverError: editForm?.controls['oldPassword'].errors.serverError
         }"
       >
         <nz-input-group [nzSuffix]="oldPwTemplate">
           <input
             [type]="oldPWVisible ? 'text' : 'password'"
             nz-input
-            placeholder="{{ 'user.oldPwAsk' | i18n }}"
+            placeholder="{{ 'user.oldPw' | i18n }}"
             formControlName="oldPassword"
           />
         </nz-input-group>
@@ -48,16 +48,16 @@ import { isValidForm } from 'src/app/freamwork/util/form-valid-checker';
         label="{{ 'user.newPassword' | i18n }}"
         required
         [error]="{
-          required: this.i18n.fanyi('user.newPasswordAsk'),
-          minlength: this.i18n.fanyi('user.minlength'),
-          maxlength: this.i18n.fanyi('user.maxlength')
+          required: this.i18n.fanyi('common.msg.requireErr', { item: 'user.newPassword' }),
+          minlength: this.i18n.fanyi('common.msg.minLengthErr', { item: 'user.newPassword', length: 6 }),
+          maxlength: this.i18n.fanyi('common.msg.maxLengthErr', { item: 'user.newPassword', length: 20 })
         }"
       >
         <nz-input-group [nzSuffix]="newPwTemplate">
           <input
             [type]="newPWVisible ? 'text' : 'password'"
             nz-input
-            placeholder="{{ 'user.newPasswordAsk' | i18n }}"
+            placeholder="{{ 'user.newPassword' | i18n }}"
             formControlName="newPassword"
           />
         </nz-input-group>
@@ -69,9 +69,9 @@ import { isValidForm } from 'src/app/freamwork/util/form-valid-checker';
         label="{{ 'user.newPasswordComfirm' | i18n }}"
         required
         [error]="{
-          required: this.i18n.fanyi('user.newPasswordComfirmAsk'),
-          minlength: this.i18n.fanyi('user.minlength'),
-          maxlength: this.i18n.fanyi('user.maxlength'),
+          required: this.i18n.fanyi('common.msg.requireErr', { item: 'user.newPasswordComfirm' }),
+          minlength: this.i18n.fanyi('common.msg.minLengthErr', { item: 'user.newPasswordComfirm', length: 6 }),
+          maxlength: this.i18n.fanyi('common.msg.maxLengthErr', { item: 'user.newPasswordComfirm', length: 20 }),
           confirm: this.i18n.fanyi('user.confirmPsdError')
         }"
       >
@@ -79,7 +79,7 @@ import { isValidForm } from 'src/app/freamwork/util/form-valid-checker';
           <input
             [type]="newPwConfirmVisible ? 'text' : 'password'"
             nz-input
-            placeholder="{{ 'user.newPasswordComfirmAsk' | i18n }}"
+            placeholder="{{ 'user.newPasswordComfirm' | i18n }}"
             formControlName="newPwConfirm"
           />
         </nz-input-group>
@@ -109,8 +109,7 @@ export class EditMyPasswordComponent implements OnInit {
     public token: TokenService,
     @Inject(ALAIN_I18N_TOKEN) public i18n: I18NService,
     private messageService: NzMessageService,
-    public userServie: UserService,
-    private notification: NzNotificationService
+    public userServie: UserService
   ) {
     this.messageService.remove();
   }
@@ -149,19 +148,11 @@ export class EditMyPasswordComponent implements OnInit {
     }
 
     if (this.editForm?.controls['oldPassword'].value === this.editForm?.controls['newPassword'].value) {
-      // this.notification.error(this.i18n.fanyi("user.serverError"), "", {
-      //   nzPlacement: 'topRight',
-      //   nzDuration: 3000,
-      // });
-      this.messageService.error(this.i18n.fanyi('user.serverError'));
+      this.messageService.error(this.i18n.fanyi('user.sameWithOldPwError'));
       return null;
     }
 
     if (this.editForm?.controls['newPassword'].value !== this.editForm?.controls['newPwConfirm'].value) {
-      // this.notification.error(this.i18n.fanyi("user.confirmPsdError"), "", {
-      //   nzPlacement: 'topRight',
-      //   nzDuration: 3000,
-      // });
       this.messageService.error(this.i18n.fanyi('user.confirmPsdError'));
       return null;
     }

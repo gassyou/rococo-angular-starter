@@ -6,6 +6,7 @@ import { RoleService } from 'src/app/core/service/core/role.service';
 import { UserService } from 'src/app/core/service/core/user.service';
 import { I18NService } from 'src/app/core/service/i18n.service';
 import { FormComponent } from 'src/app/freamwork/core/form-component';
+import { emptyValidator } from 'src/app/shared/empty.validator';
 
 @Component({
   selector: 'user-edit',
@@ -15,14 +16,15 @@ import { FormComponent } from 'src/app/freamwork/core/form-component';
         label="{{ 'user.name' | i18n }}"
         required
         [error]="{
-          required: this.i18n.fanyi('user.askName'),
-          maxLength: this.i18n.fanyi('user.maxNameLength')
+          required: this.i18n.fanyi('common.msg.requireErr', { item: 'user.name' }),
+          empty: this.i18n.fanyi('common.msg.emptyErr'),
+          maxLength: this.i18n.fanyi('common.msg.maxLengthErr', { item: 'user.name', length: 20 })
         }"
       >
-        <input nz-input formControlName="name" placeholder="{{ 'user.askName' | i18n }}" />
+        <input nz-input formControlName="name" placeholder="{{ 'user.name' | i18n }}" />
       </se>
       <se label="{{ 'user.role' | i18n }}">
-        <nz-select formControlName="roleId" nzPlaceHolder="{{ 'user.askRole' | i18n }}" nzMode="multiple">
+        <nz-select formControlName="roleId" nzPlaceHolder="{{ 'user.role' | i18n }}" nzMode="multiple">
           <nz-option *ngFor="let role of roleList" [nzValue]="role.id" [nzLabel]="role.name"></nz-option>
         </nz-select>
       </se>
@@ -30,21 +32,25 @@ import { FormComponent } from 'src/app/freamwork/core/form-component';
         label="{{ 'user.account' | i18n }}"
         required
         [error]="{
-          required: this.i18n.fanyi('user.askAccount'),
-          serverError: this.i18n.fanyi('user.serverAccountError')
+          required: this.i18n.fanyi('common.msg.requireErr', { item: 'user.account' }),
+          empty: this.i18n.fanyi('common.msg.emptyErr'),
+          maxLength: this.i18n.fanyi('common.msg.maxLengthErr', { item: 'user.account', length: 20 }),
+          serverError: editForm?.controls['account'].errors.serverError
         }"
       >
-        <input nz-input formControlName="account" placeholder="{{ 'user.askAccount' | i18n }}" />
+        <input nz-input formControlName="account" placeholder="{{ 'user.account' | i18n }}" />
       </se>
       <se
         label="{{ 'user.email' | i18n }}"
         required
         [error]="{
-          required: this.i18n.fanyi('user.askEmail'),
-          serverError: this.i18n.fanyi('user.serverEmailError')
+          required: this.i18n.fanyi('common.msg.requireErr', { item: 'user.email' }),
+          empty: this.i18n.fanyi('common.msg.emptyErr'),
+          serverError: editForm?.controls['mail'].errors.serverError,
+          maxLength: this.i18n.fanyi('common.msg.maxLengthErr', { item: 'user.email', length: 100 })
         }"
       >
-        <input nz-input formControlName="mail" placeholder="{{ 'user.askEmail' | i18n }}" />
+        <input nz-input formControlName="mail" placeholder="{{ 'user.email' | i18n }}" />
       </se>
     </form>
   `
@@ -72,12 +78,12 @@ export class EditComponent extends FormComponent implements OnInit {
 
     super.editForm = this.fb.group({
       id: [this.value ? this.value.id : ''],
-      name: [this.value ? this.value.name : null, [Validators.required, Validators.maxLength(20)]],
+      name: [this.value ? this.value.name : null, [Validators.required, Validators.maxLength(20), emptyValidator]],
       roleId: [this.value ? this.value.roleId : null],
       account: [
         this.value ? this.value.account : null,
         {
-          validators: [Validators.required],
+          validators: [Validators.required, emptyValidator, Validators.maxLength(20)],
           asyncValidators: [this.checkAccountValidator.bind(this)],
           updateOn: 'blur'
         }
@@ -85,15 +91,15 @@ export class EditComponent extends FormComponent implements OnInit {
       mail: [
         this.value ? this.value.mail : null,
         {
-          validators: [Validators.required],
-          asyncValidators: [this.checkMobileValidator.bind(this)],
+          validators: [Validators.required, emptyValidator, Validators.maxLength(100)],
+          asyncValidators: [this.checkEmailValidator.bind(this)],
           updateOn: 'blur'
         }
       ]
     });
   }
 
-  checkMobileValidator = (control: UntypedFormControl): { [key: string]: any } => {
+  checkEmailValidator = (control: UntypedFormControl): { [key: string]: any } => {
     if (!control.value) {
       return of();
     }

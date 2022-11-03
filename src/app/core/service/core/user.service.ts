@@ -24,7 +24,7 @@ export class UserService extends CRUDService {
     return this.http.post('/sys-user/update-password', data).pipe(
       map((response: any) => {
         if (response['meta']['success']) {
-          this.message.info(this.i18n.fanyi('user.modificationSucceeded'));
+          this.message.success(this.i18n.fanyi('common.msg.handle-ok'));
           return response;
         } else {
           this.message.error(response['meta']['message']);
@@ -38,7 +38,7 @@ export class UserService extends CRUDService {
     return this.http.post('/sys-user/enable', data).pipe(
       map((response: any) => {
         if (response['meta']['success']) {
-          this.message.info(this.i18n.fanyi('common.handle-ok'));
+          this.message.success(this.i18n.fanyi('common.msg.handle-ok'));
           this.search();
           return response.data;
         } else {
