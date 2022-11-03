@@ -59,7 +59,6 @@ import { CRUDService } from '../../freamwork/core/crud.service';
         background: none;
         border: none;
       }
-
       .search-btn:hover {
         background-color: #e3e5e6;
       }
@@ -75,11 +74,9 @@ import { CRUDService } from '../../freamwork/core/crud.service';
       }
       .search-input {
         width: 350px;
-
         @media screen and (max-width: 1000px) {
           width: 200px;
         }
-
         @media screen and (max-width: 900px) {
           width: 100px;
         }
