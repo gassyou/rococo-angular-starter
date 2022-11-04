@@ -10,10 +10,10 @@ export class RoleService extends CRUDService {
   constructor(http: _HttpClient, @Optional() message: NzMessageService, @Inject(ALAIN_I18N_TOKEN) i18n: I18NService) {
     super(http, message, i18n);
 
-    super.searchUrl = 'roles';
+    super.searchUrl = 'role/search';
     super.addUrl = 'role/add';
     super.deleteUrl = 'role/delete';
     super.updateUrl = 'role/update';
-    super.allDataUrl = 'all-roles';
+    super.allDataUrl = 'role/all';
   }
 }
