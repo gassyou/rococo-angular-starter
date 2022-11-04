@@ -100,10 +100,6 @@ export class EditComponent extends FormComponent implements OnInit {
   }
 
   checkEmailValidator = (control: UntypedFormControl): { [key: string]: any } => {
-    if (!control.value) {
-      return of();
-    }
-
     if (this.editForm && control.value) {
       const param = {
         id: this.editForm.controls['id'].value,

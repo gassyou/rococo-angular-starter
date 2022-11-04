@@ -65,7 +65,7 @@ export class MyApplicationService extends ApplicationService {
         module: 'page',
         text: '用户管理',
         parentText: '系统管理',
-        link: 'sys/user',
+        link: '/sys/user',
         acl: [1]
       }),
       new FunctionModel({
@@ -75,7 +75,7 @@ export class MyApplicationService extends ApplicationService {
         module: 'page',
         text: '角色管理',
         parentText: '系统管理',
-        link: 'sys/role',
+        link: '/sys/role',
         acl: [1]
       }),
       new FunctionModel({
@@ -85,7 +85,7 @@ export class MyApplicationService extends ApplicationService {
         module: 'page',
         text: '权限管理',
         parentText: '系统管理',
-        link: 'sys/auth',
+        link: '/sys/auth',
         acl: [1]
       })
     ];
