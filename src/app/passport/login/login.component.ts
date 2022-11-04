@@ -53,10 +53,11 @@ import { CheckForm } from 'src/app/freamwork/util/form-valid-checker';
   `,
   styles: [
     `
+      @import url('../../../styles/theme.less');
       .bg {
         width: 100%;
         height: 100%;
-        background-image: url('../../../assets/bg.png');
+        background-image: url('../../../assets/bg.jpg');
         background-size: cover;
       }
       .login_panel {
@@ -64,7 +65,7 @@ import { CheckForm } from 'src/app/freamwork/util/form-valid-checker';
         margin-top: 280px;
         margin-left: 700px;
         padding: 24px;
-        opacity: 0.8;
+        opacity: 0.85;
         position: absolute;
         top: 0;
         right: 200px;
@@ -74,6 +75,8 @@ import { CheckForm } from 'src/app/freamwork/util/form-valid-checker';
         text-align: center;
         width: 100%;
         margin-bottom: 24px;
+        font-weight: bold;
+        color: @primary-color;
       }
     `
   ]

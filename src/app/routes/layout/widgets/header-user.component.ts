@@ -15,7 +15,7 @@ import { MyInfoComponent } from './my-info.component';
   selector: 'header-user',
   template: `
     <div class="alain-default__nav-item d-flex align-items-center px-sm" nz-dropdown nzPlacement="bottomRight" [nzDropdownMenu]="userMenu">
-      <nz-avatar style="background-color:#0069f7;" [nzText]="myInfo?.name[0]" nzSize="small" class="mr-sm"></nz-avatar>
+      <nz-avatar [nzText]="myInfo?.name[0]" nzSize="small" class="mr-sm"></nz-avatar>
       {{ myInfo?.name }}
     </div>
     <nz-dropdown-menu #userMenu="nzDropdownMenu">
@@ -48,7 +48,14 @@ import { MyInfoComponent } from './my-info.component';
       </div>
     </nz-dropdown-menu>
   `,
-  styles: [],
+  styles: [
+    `
+      @import url('../../../../styles/theme.less');
+      nz-avatar {
+        background-color: @primary-color;
+      }
+    `
+  ],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class HeaderUserComponent implements OnInit, OnDestroy {
