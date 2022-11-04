@@ -24,7 +24,12 @@ export class MainComponent implements OnInit {
     // 数字类型的roleList，需要使用setAbility() 方法
     // this.acl.setRole(this.token.get().roleList);
 
-    this.acl.setAbility(this.token.get().roleList);
+    if (this.myApp.demoLoginResponeseInfo) {
+      this.acl.setFull(true);
+    } else {
+      this.acl.setAbility(this.token.get().roleList);
+    }
+
     this.menu.add(this.menu.menus);
   }
 }
