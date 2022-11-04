@@ -18,7 +18,7 @@ import { emptyValidator } from 'src/app/shared/empty.validator';
         [error]="{
           required: this.i18n.fanyi('common.msg.requireErr', { item: 'user.name' }),
           empty: this.i18n.fanyi('common.msg.emptyErr'),
-          maxLength: this.i18n.fanyi('common.msg.maxLengthErr', { item: 'user.name', length: 20 })
+          maxlength: this.i18n.fanyi('common.msg.maxLengthErr', { item: 'user.name', length: 20 })
         }"
       >
         <input nz-input formControlName="name" placeholder="{{ 'user.name' | i18n }}" />
@@ -34,7 +34,7 @@ import { emptyValidator } from 'src/app/shared/empty.validator';
         [error]="{
           required: this.i18n.fanyi('common.msg.requireErr', { item: 'user.account' }),
           empty: this.i18n.fanyi('common.msg.emptyErr'),
-          maxLength: this.i18n.fanyi('common.msg.maxLengthErr', { item: 'user.account', length: 20 }),
+          maxlength: this.i18n.fanyi('common.msg.maxLengthErr', { item: 'user.account', length: 20 }),
           serverError: editForm?.controls['account'].errors.serverError
         }"
       >
@@ -47,7 +47,7 @@ import { emptyValidator } from 'src/app/shared/empty.validator';
           required: this.i18n.fanyi('common.msg.requireErr', { item: 'user.email' }),
           empty: this.i18n.fanyi('common.msg.emptyErr'),
           serverError: editForm?.controls['mail'].errors.serverError,
-          maxLength: this.i18n.fanyi('common.msg.maxLengthErr', { item: 'user.email', length: 100 })
+          maxlength: this.i18n.fanyi('common.msg.maxLengthErr', { item: 'user.email', length: 100 })
         }"
       >
         <input nz-input formControlName="mail" placeholder="{{ 'user.email' | i18n }}" />
