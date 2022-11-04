@@ -195,7 +195,8 @@ export class AuthModuleComponent implements OnInit, AuthBaseComponent {
         parentId: this.viewModel.data.id,
         parentText: this.viewModel.data.text,
         parentI18n: this.viewModel.data.i18n
-      })
+      }),
+      '700px'
     );
   }
 
@@ -210,7 +211,8 @@ export class AuthModuleComponent implements OnInit, AuthBaseComponent {
         parentId: this.viewModel.data.id,
         parentText: this.viewModel.data.text,
         parentI18n: this.viewModel.data.i18n
-      })
+      }),
+      '700px'
     );
   }
 

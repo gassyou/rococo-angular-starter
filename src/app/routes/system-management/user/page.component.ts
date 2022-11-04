@@ -107,7 +107,7 @@ export class PageComponent extends ListComponent implements OnInit {
       account: { type: 'string', title: this.i18n.fanyi('user.account') }
     },
     ui: {
-      spanLabelFixed: 50,
+      spanLabelFixed: 100,
       grid: {
         span: 8
       }

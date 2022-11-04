@@ -88,7 +88,7 @@ export class HeaderUserComponent implements OnInit, OnDestroy {
     modalCreator(
       this.nzModal,
       this.i18n.fanyi('app.editMyPw'),
-      this.i18n.fanyi('common.cancel'),
+      this.i18n.fanyi('common.action.cancel'),
       this.i18n.fanyi('app.editMyPw'),
       EditMyPasswordComponent,
       this.myInfo?.name

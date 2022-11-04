@@ -20,7 +20,7 @@ import { isValidForm } from 'src/app/freamwork/util/form-valid-checker';
       Hi,{{ value }}!
       <span style="color:#9e9e9e;margin-left:5px; font-size:11px">{{ 'user.changePassword' | i18n }}</span>
     </h2>
-    <form nz-form [formGroup]="editForm" se-container="1" labelWidth="130">
+    <form nz-form [formGroup]="editForm" se-container="1" labelWidth="150" nzLayout="vertical">
       <se
         label="{{ 'user.oldPw' | i18n }}"
         required

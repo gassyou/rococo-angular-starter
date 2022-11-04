@@ -12,6 +12,7 @@ import { ListComponent } from 'src/app/freamwork/core/list-component';
 import { AclById, ACLConfig } from 'src/app/freamwork/util/permission.decorator';
 import { buildTree } from 'src/app/freamwork/util/tree/tree';
 import { FunctionModel } from 'src/app/routes/system-management/auth/entity/function-model';
+import { isNull } from 'util';
 
 import { AuthHostDirective } from './component/auth-host.directive';
 import { AuthModuleEditComponent } from './component/auth-module-edit.component';
@@ -27,7 +28,7 @@ import { AuthViewModel } from './view-model/auth-view-model';
       <span [acl]="updateAcl">
         <button [nzLoading]="updateLoading" nz-button nzType="primary" (click)="updateAuth()">
           <span nz-icon nzType="sync" nzTheme="outline"></span>
-          {{ 'common.update' | i18n }}
+          {{ 'common.action.update' | i18n }}
         </button>
       </span>
       <span [acl]="addModuleAcl">
@@ -139,9 +140,11 @@ export class AuthComponent extends ListComponent implements OnInit {
   addModule() {
     super.openModal(
       this.i18n.fanyi('auth.addModule'),
-      this.i18n.fanyi('common.cancel'),
-      this.i18n.fanyi('common.ok'),
-      AuthModuleEditComponent
+      this.i18n.fanyi('common.action.cancel'),
+      this.i18n.fanyi('common.action.ok'),
+      AuthModuleEditComponent,
+      null,
+      '700px'
     );
   }
 

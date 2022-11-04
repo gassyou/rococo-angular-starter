@@ -12,7 +12,7 @@ import { FormComponent } from 'src/app/freamwork/core/form-component';
     <h2>
       {{ value.name }}
       <h2>
-        <form nz-form [formGroup]="editForm" se-container="1" labelWidth="100">
+        <form nz-form [formGroup]="editForm" se-container="1" labelWidth="120">
           <se
             label="{{ 'user.newPassword' | i18n }}"
             required

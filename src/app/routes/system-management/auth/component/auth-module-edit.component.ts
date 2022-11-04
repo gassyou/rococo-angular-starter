@@ -10,7 +10,7 @@ import { emptyValidator } from 'src/app/shared/empty.validator';
 @Component({
   selector: 'app-auth-module-edit',
   template: `
-    <form nz-form [formGroup]="editForm" se-container="1" labelWidth="100">
+    <form nz-form [formGroup]="editForm" se-container="1" labelWidth="160">
       <se label="{{ 'auth.lblParent' | i18n }}">
         <div>{{ (value ? value.parentName : 'common.lbl.none') | i18n }}</div>
       </se>

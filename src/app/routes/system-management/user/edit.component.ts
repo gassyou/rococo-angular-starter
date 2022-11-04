@@ -11,7 +11,7 @@ import { emptyValidator } from 'src/app/shared/empty.validator';
 @Component({
   selector: 'user-edit',
   template: `
-    <form nz-form [formGroup]="editForm" se-container="1" labelWidth="60">
+    <form nz-form [formGroup]="editForm" se-container="1" labelWidth="100">
       <se
         label="{{ 'user.name' | i18n }}"
         required
