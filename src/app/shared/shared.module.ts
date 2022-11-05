@@ -9,6 +9,7 @@ import { AlainThemeModule } from '@delon/theme';
 
 import { AdvanceSearchV2Component } from './components/advance-search-v2.component';
 import { AdvanceSearchComponent } from './components/advance-search.component';
+import { FixedTableHeaderDirective } from './components/fixed-table-header.directive';
 import { FormItemDirective } from './components/form-item.directive';
 import { PageContainerV2Component } from './components/page-container-v2.component';
 import { PageContainerComponent } from './components/page-container.component';
@@ -22,7 +23,8 @@ import { ZORRO_MODULES } from './zorro.module';
     AdvanceSearchComponent,
     PageContainerComponent,
     PageContainerV2Component,
-    FormItemDirective
+    FormItemDirective,
+    FixedTableHeaderDirective
   ],
   imports: [
     CommonModule,
@@ -39,6 +41,7 @@ import { ZORRO_MODULES } from './zorro.module';
     AdvanceSearchComponent,
     AdvanceSearchV2Component,
     FormItemDirective,
+    FixedTableHeaderDirective,
     PageContainerComponent,
     PageContainerV2Component,
     ...ZORRO_MODULES,

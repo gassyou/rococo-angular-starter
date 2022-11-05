@@ -46,7 +46,6 @@ export class FormItemDirective implements AfterViewInit {
   setLabel() {
     const parentElement = this.elementRef.nativeElement.parentNode;
     if (parentElement && parentElement.tagName.toUpperCase() === 'DIV' && !this.labelElement) {
-
       this.labelElement = this.renderer.createElement('label');
       this.renderer.addClass(this.labelElement, 'form-control-label');
       this.renderer.addClass(this.labelElement, 'form-control-label-focus');
