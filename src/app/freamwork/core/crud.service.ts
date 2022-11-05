@@ -335,6 +335,9 @@ export abstract class CRUDService {
    * @param params 参数。比如电话号码。{mobile:13800000000,id:1}
    */
   public asyncValidate(checkUrl: string, params: any): Observable<any> {
+    if (this.demoDataSource && this.demoDataSource.length > 0) {
+      return of(null);
+    }
     return this.http.post(checkUrl, params).pipe(
       map((result: any) => {
         if (result['meta']['success']) {
@@ -348,6 +351,9 @@ export abstract class CRUDService {
 
   // get类型校验
   public asyncValidateGet(checkUrl: string, params: any): Observable<any> {
+    if (this.demoDataSource && this.demoDataSource.length > 0) {
+      return of(null);
+    }
     return this.http.get(checkUrl, params).pipe(
       map((result: any) => {
         if (result['meta']['success']) {

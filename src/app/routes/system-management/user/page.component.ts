@@ -31,7 +31,6 @@ import { PasswordEditComponent } from './password-edit.component';
       [nzTotal]="total"
       [(nzPageSize)]="pageSize"
       [(nzPageIndex)]="currentPage"
-      s
       [nzPageSizeOptions]="pageSizeOptions"
       (nzPageIndexChange)="onPageIndexChange()"
       (nzPageSizeChange)="onPageSizeChange()"

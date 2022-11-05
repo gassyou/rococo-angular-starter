@@ -7,6 +7,7 @@ import { I18NService } from '../i18n.service';
 
 @Injectable()
 export class RoleService extends CRUDService {
+  demoDataSource: any[] = [];
   constructor(http: _HttpClient, @Optional() message: NzMessageService, @Inject(ALAIN_I18N_TOKEN) i18n: I18NService) {
     super(http, message, i18n);
 
@@ -15,5 +16,14 @@ export class RoleService extends CRUDService {
     super.deleteUrl = 'role/delete';
     super.updateUrl = 'role/update';
     super.allDataUrl = 'role/all';
+
+    this.demoDataSource = [];
+    for (let i = 0; i < 100; i++) {
+      this.demoDataSource.push({
+        name: `管理员${i}`,
+        remark: 'test',
+        enable: i % 2
+      });
+    }
   }
 }

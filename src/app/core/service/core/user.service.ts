@@ -11,6 +11,8 @@ import { RoleService } from './role.service';
 
 @Injectable()
 export class UserService extends CRUDService {
+
+  demoDataSource: any[] = [];
   constructor(http: _HttpClient, @Optional() message: NzMessageService, @Inject(ALAIN_I18N_TOKEN) i18n: I18NService) {
     super(http, message, i18n);
 
@@ -18,6 +20,18 @@ export class UserService extends CRUDService {
     super.addUrl = 'sys-user/add';
     super.deleteUrl = 'sys-user/delete';
     super.updateUrl = 'sys-user/update';
+
+    this.demoDataSource = [];
+    for (let i = 0; i < 100; i++) {
+      this.demoDataSource.push({
+        name: `张三${i}`,
+        account: i,
+        roleName: `管理员${i}`,
+        mail: `mail${i}@example.com`,
+        lastLoginTime: new Date(),
+        lastLoginIp: `0.0.0.0`
+      });
+    }
   }
 
   public updatePassword(data: any): Observable<any> {

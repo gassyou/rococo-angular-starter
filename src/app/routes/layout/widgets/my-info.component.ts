@@ -185,7 +185,7 @@ export class MyInfoComponent implements OnInit {
         id: this.value?.id,
         mail: this.myForm.controls['mail'].value
       };
-      return this.userService.asyncValidate('/sys-user/is-mail-unique', param);
+      return this.userService.asyncValidate('sys-user/is-mail-unique', param);
     }
     return of();
   };
