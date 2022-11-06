@@ -66,7 +66,7 @@ export class AuthModuleEditComponent extends AuthBaseEditComponent implements On
       key: [
         this.value?.key ? this.value?.key : null,
         {
-          Validators: [Validators.required, Validators.maxLength(100), emptyValidator],
+          validators: [Validators.required, Validators.maxLength(100), emptyValidator],
           asyncValidators: [this.checkKeyValidator.bind(this)],
           updateOn: 'blur'
         }
