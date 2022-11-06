@@ -28,6 +28,8 @@ export abstract class CRUDService {
 
   public tableDataLoading = false;
 
+  public showAdvancePannel = true;
+
   private _search$ = new BehaviorSubject<SearchParams | null>(null);
   public datasource$ = this._search$
     .asObservable()

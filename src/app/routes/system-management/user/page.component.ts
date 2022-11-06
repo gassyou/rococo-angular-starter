@@ -34,6 +34,7 @@ import { PasswordEditComponent } from './password-edit.component';
       [nzPageSizeOptions]="pageSizeOptions"
       (nzPageIndexChange)="onPageIndexChange()"
       (nzPageSizeChange)="onPageSizeChange()"
+      [nzScroll]="{ x: '2000px' }"
     >
       <thead>
         <tr>

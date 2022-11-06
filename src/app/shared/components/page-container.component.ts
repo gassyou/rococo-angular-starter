@@ -7,7 +7,7 @@ import { Menu, MenuService } from '@delon/theme';
   selector: 'app-page',
   template: `
     <div class="alain-default__content-title" style="min-height: 54px">
-    <nz-breadcrumb [nzAutoGenerate]="true">
+      <nz-breadcrumb [nzAutoGenerate]="true">
         <ng-container *ngFor="let item of breadcrumbItems">
           <nz-breadcrumb-item>
             <a *ngIf="item.link; else noLink" [routerLink]="[item.link]">
@@ -74,7 +74,7 @@ import { Menu, MenuService } from '@delon/theme';
         margin-top: -24px;
         margin-bottom: -24px;
         padding: 24px;
-        height: calc(100vh - 103px);
+        height: calc(100vh - 105px);
         overflow-y: scroll;
       }
     `

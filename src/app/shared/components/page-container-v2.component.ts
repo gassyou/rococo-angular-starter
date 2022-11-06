@@ -78,7 +78,7 @@ import { Menu, MenuService } from '@delon/theme';
         margin-top: -24px;
         margin-bottom: -24px;
         padding: 24px;
-        height: calc(100vh - 103px);
+        height: calc(100vh - 105px);
         overflow-y: scroll;
       }
     `

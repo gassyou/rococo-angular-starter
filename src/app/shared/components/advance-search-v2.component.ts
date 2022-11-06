@@ -8,7 +8,7 @@ import { CRUDService } from '../../freamwork/core/crud.service';
 @Component({
   selector: 'app-advance-search-v2',
   template: `
-    <nz-card id="searchForm" class="p-md">
+    <nz-card id="searchForm" class="p-md" [style.display]="searchService.showAdvancePannel ? 'block' : 'none'">
       <sf
         [style.width]="inlineMode ? (formItemCount <= 1 ? '500px' : '1000px') : '100%'"
         #sf
