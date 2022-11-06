@@ -2,6 +2,7 @@ import { TreeDataSource } from 'src/app/freamwork/util/tree/tree-datasource';
 
 export class FunctionModel extends TreeDataSource {
   public moduleType!: 'module' | 'page' | 'tab' | 'action';
+  public key!: string;
   public text!: string;
   public i18n?: string;
   public parentText?: string;
