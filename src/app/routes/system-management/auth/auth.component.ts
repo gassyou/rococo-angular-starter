@@ -9,10 +9,9 @@ import { AuthService, viewModelFactory } from 'src/app/core/service/core/auth.se
 import { RoleService } from 'src/app/core/service/core/role.service';
 import { I18NService } from 'src/app/core/service/i18n.service';
 import { ListComponent } from 'src/app/freamwork/core/list-component';
-import { AclById, ACLConfig } from 'src/app/freamwork/util/permission.decorator';
+import { AclByKey, ACLConfig } from 'src/app/freamwork/util/permission.decorator';
 import { buildTree } from 'src/app/freamwork/util/tree/tree';
 import { FunctionModel } from 'src/app/routes/system-management/auth/entity/function-model';
-import { isNull } from 'util';
 
 import { AuthHostDirective } from './component/auth-host.directive';
 import { AuthModuleEditComponent } from './component/auth-module-edit.component';
@@ -79,10 +78,10 @@ export class AuthComponent extends ListComponent implements OnInit {
     super(authService, modalService);
   }
 
-  @AclById(79)
+  @AclByKey('')
   updateAcl: any;
 
-  @AclById(80)
+  @AclByKey('')
   addModuleAcl: any;
 
   @ACLConfig()

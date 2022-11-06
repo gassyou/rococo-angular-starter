@@ -7,7 +7,7 @@ import { RoleService } from 'src/app/core/service/core/role.service';
 import { UserService } from 'src/app/core/service/core/user.service';
 import { I18NService } from 'src/app/core/service/i18n.service';
 import { ListComponent } from 'src/app/freamwork/core/list-component';
-import { AclById, ACLConfig } from 'src/app/freamwork/util/permission.decorator';
+import { AclByKey, ACLConfig } from 'src/app/freamwork/util/permission.decorator';
 
 import { EditComponent } from './edit.component';
 import { PasswordEditComponent } from './password-edit.component';
@@ -115,19 +115,19 @@ export class PageComponent extends ListComponent implements OnInit {
   };
 
   operation: any;
-  @AclById(53)
+  @AclByKey('')
   startusingAcl: any;
 
-  @AclById(54)
+  @AclByKey('')
   editAcl: any;
 
-  @AclById(56)
+  @AclByKey('')
   passwordChangeAcl: any;
 
-  @AclById(57)
+  @AclByKey('')
   addUserAcl: any;
 
-  @AclById(63)
+  @AclByKey('')
   searchAcl: any;
 
   constructor(

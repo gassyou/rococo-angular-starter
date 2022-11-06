@@ -6,7 +6,7 @@ import { NzModalService } from 'ng-zorro-antd/modal';
 import { AuthService } from 'src/app/core/service/core/auth.service';
 import { I18NService } from 'src/app/core/service/i18n.service';
 import { modalCreator } from 'src/app/freamwork/util/modal-creator';
-import { AclById, ACLConfig } from 'src/app/freamwork/util/permission.decorator';
+import { AclByKey, ACLConfig } from 'src/app/freamwork/util/permission.decorator';
 
 import { AuthViewModel } from '../view-model/auth-view-model';
 import { AuthActionEditComponent } from './auth-action-edit.componet';
@@ -56,10 +56,10 @@ export class AuthActionComponent implements OnInit, AuthBaseComponent {
     @Inject(ALAIN_I18N_TOKEN) public i18n: I18NService
   ) {}
 
-  @AclById(89)
+  @AclByKey('')
   updeateActionAcl: any;
 
-  @AclById(92)
+  @AclByKey('')
   deleteActionAcl: any;
 
   @ACLConfig()

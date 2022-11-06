@@ -5,7 +5,7 @@ import { NzModalService } from 'ng-zorro-antd/modal';
 import { RoleService } from 'src/app/core/service/core/role.service';
 import { I18NService } from 'src/app/core/service/i18n.service';
 import { ListComponent } from 'src/app/freamwork/core/list-component';
-import { AclById, ACLConfig } from 'src/app/freamwork/util/permission.decorator';
+import { AclByKey, ACLConfig } from 'src/app/freamwork/util/permission.decorator';
 
 import { EditComponent } from './edit.component';
 
@@ -152,19 +152,19 @@ export class PageComponent extends ListComponent implements OnInit {
     this.roleService.delete(data.id)?.subscribe();
   }
 
-  @AclById(72)
+  @AclByKey('')
   startusingAcl: any;
 
-  @AclById(73)
+  @AclByKey('')
   editAcl: any;
 
-  @AclById(74)
+  @AclByKey('')
   passwordChangeAcl: any;
 
-  @AclById(75)
+  @AclByKey('')
   addUserAcl: any;
 
-  @AclById(76)
+  @AclByKey('')
   searchAcl: any;
   @ACLConfig()
   ngOnInit(): void {

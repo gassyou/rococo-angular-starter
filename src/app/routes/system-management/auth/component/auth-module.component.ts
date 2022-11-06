@@ -6,7 +6,7 @@ import { AuthService } from 'src/app/core/service/core/auth.service';
 import { I18NService } from 'src/app/core/service/i18n.service';
 import { FormComponent } from 'src/app/freamwork/core/form-component';
 import { modalCreator } from 'src/app/freamwork/util/modal-creator';
-import { AclById, ACLConfig } from 'src/app/freamwork/util/permission.decorator';
+import { AclByKey, ACLConfig } from 'src/app/freamwork/util/permission.decorator';
 import { FunctionModel } from 'src/app/routes/system-management/auth/entity/function-model';
 
 import { AuthViewModel } from '../view-model/auth-view-model';
@@ -151,22 +151,22 @@ export class AuthModuleComponent implements OnInit, AuthBaseComponent {
     public acl: ACLService,
     @Inject(ALAIN_I18N_TOKEN) public i18n: I18NService
   ) {}
-  @AclById(87)
+  @AclByKey('')
   updeateModuleAndChildModuleAcl: any;
 
-  @AclById(81)
+  @AclByKey('')
   addChildModuleAcl: any;
 
-  @AclById(82)
+  @AclByKey('')
   addPageAcl: any;
 
-  @AclById(83)
+  @AclByKey('')
   addTabAcl: any;
 
-  @AclById(84)
+  @AclByKey('')
   addActionAcl: any;
 
-  @AclById(90)
+  @AclByKey('')
   deleteModleAndChildModuleAcl: any;
 
   @ACLConfig()

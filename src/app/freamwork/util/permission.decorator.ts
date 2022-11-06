@@ -8,6 +8,7 @@ const ACL_INFO_NAME = 'acl_info_data';
 
 export interface ActionCofing {
   id?: number;
+  key?: string;
   module?: string;
   action?: string;
   tab?: string;
@@ -80,6 +81,24 @@ export function AclById(id: number) {
   };
 }
 
+/**
+ * 根据Function Key，从缓存中获取某个按钮所需要的权限集合
+ */
+export function AclByKey(functionKey: string) {
+  return (target: any, key: string) => {
+    if (!target[ACL_DECORATORS]) {
+      target[ACL_DECORATORS] = [];
+    }
+
+    (target[ACL_DECORATORS] as ActionPropertyCofing[]).push({
+      name: key,
+      config: {
+        key: functionKey
+      }
+    });
+  };
+}
+
 export function ACLConfig() {
   return (target: any, name: string, descriptor: PropertyDescriptor) => {
     if (!target[ACL_DECORATORS] || (target[ACL_DECORATORS] as ActionCofing[]).length <= 0) {
@@ -91,6 +110,8 @@ export function ACLConfig() {
       (target[ACL_DECORATORS] as ActionPropertyCofing[]).forEach(item => {
         if (item.config.id) {
           getAclById(item.config.id).subscribe(data => (this[item.name] = data));
+        } else if (item.config.key) {
+          getAclByKey(item.config.key).subscribe(data => (this[item.name] = data));
         } else {
           getAcl(item.config.module, item.config.action, item.config.tab).subscribe(data => (this[item.name] = data));
         }
@@ -99,6 +120,16 @@ export function ACLConfig() {
       originalMethod.apply(this, args);
     };
   };
+}
+
+export function getAclByKey(functionKey: string): Observable<any[]> {
+  return DecoratorService.getMyAppService()
+    .getACLInfo()
+    .pipe(
+      map((response: any[]) => {
+        return getAclByFunctionKey(response, functionKey);
+      })
+    );
 }
 
 export function getAclById(functionId: number): Observable<any[]> {
@@ -162,6 +193,17 @@ export function hasPermission(permission: any[], aclList: any[]): boolean {
     }
   }
   return false;
+}
+
+function getAclByFunctionKey(aclInfo: any[], funcitonKey: String): any[] {
+  const aclObject = aclInfo.filter(item => {
+    return item.key === funcitonKey;
+  });
+  if (!aclObject || aclObject.length <= 0 || !aclObject[0].acl) {
+    return [];
+  } else {
+    return aclObject[0].acl;
+  }
 }
 
 function getAclByFunctionID(aclInfo: any[], funcitonId: number): any[] {
