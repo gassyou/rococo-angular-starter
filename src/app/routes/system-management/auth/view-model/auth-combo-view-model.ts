@@ -13,6 +13,7 @@ export class AuthComboViewModel extends AuthViewModel {
 
   public add(component: AuthViewModel): void {
     component.rank = this.rank + 1;
+    component.parent = this;
     component.titleBackgroundColor = `hsl(${220 - component.rank * 8},${50 + component.rank * 10}%,${50 + component.rank * 2}%)`;
     this.children.push(component);
   }

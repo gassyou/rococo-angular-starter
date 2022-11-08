@@ -15,7 +15,13 @@ import { AuthBaseComponent } from './auth-base.component';
 @Component({
   selector: 'app-module',
   template: `
-    <label class="mr-md mb-md" nz-checkbox (contextmenu)="contextMenu($event, menu)" [(ngModel)]="this.viewModel.isChecked">
+    <label
+      class="mr-md mb-md"
+      nz-checkbox
+      (contextmenu)="contextMenu($event, menu)"
+      [ngModel]="this.viewModel.isChecked"
+      (ngModelChange)="onFunctionChange()"
+    >
       {{ this.viewModel?.data.name | i18n }}
       <span style="color:#000;font-weight: lighter;"> (key: {{ this.viewModel.key }})</span>
     </label>
@@ -67,6 +73,10 @@ export class AuthActionComponent implements OnInit, AuthBaseComponent {
 
   deleteFunctoin() {
     this.authService.deleteBatch([this.viewModel.data.id])?.subscribe();
+  }
+
+  onFunctionChange() {
+    this.viewModel.isChecked ? this.viewModel.setUnchecked() : this.viewModel.setChecked();
   }
 
   update() {

@@ -6,6 +6,7 @@ import { FunctionModel } from 'src/app/routes/system-management/auth/entity/func
 import { AuthBaseComponent } from '../component/auth-base.component';
 
 export abstract class AuthViewModel implements Tree {
+  public parent: AuthViewModel | undefined = undefined;
   public rank = 1;
   public titleBackgroundColor = 'hsl(220, 50%, 50%)';
 
@@ -99,10 +100,18 @@ export abstract class AuthViewModel implements Tree {
     }
   }
 
+  public setParentChecked() {
+    if (this.parent && !this.parent.isChecked) {
+      this.parent.isChecked = true;
+    }
+    this.parent?.setParentChecked();
+  }
+
   public setChecked(): void {
     if (!this.isChecked) {
       this.isChecked = true;
     }
+    this.setParentChecked();
     if (this.getChildren() && this.getChildren().length > 0) {
       this.getChildren().forEach((item: AuthViewModel) => {
         item.setChecked();
