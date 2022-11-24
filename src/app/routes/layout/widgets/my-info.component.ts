@@ -1,7 +1,7 @@
 import { Component, Inject, Input, OnInit } from '@angular/core';
-import { UntypedFormBuilder, UntypedFormControl, UntypedFormGroup, Validators } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormControl, UntypedFormGroup, ValidationErrors, Validators } from '@angular/forms';
 import { ALAIN_I18N_TOKEN } from '@delon/theme';
-import { of } from 'rxjs';
+import { Observable, of } from 'rxjs';
 import { UserService } from 'src/app/core/service/core/user.service';
 import { I18NService } from 'src/app/core/service/i18n.service';
 import { MyApplicationService } from 'src/app/core/service/my-application.service';
@@ -175,11 +175,7 @@ export class MyInfoComponent implements OnInit {
     });
   }
 
-  checkEmailValidator = (control: UntypedFormControl): { [key: string]: any } => {
-    if (!control.value) {
-      return of();
-    }
-
+  checkEmailValidator = (control: UntypedFormControl): Observable<ValidationErrors | null> => {
     if (this.myForm && control.value) {
       const param = {
         id: this.value?.id,
@@ -187,7 +183,7 @@ export class MyInfoComponent implements OnInit {
       };
       return this.userService.asyncValidate('sys-user/is-mail-unique', param);
     }
-    return of();
+    return of(null);
   };
 
   @CheckForm('myForm')

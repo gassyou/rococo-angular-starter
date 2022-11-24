@@ -1,7 +1,7 @@
 import { Component, Inject, Input, OnInit } from '@angular/core';
-import { UntypedFormBuilder, UntypedFormControl, Validators } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormControl, ValidationErrors, Validators } from '@angular/forms';
 import { ALAIN_I18N_TOKEN } from '@delon/theme';
-import { of } from 'rxjs';
+import { of, Observable } from 'rxjs';
 import { RoleService } from 'src/app/core/service/core/role.service';
 import { UserService } from 'src/app/core/service/core/user.service';
 import { I18NService } from 'src/app/core/service/i18n.service';
@@ -12,6 +12,18 @@ import { emptyValidator } from 'src/app/shared/empty.validator';
   selector: 'user-edit',
   template: `
     <form nz-form [formGroup]="editForm" se-container="1" labelWidth="100">
+      <se
+        label="{{ 'user.account' | i18n }}"
+        required
+        [error]="{
+          required: this.i18n.fanyi('common.msg.requireErr', { item: 'user.account' }),
+          empty: this.i18n.fanyi('common.msg.emptyErr'),
+          maxlength: this.i18n.fanyi('common.msg.maxLengthErr', { item: 'user.account', length: 20 }),
+          serverError: editForm?.controls['account'].errors.serverError
+        }"
+      >
+        <input nz-input formControlName="account" placeholder="{{ 'user.account' | i18n }}" />
+      </se>
       <se
         label="{{ 'user.name' | i18n }}"
         required
@@ -27,18 +39,6 @@ import { emptyValidator } from 'src/app/shared/empty.validator';
         <nz-select formControlName="roleId" nzPlaceHolder="{{ 'user.role' | i18n }}" nzMode="multiple">
           <nz-option *ngFor="let role of roleList" [nzValue]="role.id" [nzLabel]="role.name"></nz-option>
         </nz-select>
-      </se>
-      <se
-        label="{{ 'user.account' | i18n }}"
-        required
-        [error]="{
-          required: this.i18n.fanyi('common.msg.requireErr', { item: 'user.account' }),
-          empty: this.i18n.fanyi('common.msg.emptyErr'),
-          maxlength: this.i18n.fanyi('common.msg.maxLengthErr', { item: 'user.account', length: 20 }),
-          serverError: editForm?.controls['account'].errors.serverError
-        }"
-      >
-        <input nz-input formControlName="account" placeholder="{{ 'user.account' | i18n }}" />
       </se>
       <se
         label="{{ 'user.email' | i18n }}"
@@ -99,7 +99,7 @@ export class EditComponent extends FormComponent implements OnInit {
     });
   }
 
-  checkEmailValidator = (control: UntypedFormControl): { [key: string]: any } => {
+  checkEmailValidator = (control: UntypedFormControl): Observable<ValidationErrors | null> => {
     if (this.editForm && control.value) {
       const param = {
         id: this.editForm.controls['id'].value,
@@ -107,10 +107,10 @@ export class EditComponent extends FormComponent implements OnInit {
       };
       return this.userService.asyncValidate('/sys-user/is-mail-unique', param);
     }
-    return of();
+    return of(null);
   };
   // 验证account唯一性
-  checkAccountValidator = (control: UntypedFormControl): { [key: string]: any } => {
+  checkAccountValidator = (control: UntypedFormControl): Observable<ValidationErrors | null> => {
     if (this.editForm && control.value) {
       const param = {
         id: this.editForm.controls['id'].value,
@@ -118,6 +118,6 @@ export class EditComponent extends FormComponent implements OnInit {
       };
       return this.userService.asyncValidate('/sys-user/is-account-unique', param);
     }
-    return of();
+    return of(null);
   };
 }

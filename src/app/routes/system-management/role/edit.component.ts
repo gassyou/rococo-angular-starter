@@ -1,7 +1,7 @@
 import { Component, Inject, Input, OnInit } from '@angular/core';
-import { UntypedFormBuilder, UntypedFormControl, Validators } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormControl, ValidationErrors, Validators } from '@angular/forms';
 import { ALAIN_I18N_TOKEN } from '@delon/theme';
-import { of } from 'rxjs';
+import { Observable, of } from 'rxjs';
 import { RoleService } from 'src/app/core/service/core/role.service';
 import { I18NService } from 'src/app/core/service/i18n.service';
 import { FormComponent } from 'src/app/freamwork/core/form-component';
@@ -64,7 +64,7 @@ export class EditComponent extends FormComponent implements OnInit {
   }
 
   // 验证角色名唯一性
-  checkRoleNameValidator = (control: UntypedFormControl): { [key: string]: any } => {
+  checkRoleNameValidator = (control: UntypedFormControl): Observable<ValidationErrors | null> => {
     if (this.editForm && control.value) {
       const param = {
         id: this.editForm.controls['id'].value,
@@ -72,6 +72,6 @@ export class EditComponent extends FormComponent implements OnInit {
       };
       return this.roleService.asyncValidate('/role/is-name-unique', param);
     }
-    return of();
+    return of(null);
   };
 }

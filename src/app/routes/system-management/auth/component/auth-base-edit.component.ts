@@ -1,5 +1,5 @@
-import { UntypedFormControl } from '@angular/forms';
-import { of } from 'rxjs';
+import { UntypedFormControl, ValidationErrors } from '@angular/forms';
+import { Observable, of } from 'rxjs';
 import { I18NService } from 'src/app/core/service/i18n.service';
 import { CRUDService } from 'src/app/freamwork/core/crud.service';
 import { FormComponent } from 'src/app/freamwork/core/form-component';
@@ -37,7 +37,7 @@ export class AuthBaseEditComponent extends FormComponent {
     super(crudService);
   }
 
-  checkKeyValidator = (control: UntypedFormControl): { [key: string]: any } => {
+  checkKeyValidator = (control: UntypedFormControl): Observable<ValidationErrors | null> => {
     if (this.editForm && control.value) {
       const param = {
         id: this.editForm.controls['id'].value,
@@ -45,6 +45,6 @@ export class AuthBaseEditComponent extends FormComponent {
       };
       return this.crudService.asyncValidate('/auth/is-key-unique', param);
     }
-    return of();
+    return of(null);
   };
 }

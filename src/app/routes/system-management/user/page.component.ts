@@ -39,8 +39,8 @@ import { PasswordEditComponent } from './password-edit.component';
       <thead>
         <tr>
           <th>{{ 'common.lbl.no' | i18n }}</th>
-          <th>{{ 'user.name' | i18n }}</th>
           <th>{{ 'user.account' | i18n }}</th>
+          <th>{{ 'user.name' | i18n }}</th>
           <th>{{ 'user.role' | i18n }}</th>
           <th>{{ 'user.email' | i18n }}</th>
           <th>{{ 'user.lastLoginTime' | i18n }}</th>
@@ -52,8 +52,8 @@ import { PasswordEditComponent } from './password-edit.component';
       <tbody>
         <tr *ngFor="let data of basicTable.data; let idx = index">
           <td>{{ idx + (currentPage - 1) * pageSize + 1 }}</td>
-          <td>{{ data.name }}</td>
           <td>{{ data.account }}</td>
+          <td>{{ data.name }}</td>
           <td>{{ data.roleName }}</td>
           <td>{{ data.mail }}</td>
           <td>{{ data.lastLoginTime }}</td>

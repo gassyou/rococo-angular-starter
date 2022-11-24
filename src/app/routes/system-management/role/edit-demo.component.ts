@@ -1,5 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { UntypedFormArray, UntypedFormBuilder, UntypedFormControl, Validators } from '@angular/forms';
+import { UntypedFormArray, UntypedFormBuilder, UntypedFormControl, ValidationErrors, Validators } from '@angular/forms';
 import { Observable, of } from 'rxjs';
 import { RoleService } from 'src/app/core/service/core/role.service';
 import { FormComponent } from 'src/app/freamwork/core/form-component';
@@ -69,7 +69,7 @@ export class EditDemoComponent extends FormComponent implements OnInit {
     return of(this.editForm?.value);
   }
 
-  checkRoleNameValidator = (control: UntypedFormControl): { [key: string]: any } => {
+  checkRoleNameValidator = (control: UntypedFormControl): Observable<ValidationErrors | null> => {
     if (this.editForm && control.value) {
       const param = {
         id: this.editForm.controls['id'].value,
@@ -77,6 +77,6 @@ export class EditDemoComponent extends FormComponent implements OnInit {
       };
       return this.roleService.asyncValidate('/role/check-name', param);
     }
-    return of();
+    return of(null);
   };
 }

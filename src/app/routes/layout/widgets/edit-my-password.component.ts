@@ -1,5 +1,5 @@
 import { Component, Inject, Input, OnInit } from '@angular/core';
-import { UntypedFormBuilder, UntypedFormControl, UntypedFormGroup, Validators } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormControl, UntypedFormGroup, ValidationErrors, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { TokenService } from '@delon/auth';
 import { ALAIN_I18N_TOKEN } from '@delon/theme';
@@ -166,7 +166,7 @@ export class EditMyPasswordComponent implements OnInit {
 
   cancel() {}
 
-  checkConfirmPw = (control: UntypedFormControl): { [key: string]: any } | null => {
+  checkConfirmPw = (control: UntypedFormControl): ValidationErrors | null => {
     if (!control.value) {
       return { required: true };
     }
@@ -176,10 +176,7 @@ export class EditMyPasswordComponent implements OnInit {
     return null;
   };
 
-  checkOldPw = (control: UntypedFormControl): { [key: string]: any } | null => {
-    if (!control.value) {
-      return of();
-    }
+  checkOldPw = (control: UntypedFormControl): Observable<ValidationErrors | null> => {
     if (this.editForm && control.value) {
       const param = {
         id: this.editForm.controls['id'].value,
@@ -187,6 +184,6 @@ export class EditMyPasswordComponent implements OnInit {
       };
       return this.userServie.asyncValidate('sys-user/check-password', param);
     }
-    return of();
+    return of(null);
   };
 }
