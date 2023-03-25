@@ -19,7 +19,7 @@ import { emptyValidator } from 'src/app/shared/empty.validator';
           required: this.i18n.fanyi('common.msg.requireErr', { item: 'user.account' }),
           empty: this.i18n.fanyi('common.msg.emptyErr'),
           maxlength: this.i18n.fanyi('common.msg.maxLengthErr', { item: 'user.account', length: 20 }),
-          serverError: editForm?.controls['account'].errors.serverError
+          serverError: this.i18n.fanyi('common.msg.itemExisted', { item: 'user.account' })
         }"
       >
         <input nz-input formControlName="account" placeholder="{{ 'user.account' | i18n }}" />
@@ -46,7 +46,7 @@ import { emptyValidator } from 'src/app/shared/empty.validator';
         [error]="{
           required: this.i18n.fanyi('common.msg.requireErr', { item: 'user.email' }),
           empty: this.i18n.fanyi('common.msg.emptyErr'),
-          serverError: editForm?.controls['mail'].errors.serverError,
+          serverError: this.i18n.fanyi('common.msg.itemExisted', { item: 'user.email' }),
           maxlength: this.i18n.fanyi('common.msg.maxLengthErr', { item: 'user.email', length: 100 })
         }"
       >

@@ -62,7 +62,20 @@ import { CRUDService } from '../../freamwork/core/crud.service';
       .search-btn:hover {
         background-color: #e3e5e6;
       }
+      .search-input {
+        width: 350px;
+      }
 
+      @media screen and (max-width: 900px) {
+        .search-input {
+          width: 100px;
+        }
+      }
+      @media screen and (max-width: 1000px) {
+        .search-input {
+          width: 200px;
+        }
+      }
       .sk {
         -webkit-box-shadow: 0 2px 4px rgb(0 0 0 / 20%);
         -webkit-box-shadow: 0 2px 4px rgb(0 0 0 / 20%);
@@ -71,15 +84,6 @@ import { CRUDService } from '../../freamwork/core/crud.service';
         border: 1px solid rgba(0, 0, 0, 0.2);
         width: 100%;
         padding-bottom: 6px;
-      }
-      .search-input {
-        width: 350px;
-        @media screen and (max-width: 1000px) {
-          width: 200px;
-        }
-        @media screen and (max-width: 900px) {
-          width: 100px;
-        }
       }
     `
   ]

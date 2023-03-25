@@ -42,7 +42,8 @@
       "requestTimeout": "服务器超时', '服务器端的响应超时了！",
       "dataNotExisted": "相关数据不存在，可以尝试刷新后重试！",
       "authError": "授权信息发生变更或者已经失效，请再次登录系统！",
-      "loginError": "登录异常，请重新登录！"
+      "loginError": "登录异常，请重新登录！",
+      "itemExisted": "{{item}}が存在しています"
     }
   },
 

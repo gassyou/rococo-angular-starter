@@ -17,7 +17,7 @@ import { emptyValidator } from 'src/app/shared/empty.validator';
         [error]="{
           required: this.i18n.fanyi('common.msg.requireErr', { item: 'role.name' }),
           maxlength: this.i18n.fanyi('common.msg.maxLengthErr', { item: 'role.name', length: 32 }),
-          serverError: editForm?.controls['name'].errors.serverError,
+          serverError: this.i18n.fanyi('common.msg.itemExisted', { item: 'role.name' }),
           empty: this.i18n.fanyi('common.msg.emptyErr')
         }"
       >
