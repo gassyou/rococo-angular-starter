@@ -1,15 +1,18 @@
 import { Component, Inject, Input, OnInit } from '@angular/core';
-import { UntypedFormBuilder, UntypedFormControl, ValidationErrors, Validators } from '@angular/forms';
-import { ALAIN_I18N_TOKEN } from '@delon/theme';
+import { UntypedFormBuilder, UntypedFormControl, ValidationErrors, Validators, FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { ALAIN_I18N_TOKEN, AlainThemeModule } from '@delon/theme';
 import { Observable, of } from 'rxjs';
 import { RoleService } from 'src/app/core/service/core/role.service';
 import { I18NService } from 'src/app/core/service/i18n.service';
 import { FormComponent } from 'src/app/freamwork/core/form-component';
 import { emptyValidator } from 'src/app/shared/empty.validator';
+import { NzInputModule } from 'ng-zorro-antd/input';
+import { SEModule } from '@delon/abc/se';
+import { NzFormModule } from 'ng-zorro-antd/form';
 
 @Component({
-  selector: 'app-edit',
-  template: `
+    selector: 'app-edit',
+    template: `
     <form nz-form [formGroup]="editForm" se-container="1" labelWidth="100">
       <se
         label="{{ 'role.name' | i18n }}"
@@ -37,7 +40,9 @@ import { emptyValidator } from 'src/app/shared/empty.validator';
       </se>
     </form>
   `,
-  styles: []
+    styles: [],
+    standalone: true,
+    imports: [FormsModule, NzFormModule, SEModule, ReactiveFormsModule, NzInputModule, AlainThemeModule]
 })
 export class EditComponent extends FormComponent implements OnInit {
   @Input()

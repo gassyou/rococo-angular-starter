@@ -3,10 +3,13 @@ import { VERSION as VERSION_ALAIN } from '@delon/theme';
 import { VERSION as VERSION_ZORRO } from 'ng-zorro-antd/version';
 
 import { DecoratorService } from './freamwork/util/decorator.service';
+import { RouterOutlet } from '@angular/router';
 
 @Component({
-  selector: 'app-root',
-  template: ` <router-outlet></router-outlet> `
+    selector: 'app-root',
+    template: ` <router-outlet></router-outlet> `,
+    standalone: true,
+    imports: [RouterOutlet]
 })
 export class AppComponent {
   constructor(el: ElementRef, renderer: Renderer2, service: DecoratorService) {

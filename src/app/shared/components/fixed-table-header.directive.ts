@@ -1,7 +1,8 @@
 import { Directive, ElementRef, Renderer2, OnInit, AfterViewInit } from '@angular/core';
 
 @Directive({
-  selector: '[appFixedTableHeader]'
+    selector: '[appFixedTableHeader]',
+    standalone: true
 })
 export class FixedTableHeaderDirective implements AfterViewInit {
   constructor(private renderer: Renderer2, private elementRef: ElementRef) {}

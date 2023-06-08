@@ -23,34 +23,32 @@ import { AuthPageEditComponent } from './component/auth-page-edit.component';
 import { AuthTabEditComponent } from './component/auth-tab-edit.componet';
 
 @NgModule({
-  declarations: [
-    AuthComponent,
-    AuthModuleComponent,
-    AuthHostDirective,
-    AuthActionComponent,
-    AuthPageEditComponent,
-    AuthModuleEditComponent,
-    AuthTabEditComponent,
-    AuthActionEditComponent
-  ],
-  imports: [
-    CommonModule,
-    AuthRoutingModule,
-    SharedModule,
-    FormsModule,
-    ReactiveFormsModule,
-    ZORRO_MODULES,
-    DelonFormModule,
-    AlainThemeModule.forChild(),
-    DelonACLModule
-  ],
-  providers: [
-    NzModalService,
-    NzMessageService,
-    AuthService,
-    { provide: CRUDService, useExisting: AuthService },
-    RoleService,
-    AuthHostDirective
-  ]
+    imports: [
+        CommonModule,
+        AuthRoutingModule,
+        SharedModule,
+        FormsModule,
+        ReactiveFormsModule,
+        ZORRO_MODULES,
+        DelonFormModule,
+        AlainThemeModule.forChild(),
+        DelonACLModule,
+        AuthComponent,
+        AuthModuleComponent,
+        AuthHostDirective,
+        AuthActionComponent,
+        AuthPageEditComponent,
+        AuthModuleEditComponent,
+        AuthTabEditComponent,
+        AuthActionEditComponent
+    ],
+    providers: [
+        NzModalService,
+        NzMessageService,
+        AuthService,
+        { provide: CRUDService, useExisting: AuthService },
+        RoleService,
+        AuthHostDirective
+    ]
 })
 export class AuthModule {}

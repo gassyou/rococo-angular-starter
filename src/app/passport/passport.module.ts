@@ -9,8 +9,7 @@ import { LoginComponent } from './login/login.component';
 import { PassportRoutingModule } from './passport-routing.module';
 
 @NgModule({
-  declarations: [LoginComponent],
-  imports: [SharedModule, ReactiveFormsModule, PassportRoutingModule, CoreModule, AlainThemeModule.forChild()],
-  providers: [MyApplicationService]
+    imports: [SharedModule, ReactiveFormsModule, PassportRoutingModule, CoreModule, AlainThemeModule.forChild(), LoginComponent],
+    providers: [MyApplicationService]
 })
 export class PassportModule {}

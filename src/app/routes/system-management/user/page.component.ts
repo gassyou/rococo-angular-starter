@@ -1,6 +1,6 @@
 import { Component, Inject, OnInit } from '@angular/core';
-import { ACLService } from '@delon/acl';
-import { ALAIN_I18N_TOKEN } from '@delon/theme';
+import { ACLService, DelonACLModule } from '@delon/acl';
+import { ALAIN_I18N_TOKEN, AlainThemeModule } from '@delon/theme';
 import { NzModalService } from 'ng-zorro-antd/modal';
 import { map } from 'rxjs/operators';
 import { RoleService } from 'src/app/core/service/core/role.service';
@@ -11,10 +11,16 @@ import { AclByKey, ACLConfig } from 'src/app/freamwork/util/permission.decorator
 
 import { EditComponent } from './edit.component';
 import { PasswordEditComponent } from './password-edit.component';
+import { NzDividerModule } from 'ng-zorro-antd/divider';
+import { FormsModule } from '@angular/forms';
+import { NzSwitchModule } from 'ng-zorro-antd/switch';
+import { NgFor } from '@angular/common';
+import { NzTableModule } from 'ng-zorro-antd/table';
+import { PageContainerV2Component } from '../../../shared/components/page-container-v2.component';
 
 @Component({
-  selector: 'user-list',
-  template: ` <app-page-v2
+    selector: 'user-list',
+    template: ` <app-page-v2
     [advanceSearchForm]="advanceSearchForm"
     [simpleSearchKeys]="simpleSearchKeys"
     [operations]="operation"
@@ -78,7 +84,9 @@ import { PasswordEditComponent } from './password-edit.component';
       </tbody>
     </nz-table>
     <ng-template #totalTemplate let-total> {{ 'common.lbl.totalRecord' | i18n: { total: total } }} </ng-template>
-  </app-page-v2>`
+  </app-page-v2>`,
+    standalone: true,
+    imports: [PageContainerV2Component, NzTableModule, NgFor, DelonACLModule, NzSwitchModule, FormsModule, NzDividerModule, AlainThemeModule]
 })
 export class PageComponent extends ListComponent implements OnInit {
   simpleSearchKeys = ['name', 'role'];

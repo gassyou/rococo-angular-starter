@@ -1,13 +1,19 @@
 import { Component, Inject, OnDestroy, OnInit } from '@angular/core';
 import { TokenService } from '@delon/auth';
-import { ALAIN_I18N_TOKEN, Menu, MenuService } from '@delon/theme';
+import { ALAIN_I18N_TOKEN, Menu, MenuService, AlainThemeModule } from '@delon/theme';
 import { Subscription } from 'rxjs';
 import { I18NService } from 'src/app/core/service/i18n.service';
 import { MyApplicationService } from 'src/app/core/service/my-application.service';
+import { RouterLink } from '@angular/router';
+import { NzCardModule } from 'ng-zorro-antd/card';
+import { NgFor } from '@angular/common';
+import { NzGridModule } from 'ng-zorro-antd/grid';
+import { NzDividerModule } from 'ng-zorro-antd/divider';
+import { NzAvatarModule } from 'ng-zorro-antd/avatar';
 
 @Component({
-  selector: 'app-home',
-  template: `
+    selector: 'app-home',
+    template: `
     <div style="margin-top:80px">
       <nz-avatar [nzSize]="64" nzIcon="user" style="color:#f56a00; background-color:#fde3cf;"></nz-avatar>
       <span class="ml-md" style="font-size:24px; font-weight:bold; color:#767676"> {{ userName }} , {{ 'home.welcome' | i18n }}! </span>
@@ -23,7 +29,9 @@ import { MyApplicationService } from 'src/app/core/service/my-application.servic
       </div>
     </div>
   `,
-  styles: []
+    styles: [],
+    standalone: true,
+    imports: [NzAvatarModule, NzDividerModule, NzGridModule, NgFor, NzCardModule, RouterLink, AlainThemeModule]
 })
 export class HomeComponent implements OnInit, OnDestroy {
   userName: string = '';

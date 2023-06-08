@@ -1,6 +1,6 @@
-import { DOCUMENT } from '@angular/common';
+import { DOCUMENT, NgFor } from '@angular/common';
 import { Component, OnInit, ChangeDetectionStrategy, OnDestroy, ChangeDetectorRef, Inject } from '@angular/core';
-import { ALAIN_I18N_TOKEN, SettingsService } from '@delon/theme';
+import { ALAIN_I18N_TOKEN, SettingsService, AlainThemeModule } from '@delon/theme';
 import { NzModalService } from 'ng-zorro-antd/modal';
 import { Subscription } from 'rxjs';
 import { I18NService } from 'src/app/core/service/i18n.service';
@@ -10,10 +10,15 @@ import { modalCreator } from 'src/app/freamwork/util/modal-creator';
 
 import { EditMyPasswordComponent } from './edit-my-password.component';
 import { MyInfoComponent } from './my-info.component';
+import { NzIconModule } from 'ng-zorro-antd/icon';
+import { NzButtonModule } from 'ng-zorro-antd/button';
+import { NzMenuModule } from 'ng-zorro-antd/menu';
+import { NzAvatarModule } from 'ng-zorro-antd/avatar';
+import { NzDropDownModule } from 'ng-zorro-antd/dropdown';
 
 @Component({
-  selector: 'header-user',
-  template: `
+    selector: 'header-user',
+    template: `
     <div class="alain-default__nav-item d-flex align-items-center px-sm" nz-dropdown nzPlacement="bottomRight" [nzDropdownMenu]="userMenu">
       <nz-avatar [nzText]="myInfo?.name[0]" nzSize="small" class="mr-sm"></nz-avatar>
       {{ myInfo?.name }}
@@ -48,15 +53,17 @@ import { MyInfoComponent } from './my-info.component';
       </div>
     </nz-dropdown-menu>
   `,
-  styles: [
-    `
+    styles: [
+        `
       @import url('../../../../styles/theme.less');
       nz-avatar {
         background-color: @primary-color;
       }
     `
-  ],
-  changeDetection: ChangeDetectionStrategy.OnPush
+    ],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    standalone: true,
+    imports: [NzDropDownModule, NzAvatarModule, NzMenuModule, NzButtonModule, NzIconModule, NgFor, AlainThemeModule]
 })
 export class HeaderUserComponent implements OnInit, OnDestroy {
   myInfoSubscription: Subscription | undefined;

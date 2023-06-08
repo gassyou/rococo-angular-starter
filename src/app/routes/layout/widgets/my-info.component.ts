@@ -1,6 +1,6 @@
 import { Component, Inject, Input, OnInit } from '@angular/core';
-import { UntypedFormBuilder, UntypedFormControl, UntypedFormGroup, ValidationErrors, Validators } from '@angular/forms';
-import { ALAIN_I18N_TOKEN } from '@delon/theme';
+import { UntypedFormBuilder, UntypedFormControl, UntypedFormGroup, ValidationErrors, Validators, FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { ALAIN_I18N_TOKEN, AlainThemeModule } from '@delon/theme';
 import { Observable, of } from 'rxjs';
 import { UserService } from 'src/app/core/service/core/user.service';
 import { I18NService } from 'src/app/core/service/i18n.service';
@@ -8,10 +8,17 @@ import { MyApplicationService } from 'src/app/core/service/my-application.servic
 import { MyInfo } from 'src/app/freamwork/core/application.service';
 import { CheckForm } from 'src/app/freamwork/util/form-valid-checker';
 import { emptyValidator } from 'src/app/shared/empty.validator';
+import { NzWaveModule } from 'ng-zorro-antd/core/wave';
+import { NzInputModule } from 'ng-zorro-antd/input';
+import { NgIf } from '@angular/common';
+import { NzIconModule } from 'ng-zorro-antd/icon';
+import { NzButtonModule } from 'ng-zorro-antd/button';
+import { NzGridModule } from 'ng-zorro-antd/grid';
+import { NzFormModule } from 'ng-zorro-antd/form';
 
 @Component({
-  selector: 'app-my-info',
-  template: `
+    selector: 'app-my-info',
+    template: `
     <form nz-form [formGroup]="myForm">
       <div nz-row class="info-div">
         <label nz-col [nzSm]="12" [nzXs]="12" class="info-label">
@@ -113,8 +120,8 @@ import { emptyValidator } from 'src/app/shared/empty.validator';
       </div>
     </form>
   `,
-  styles: [
-    `
+    styles: [
+        `
       .anticon:before {
         display: block;
         font-size: 17px;
@@ -137,7 +144,9 @@ import { emptyValidator } from 'src/app/shared/empty.validator';
         justify-content: center;
       }
     `
-  ]
+    ],
+    standalone: true,
+    imports: [FormsModule, NzFormModule, ReactiveFormsModule, NzGridModule, NzButtonModule, NzIconModule, NgIf, NzInputModule, NzWaveModule, AlainThemeModule]
 })
 export class MyInfoComponent implements OnInit {
   @Input()

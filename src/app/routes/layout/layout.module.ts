@@ -13,8 +13,7 @@ import { EditMyPasswordComponent } from './widgets/edit-my-password.component';
 import { HeaderUserComponent } from './widgets/header-user.component';
 import { MyInfoComponent } from './widgets/my-info.component';
 @NgModule({
-  declarations: [MainComponent, HeaderUserComponent, EditMyPasswordComponent, MyInfoComponent],
-  imports: [CommonModule, LayoutDefaultModule, RouterModule, SharedModule, SEModule, ReactiveFormsModule, AlainThemeModule.forChild()],
-  providers: [UserService]
+    imports: [CommonModule, LayoutDefaultModule, RouterModule, SharedModule, SEModule, ReactiveFormsModule, AlainThemeModule.forChild(), MainComponent, HeaderUserComponent, EditMyPasswordComponent, MyInfoComponent],
+    providers: [UserService]
 })
 export class LayoutModule {}

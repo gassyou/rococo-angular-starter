@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { ActivatedRouteSnapshot, CanActivate, CanActivateChild, Router, RouterStateSnapshot } from '@angular/router';
+import { ActivatedRouteSnapshot, Router, RouterStateSnapshot } from '@angular/router';
 import { TokenService } from '@delon/auth';
 import { MenuService } from '@delon/theme';
 import { Observable, of } from 'rxjs';
@@ -8,7 +8,7 @@ import { switchMap } from 'rxjs/operators';
 import { MyApplicationService } from '../service/my-application.service';
 
 @Injectable()
-export class AuthGuard implements CanActivate, CanActivateChild {
+export class AuthGuard  {
   constructor(private router: Router, private myApp: MyApplicationService, private token: TokenService, private menu: MenuService) {}
 
   canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<boolean> | boolean {

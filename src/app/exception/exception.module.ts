@@ -8,7 +8,6 @@ import { ExceptionNotFoundComponent } from './exception-not-found.component';
 import { ExceptionRoutingModule } from './exception-routing.module';
 
 @NgModule({
-  declarations: [ExceptionNoAuthComponent, ExceptionNotFoundComponent],
-  imports: [CommonModule, ExceptionRoutingModule, SharedModule, AlainThemeModule.forChild()]
+    imports: [CommonModule, ExceptionRoutingModule, SharedModule, AlainThemeModule.forChild(), ExceptionNoAuthComponent, ExceptionNotFoundComponent]
 })
 export class ExceptionModule {}

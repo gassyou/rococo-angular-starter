@@ -17,35 +17,33 @@ import { DELON_MODULES } from './delon.module';
 import { ZORRO_MODULES } from './zorro.module';
 
 @NgModule({
-  declarations: [
-    AdvanceSearchComponent,
-    AdvanceSearchV2Component,
-    AdvanceSearchComponent,
-    PageContainerComponent,
-    PageContainerV2Component,
-    FormItemDirective,
-    FixedTableHeaderDirective
-  ],
-  imports: [
-    CommonModule,
-    FormsModule,
-    ...ZORRO_MODULES,
-    ...DELON_MODULES,
-    OverlayModule,
-    DelonFormModule.forRoot(),
-    AlainThemeModule.forChild(),
-    DelonACLModule,
-    RouterModule
-  ],
-  exports: [
-    AdvanceSearchComponent,
-    AdvanceSearchV2Component,
-    FormItemDirective,
-    FixedTableHeaderDirective,
-    PageContainerComponent,
-    PageContainerV2Component,
-    ...ZORRO_MODULES,
-    ...DELON_MODULES
-  ]
+    imports: [
+        CommonModule,
+        FormsModule,
+        ...ZORRO_MODULES,
+        ...DELON_MODULES,
+        OverlayModule,
+        DelonFormModule.forRoot(),
+        AlainThemeModule.forChild(),
+        DelonACLModule,
+        RouterModule,
+        AdvanceSearchComponent,
+        AdvanceSearchV2Component,
+        AdvanceSearchComponent,
+        PageContainerComponent,
+        PageContainerV2Component,
+        FormItemDirective,
+        FixedTableHeaderDirective
+    ],
+    exports: [
+        AdvanceSearchComponent,
+        AdvanceSearchV2Component,
+        FormItemDirective,
+        FixedTableHeaderDirective,
+        PageContainerComponent,
+        PageContainerV2Component,
+        ...ZORRO_MODULES,
+        ...DELON_MODULES
+    ]
 })
 export class SharedModule {}

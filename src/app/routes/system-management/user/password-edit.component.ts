@@ -1,14 +1,19 @@
 import { Component, Inject, Input, OnInit } from '@angular/core';
-import { UntypedFormBuilder, Validators } from '@angular/forms';
-import { ALAIN_I18N_TOKEN } from '@delon/theme';
+import { UntypedFormBuilder, Validators, FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { ALAIN_I18N_TOKEN, AlainThemeModule } from '@delon/theme';
 import { NzMessageService } from 'ng-zorro-antd/message';
 import { Observable, of } from 'rxjs';
 import { UserService } from 'src/app/core/service/core/user.service';
 import { I18NService } from 'src/app/core/service/i18n.service';
 import { FormComponent } from 'src/app/freamwork/core/form-component';
+import { NzIconModule } from 'ng-zorro-antd/icon';
+import { NzInputModule } from 'ng-zorro-antd/input';
+import { NzButtonModule } from 'ng-zorro-antd/button';
+import { SEModule } from '@delon/abc/se';
+import { NzFormModule } from 'ng-zorro-antd/form';
 @Component({
-  selector: 'app-password-edit',
-  template: `
+    selector: 'app-password-edit',
+    template: `
     <h2>
       {{ value.name }}
       <h2>
@@ -59,7 +64,9 @@ import { FormComponent } from 'src/app/freamwork/core/form-component';
       </h2>
     </h2>
   `,
-  styles: []
+    styles: [],
+    standalone: true,
+    imports: [FormsModule, NzFormModule, SEModule, ReactiveFormsModule, NzButtonModule, NzInputModule, NzIconModule, AlainThemeModule]
 })
 export class PasswordEditComponent extends FormComponent implements OnInit {
   newPWVisible = false;

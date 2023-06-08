@@ -1,8 +1,8 @@
 import { Component, Inject, Input, OnInit } from '@angular/core';
-import { UntypedFormBuilder, UntypedFormControl, UntypedFormGroup, ValidationErrors, Validators } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormControl, UntypedFormGroup, ValidationErrors, Validators, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { TokenService } from '@delon/auth';
-import { ALAIN_I18N_TOKEN } from '@delon/theme';
+import { ALAIN_I18N_TOKEN, AlainThemeModule } from '@delon/theme';
 import { NzMessageService } from 'ng-zorro-antd/message';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { Observable, of } from 'rxjs';
@@ -12,10 +12,15 @@ import { I18NService } from 'src/app/core/service/i18n.service';
 import { MyApplicationService } from 'src/app/core/service/my-application.service';
 import { encryptForServer } from 'src/app/freamwork/util/crypto';
 import { isValidForm } from 'src/app/freamwork/util/form-valid-checker';
+import { NzIconModule } from 'ng-zorro-antd/icon';
+import { NzInputModule } from 'ng-zorro-antd/input';
+import { NzButtonModule } from 'ng-zorro-antd/button';
+import { SEModule } from '@delon/abc/se';
+import { NzFormModule } from 'ng-zorro-antd/form';
 
 @Component({
-  selector: 'app-password-edit',
-  template: `
+    selector: 'app-password-edit',
+    template: `
     <h2>
       Hi,{{ value }}!
       <span style="color:#9e9e9e;margin-left:5px; font-size:11px">{{ 'user.changePassword' | i18n }}</span>
@@ -89,8 +94,10 @@ import { isValidForm } from 'src/app/freamwork/util/form-valid-checker';
       </se>
     </form>
   `,
-  styles: [],
-  providers: [UserService, NzNotificationService]
+    styles: [],
+    providers: [UserService, NzNotificationService],
+    standalone: true,
+    imports: [FormsModule, NzFormModule, SEModule, ReactiveFormsModule, NzButtonModule, NzInputModule, NzIconModule, AlainThemeModule]
 })
 export class EditMyPasswordComponent implements OnInit {
   public editForm: UntypedFormGroup | undefined;

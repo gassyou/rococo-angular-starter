@@ -9,7 +9,6 @@ import { LayoutModule } from './layout/layout.module';
 import { RoutesRoutingModule } from './routes-routing.module';
 
 @NgModule({
-  declarations: [HomeComponent],
-  imports: [CommonModule, RoutesRoutingModule, LayoutModule, SharedModule, FormsModule, AlainThemeModule.forChild()]
+    imports: [CommonModule, RoutesRoutingModule, LayoutModule, SharedModule, FormsModule, AlainThemeModule.forChild(), HomeComponent]
 })
 export class RoutesModule {}

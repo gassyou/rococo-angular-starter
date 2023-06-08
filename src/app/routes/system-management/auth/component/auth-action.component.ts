@@ -1,7 +1,7 @@
 import { Component, Inject, Input, OnInit, ViewContainerRef } from '@angular/core';
-import { ACLService } from '@delon/acl';
-import { ALAIN_I18N_TOKEN } from '@delon/theme';
-import { NzContextMenuService, NzDropdownMenuComponent } from 'ng-zorro-antd/dropdown';
+import { ACLService, DelonACLModule } from '@delon/acl';
+import { ALAIN_I18N_TOKEN, AlainThemeModule } from '@delon/theme';
+import { NzContextMenuService, NzDropdownMenuComponent, NzDropDownModule } from 'ng-zorro-antd/dropdown';
 import { NzModalService } from 'ng-zorro-antd/modal';
 import { AuthService } from 'src/app/core/service/core/auth.service';
 import { I18NService } from 'src/app/core/service/i18n.service';
@@ -11,10 +11,16 @@ import { AclByKey, ACLConfig } from 'src/app/freamwork/util/permission.decorator
 import { AuthViewModel } from '../view-model/auth-view-model';
 import { AuthActionEditComponent } from './auth-action-edit.componet';
 import { AuthBaseComponent } from './auth-base.component';
+import { NzPopconfirmModule } from 'ng-zorro-antd/popconfirm';
+import { NzIconModule } from 'ng-zorro-antd/icon';
+import { NzButtonModule } from 'ng-zorro-antd/button';
+import { NzMenuModule } from 'ng-zorro-antd/menu';
+import { FormsModule } from '@angular/forms';
+import { NzCheckboxModule } from 'ng-zorro-antd/checkbox';
 
 @Component({
-  selector: 'app-module',
-  template: `
+    selector: 'app-module',
+    template: `
     <label
       class="mr-md mb-md"
       nz-checkbox
@@ -43,7 +49,9 @@ import { AuthBaseComponent } from './auth-base.component';
       </ul>
     </nz-dropdown-menu>
   `,
-  styles: [``]
+    styles: [``],
+    standalone: true,
+    imports: [NzCheckboxModule, FormsModule, NzDropDownModule, NzMenuModule, DelonACLModule, NzButtonModule, NzIconModule, NzPopconfirmModule, AlainThemeModule]
 })
 export class AuthActionComponent implements OnInit, AuthBaseComponent {
   @Input()

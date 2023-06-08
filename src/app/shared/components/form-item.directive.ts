@@ -1,7 +1,8 @@
 import { AfterViewInit, Directive, ElementRef, HostListener, Input, Renderer2 } from '@angular/core';
 
 @Directive({
-  selector: '[form-item]'
+    selector: '[form-item]',
+    standalone: true
 })
 export class FormItemDirective implements AfterViewInit {
   labelElement: any;

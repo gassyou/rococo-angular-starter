@@ -1,5 +1,5 @@
 import { Inject, Injectable, Optional } from '@angular/core';
-import { ActivatedRouteSnapshot, Resolve, Router, RouterStateSnapshot } from '@angular/router';
+import { ActivatedRouteSnapshot, Router, RouterStateSnapshot } from '@angular/router';
 import { ALAIN_I18N_TOKEN, _HttpClient } from '@delon/theme';
 import { NzMessageService } from 'ng-zorro-antd/message';
 import { Observable } from 'rxjs';
@@ -65,7 +65,7 @@ export class UserService extends CRUDService {
 }
 
 @Injectable({ providedIn: 'root' })
-export class RoleResolveService implements Resolve<any> {
+export class RoleResolveService  {
   constructor(private service: RoleService, private router: Router) {}
   resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot) {
     return this.service.all();

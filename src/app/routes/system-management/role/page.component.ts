@@ -1,6 +1,6 @@
 import { Component, Inject, OnInit } from '@angular/core';
-import { ACLService } from '@delon/acl';
-import { ALAIN_I18N_TOKEN } from '@delon/theme';
+import { ACLService, DelonACLModule } from '@delon/acl';
+import { ALAIN_I18N_TOKEN, AlainThemeModule } from '@delon/theme';
 import { NzModalService } from 'ng-zorro-antd/modal';
 import { RoleService } from 'src/app/core/service/core/role.service';
 import { I18NService } from 'src/app/core/service/i18n.service';
@@ -8,10 +8,17 @@ import { ListComponent } from 'src/app/freamwork/core/list-component';
 import { AclByKey, ACLConfig } from 'src/app/freamwork/util/permission.decorator';
 
 import { EditComponent } from './edit.component';
+import { NzPopconfirmModule } from 'ng-zorro-antd/popconfirm';
+import { NzDividerModule } from 'ng-zorro-antd/divider';
+import { FormsModule } from '@angular/forms';
+import { NzSwitchModule } from 'ng-zorro-antd/switch';
+import { NgFor } from '@angular/common';
+import { NzTableModule } from 'ng-zorro-antd/table';
+import { PageContainerV2Component } from '../../../shared/components/page-container-v2.component';
 
 @Component({
-  selector: 'app-role-page',
-  template: `
+    selector: 'app-role-page',
+    template: `
     <app-page-v2
       [advanceSearchForm]="advanceSearchForm"
       [simpleSearchKeys]="simpleSearchKeys"
@@ -76,7 +83,9 @@ import { EditComponent } from './edit.component';
       <ng-template #totalTemplate let-total>{{ 'common.lbl.totalRecord' | i18n: { total: total } }} </ng-template>
     </app-page-v2>
   `,
-  styles: []
+    styles: [],
+    standalone: true,
+    imports: [PageContainerV2Component, NzTableModule, NgFor, DelonACLModule, NzSwitchModule, FormsModule, NzDividerModule, NzPopconfirmModule, AlainThemeModule]
 })
 export class PageComponent extends ListComponent implements OnInit {
   simpleSearchKeys = ['name', 'remark', 'enable'];

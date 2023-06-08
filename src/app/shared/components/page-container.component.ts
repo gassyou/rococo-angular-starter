@@ -1,11 +1,19 @@
 import { Component, Input } from '@angular/core';
-import { Router } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 import { SFSchema } from '@delon/form';
 import { Menu, MenuService } from '@delon/theme';
+import { NzMenuModule } from 'ng-zorro-antd/menu';
+import { NzDropDownModule } from 'ng-zorro-antd/dropdown';
+import { NzWaveModule } from 'ng-zorro-antd/core/wave';
+import { AdvanceSearchComponent } from './advance-search.component';
+import { NzIconModule } from 'ng-zorro-antd/icon';
+import { NzButtonModule } from 'ng-zorro-antd/button';
+import { NgFor, NgIf } from '@angular/common';
+import { NzBreadCrumbModule } from 'ng-zorro-antd/breadcrumb';
 
 @Component({
-  selector: 'app-page',
-  template: `
+    selector: 'app-page',
+    template: `
     <div class="alain-default__content-title" style="min-height: 54px">
       <nz-breadcrumb [nzAutoGenerate]="true">
         <ng-container *ngFor="let item of breadcrumbItems">
@@ -66,8 +74,8 @@ import { Menu, MenuService } from '@delon/theme';
       <ng-content></ng-content>
     </div>
   `,
-  styles: [
-    `
+    styles: [
+        `
       .content {
         margin-left: -24px;
         margin-right: -24px;
@@ -78,7 +86,9 @@ import { Menu, MenuService } from '@delon/theme';
         overflow-y: scroll;
       }
     `
-  ]
+    ],
+    standalone: true,
+    imports: [NzBreadCrumbModule, NgFor, NgIf, RouterLink, NzButtonModule, NzIconModule, AdvanceSearchComponent, NzWaveModule, NzDropDownModule, NzMenuModule]
 })
 export class PageContainerComponent {
   @Input() pageTitle: string | undefined;

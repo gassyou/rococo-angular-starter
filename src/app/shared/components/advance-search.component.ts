@@ -1,13 +1,20 @@
 import { Component, Inject, Input, OnInit, Optional, SkipSelf } from '@angular/core';
-import { SFSchema } from '@delon/form';
-import { ALAIN_I18N_TOKEN } from '@delon/theme';
+import { SFSchema, DelonFormModule } from '@delon/form';
+import { ALAIN_I18N_TOKEN, AlainThemeModule } from '@delon/theme';
 import { I18NService } from 'src/app/core/service/i18n.service';
 import { SearchComponent } from 'src/app/freamwork/core/search-component';
 
 import { CRUDService } from '../../freamwork/core/crud.service';
+import { NzCardModule } from 'ng-zorro-antd/card';
+import { NzIconModule } from 'ng-zorro-antd/icon';
+import { NzWaveModule } from 'ng-zorro-antd/core/wave';
+import { FormsModule } from '@angular/forms';
+import { CdkOverlayOrigin, CdkConnectedOverlay } from '@angular/cdk/overlay';
+import { NzInputModule } from 'ng-zorro-antd/input';
+import { NzButtonModule } from 'ng-zorro-antd/button';
 @Component({
-  selector: 'app-advance-search',
-  template: `<nz-input-group
+    selector: 'app-advance-search',
+    template: `<nz-input-group
       nzSearch
       cdkOverlayOrigin
       #trigger="cdkOverlayOrigin"
@@ -53,8 +60,8 @@ import { CRUDService } from '../../freamwork/core/crud.service';
         </div>
       </nz-card>
     </ng-template> `,
-  styles: [
-    `
+    styles: [
+        `
       .search-btn {
         background: none;
         border: none;
@@ -86,7 +93,9 @@ import { CRUDService } from '../../freamwork/core/crud.service';
         padding-bottom: 6px;
       }
     `
-  ]
+    ],
+    standalone: true,
+    imports: [NzButtonModule, NzInputModule, CdkOverlayOrigin, FormsModule, NzWaveModule, NzIconModule, CdkConnectedOverlay, NzCardModule, DelonFormModule, AlainThemeModule]
 })
 export class AdvanceSearchComponent extends SearchComponent {
   @Input() placeholder: string = this.i18n.fanyi('common.action.search');

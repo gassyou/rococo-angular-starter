@@ -1,6 +1,6 @@
 import { Component, Inject, OnInit, ViewChild } from '@angular/core';
-import { ACLService } from '@delon/acl';
-import { ALAIN_I18N_TOKEN } from '@delon/theme';
+import { ACLService, DelonACLModule } from '@delon/acl';
+import { ALAIN_I18N_TOKEN, AlainThemeModule } from '@delon/theme';
 import { NzContextMenuService } from 'ng-zorro-antd/dropdown';
 import { NzModalService } from 'ng-zorro-antd/modal';
 import { of } from 'rxjs';
@@ -16,10 +16,17 @@ import { FunctionModel } from 'src/app/routes/system-management/auth/entity/func
 import { AuthHostDirective } from './component/auth-host.directive';
 import { AuthModuleEditComponent } from './component/auth-module-edit.component';
 import { AuthViewModel } from './view-model/auth-view-model';
+import { NzIconModule } from 'ng-zorro-antd/icon';
+import { NzWaveModule } from 'ng-zorro-antd/core/wave';
+import { NzButtonModule } from 'ng-zorro-antd/button';
+import { NgFor } from '@angular/common';
+import { FormsModule } from '@angular/forms';
+import { NzSelectModule } from 'ng-zorro-antd/select';
+import { PageContainerV2Component } from '../../../shared/components/page-container-v2.component';
 
 @Component({
-  selector: 'app-auth',
-  template: `<app-page-v2>
+    selector: 'app-auth',
+    template: `<app-page-v2>
     <div class="operation">
       <nz-select [ngModel]="selectRole" (ngModelChange)="changeRole($event)" style="width:200px" class="mr-sm">
         <nz-option *ngFor="let item of roleList" [nzValue]="item" [nzLabel]="item.name"></nz-option>
@@ -39,8 +46,8 @@ import { AuthViewModel } from './view-model/auth-view-model';
       <ng-template authHost></ng-template>
     </div>
   </app-page-v2>`,
-  styles: [
-    `
+    styles: [
+        `
       .operation {
         display: flex;
         flex-direction: row;
@@ -55,8 +62,10 @@ import { AuthViewModel } from './view-model/auth-view-model';
         overflow-y: auto;
       }
     `
-  ],
-  providers: [AuthHostDirective]
+    ],
+    providers: [AuthHostDirective],
+    standalone: true,
+    imports: [PageContainerV2Component, NzSelectModule, FormsModule, NgFor, DelonACLModule, NzButtonModule, NzWaveModule, NzIconModule, AuthHostDirective, AlainThemeModule]
 })
 export class AuthComponent extends ListComponent implements OnInit {
   selectRole: any;

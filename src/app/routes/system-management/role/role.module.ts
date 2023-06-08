@@ -17,18 +17,18 @@ import { PageComponent } from './page.component';
 import { RoleRoutingModule } from './role-routing.module';
 
 @NgModule({
-  declarations: [PageComponent, EditComponent, EditDemoComponent],
-  imports: [
-    CommonModule,
-    RoleRoutingModule,
-    SharedModule,
-    FormsModule,
-    ReactiveFormsModule,
-    ZORRO_MODULES,
-    DelonFormModule,
-    AlainThemeModule.forChild(),
-    DelonACLModule
-  ],
-  providers: [NzModalService, NzMessageService, RoleService, { provide: CRUDService, useExisting: RoleService }]
+    imports: [
+        CommonModule,
+        RoleRoutingModule,
+        SharedModule,
+        FormsModule,
+        ReactiveFormsModule,
+        ZORRO_MODULES,
+        DelonFormModule,
+        AlainThemeModule.forChild(),
+        DelonACLModule,
+        PageComponent, EditComponent, EditDemoComponent
+    ],
+    providers: [NzModalService, NzMessageService, RoleService, { provide: CRUDService, useExisting: RoleService }]
 })
 export class RoleModule {}

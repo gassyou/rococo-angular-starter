@@ -1,13 +1,18 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { UntypedFormArray, UntypedFormBuilder, UntypedFormControl, ValidationErrors, Validators } from '@angular/forms';
+import { UntypedFormArray, UntypedFormBuilder, UntypedFormControl, ValidationErrors, Validators, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { Observable, of } from 'rxjs';
 import { RoleService } from 'src/app/core/service/core/role.service';
 import { FormComponent } from 'src/app/freamwork/core/form-component';
 import { CheckForm } from 'src/app/freamwork/util/form-valid-checker';
+import { NgFor } from '@angular/common';
+import { NzWaveModule } from 'ng-zorro-antd/core/wave';
+import { NzButtonModule } from 'ng-zorro-antd/button';
+import { NzInputModule } from 'ng-zorro-antd/input';
+import { NzFormModule } from 'ng-zorro-antd/form';
 
 @Component({
-  selector: 'app-edit-demo',
-  template: `
+    selector: 'app-edit-demo',
+    template: `
     <form nz-form [formGroup]="editForm">
       <input nz-input formControlName="name" placeholder="Name" />
       <input nz-input formControlName="age" placeholder="age" />
@@ -23,7 +28,9 @@ import { CheckForm } from 'src/app/freamwork/util/form-valid-checker';
       </div>
     </form>
   `,
-  styles: []
+    styles: [],
+    standalone: true,
+    imports: [FormsModule, NzFormModule, ReactiveFormsModule, NzInputModule, NzButtonModule, NzWaveModule, NgFor]
 })
 export class EditDemoComponent extends FormComponent implements OnInit {
   @Input()

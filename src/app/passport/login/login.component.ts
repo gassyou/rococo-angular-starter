@@ -1,12 +1,21 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { I18NService } from 'src/app/core/service/i18n.service';
 import { MyApplicationService } from 'src/app/core/service/my-application.service';
 import { CheckForm } from 'src/app/freamwork/util/form-valid-checker';
+import { AlainThemeModule } from '@delon/theme';
+import { NzWaveModule } from 'ng-zorro-antd/core/wave';
+import { NzCheckboxModule } from 'ng-zorro-antd/checkbox';
+import { NzIconModule } from 'ng-zorro-antd/icon';
+import { NzInputModule } from 'ng-zorro-antd/input';
+import { NzButtonModule } from 'ng-zorro-antd/button';
+import { NzGridModule } from 'ng-zorro-antd/grid';
+import { NzFormModule } from 'ng-zorro-antd/form';
+import { NzCardModule } from 'ng-zorro-antd/card';
 
 @Component({
-  selector: 'app-login',
-  template: `
+    selector: 'app-login',
+    template: `
     <div class="bg">
       <nz-card class="login_panel">
         <h1 class="title">{{ myApp.appName | i18n }}</h1>
@@ -51,8 +60,8 @@ import { CheckForm } from 'src/app/freamwork/util/form-valid-checker';
       <div></div>
     </div>
   `,
-  styles: [
-    `
+    styles: [
+        `
       @import url('../../../styles/theme.less');
       .bg {
         width: 100%;
@@ -79,7 +88,9 @@ import { CheckForm } from 'src/app/freamwork/util/form-valid-checker';
         color: @primary-color;
       }
     `
-  ]
+    ],
+    standalone: true,
+    imports: [NzCardModule, FormsModule, NzFormModule, ReactiveFormsModule, NzGridModule, NzButtonModule, NzInputModule, NzIconModule, NzCheckboxModule, NzWaveModule, AlainThemeModule]
 })
 export class LoginComponent implements OnInit {
   loginForm: FormGroup | undefined;

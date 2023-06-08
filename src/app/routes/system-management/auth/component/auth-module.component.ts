@@ -1,6 +1,6 @@
 import { Component, Inject, Input, OnInit, Type, ViewChild, ViewContainerRef } from '@angular/core';
-import { ACLService } from '@delon/acl';
-import { ALAIN_I18N_TOKEN } from '@delon/theme';
+import { ACLService, DelonACLModule } from '@delon/acl';
+import { ALAIN_I18N_TOKEN, AlainThemeModule } from '@delon/theme';
 import { NzModalService } from 'ng-zorro-antd/modal';
 import { AuthService } from 'src/app/core/service/core/auth.service';
 import { I18NService } from 'src/app/core/service/i18n.service';
@@ -16,10 +16,16 @@ import { AuthHostDirective } from './auth-host.directive';
 import { AuthModuleEditComponent } from './auth-module-edit.component';
 import { AuthPageEditComponent } from './auth-page-edit.component';
 import { AuthTabEditComponent } from './auth-tab-edit.componet';
+import { NzPopconfirmModule } from 'ng-zorro-antd/popconfirm';
+import { NgIf } from '@angular/common';
+import { FormsModule } from '@angular/forms';
+import { NzCheckboxModule } from 'ng-zorro-antd/checkbox';
+import { NzIconModule } from 'ng-zorro-antd/icon';
+import { NzButtonModule } from 'ng-zorro-antd/button';
 
 @Component({
-  selector: 'app-module',
-  template: `
+    selector: 'app-module',
+    template: `
     <div style="display:flex">
       <div class="type-icon">
         <span nz-icon style="font-size:16px" [nzType]="this.viewModel.titleIcon" nzTheme="outline"></span>
@@ -93,8 +99,8 @@ import { AuthTabEditComponent } from './auth-tab-edit.componet';
       <ng-template authHost></ng-template>
     </div>
   `,
-  styles: [
-    `
+    styles: [
+        `
       .title-bar {
         color: #fff;
         width: 100%;
@@ -132,7 +138,9 @@ import { AuthTabEditComponent } from './auth-tab-edit.componet';
         padding: 12px;
       }
     `
-  ]
+    ],
+    standalone: true,
+    imports: [NzButtonModule, NzIconModule, NzCheckboxModule, FormsModule, NgIf, DelonACLModule, NzPopconfirmModule, AuthHostDirective, AlainThemeModule]
 })
 export class AuthModuleComponent implements OnInit, AuthBaseComponent {
   @Input()

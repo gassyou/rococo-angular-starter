@@ -18,18 +18,18 @@ import { PasswordEditComponent } from './password-edit.component';
 import { UserRoutingModule } from './user-routing.module';
 
 @NgModule({
-  declarations: [PageComponent, EditComponent, PasswordEditComponent],
-  imports: [
-    CommonModule,
-    UserRoutingModule,
-    SharedModule,
-    FormsModule,
-    ReactiveFormsModule,
-    ZORRO_MODULES,
-    DelonFormModule,
-    AlainThemeModule.forChild(),
-    DelonACLModule
-  ],
-  providers: [NzModalService, NzMessageService, UserService, RoleService, { provide: CRUDService, useExisting: UserService }]
+    imports: [
+        CommonModule,
+        UserRoutingModule,
+        SharedModule,
+        FormsModule,
+        ReactiveFormsModule,
+        ZORRO_MODULES,
+        DelonFormModule,
+        AlainThemeModule.forChild(),
+        DelonACLModule,
+        PageComponent, EditComponent, PasswordEditComponent
+    ],
+    providers: [NzModalService, NzMessageService, UserService, RoleService, { provide: CRUDService, useExisting: UserService }]
 })
 export class UserModule {}

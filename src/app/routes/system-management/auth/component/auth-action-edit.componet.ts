@@ -1,16 +1,19 @@
 import { Component, Inject, Input, OnInit } from '@angular/core';
-import { UntypedFormBuilder, Validators } from '@angular/forms';
-import { ALAIN_I18N_TOKEN } from '@delon/theme';
+import { UntypedFormBuilder, Validators, FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { ALAIN_I18N_TOKEN, AlainThemeModule } from '@delon/theme';
 import { AuthService } from 'src/app/core/service/core/auth.service';
 import { I18NService } from 'src/app/core/service/i18n.service';
 import { FunctionModel } from 'src/app/routes/system-management/auth/entity/function-model';
 import { emptyValidator } from 'src/app/shared/empty.validator';
 
 import { AuthBaseEditComponent } from './auth-base-edit.component';
+import { NzInputModule } from 'ng-zorro-antd/input';
+import { SEModule } from '@delon/abc/se';
+import { NzFormModule } from 'ng-zorro-antd/form';
 
 @Component({
-  selector: 'app-auth-page-edit',
-  template: `
+    selector: 'app-auth-page-edit',
+    template: `
     <form nz-form [formGroup]="editForm" se-container="1" labelWidth="120">
       <se label="{{ 'auth.lblParent' | i18n }}">
         <div>{{ (value ? value.parentName : 'common.lbl.none') | i18n }}</div>
@@ -28,7 +31,9 @@ import { AuthBaseEditComponent } from './auth-base-edit.component';
       </se>
     </form>
   `,
-  styles: [``]
+    styles: [``],
+    standalone: true,
+    imports: [FormsModule, NzFormModule, SEModule, ReactiveFormsModule, NzInputModule, AlainThemeModule]
 })
 export class AuthActionEditComponent extends AuthBaseEditComponent implements OnInit {
   @Input()

@@ -1,13 +1,19 @@
 import { AfterViewInit, Component, Inject, Input, OnInit, Optional, SkipSelf, ViewChild } from '@angular/core';
-import { SFComponent, SFSchema } from '@delon/form';
-import { ALAIN_I18N_TOKEN } from '@delon/theme';
+import { SFComponent, SFSchema, DelonFormModule } from '@delon/form';
+import { ALAIN_I18N_TOKEN, AlainThemeModule } from '@delon/theme';
 import { I18NService } from 'src/app/core/service/i18n.service';
 import { SearchComponent } from 'src/app/freamwork/core/search-component';
 
 import { CRUDService } from '../../freamwork/core/crud.service';
+import { NzIconModule } from 'ng-zorro-antd/icon';
+import { NgIf } from '@angular/common';
+import { NzWaveModule } from 'ng-zorro-antd/core/wave';
+import { NzButtonModule } from 'ng-zorro-antd/button';
+import { DelonACLModule } from '@delon/acl';
+import { NzCardModule } from 'ng-zorro-antd/card';
 @Component({
-  selector: 'app-advance-search-v2',
-  template: `
+    selector: 'app-advance-search-v2',
+    template: `
     <nz-card id="searchForm" class="p-md" [style.display]="searchService.showAdvancePannel ? 'block' : 'none'">
       <sf
         [style.width]="inlineMode ? (formItemCount <= 1 ? '500px' : '1000px') : '100%'"
@@ -36,8 +42,8 @@ import { CRUDService } from '../../freamwork/core/crud.service';
       </div>
     </nz-card>
   `,
-  styles: [
-    `
+    styles: [
+        `
       .search-btn {
         background: none;
         border: none;
@@ -68,7 +74,9 @@ import { CRUDService } from '../../freamwork/core/crud.service';
         width: 100%;
       }
     `
-  ]
+    ],
+    standalone: true,
+    imports: [NzCardModule, DelonFormModule, DelonACLModule, NzButtonModule, NzWaveModule, NgIf, NzIconModule, AlainThemeModule]
 })
 export class AdvanceSearchV2Component extends SearchComponent implements AfterViewInit {
   @ViewChild('sf', { static: true }) sf!: SFComponent;
